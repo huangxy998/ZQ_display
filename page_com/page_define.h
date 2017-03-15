@@ -52,6 +52,7 @@ enum
 {
 	PAGE_ID_INIT,
 	PAGE_ID_BASIC,
+	PAGE_ID_MENU,
 	PAGE_ID_MAX
 };
 

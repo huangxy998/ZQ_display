@@ -3,6 +3,8 @@
 #include "font.h" 
 #include "usart.h"
 #include "delay.h"	 
+#include "font.h"	
+
 
 #include "flash.h"	
 
@@ -80,6 +82,7 @@
 //修改SSD1963 LCD屏的驱动参数.
 //////////////////////////////////////////////////////////////////////////////////	 
 
+static sFONT *LCD_Currentfonts;
 
 //LCD的画笔颜色和背景色	   
 u16 POINT_COLOR=0x0000;	//画笔颜色
@@ -438,12 +441,12 @@ u16 LCD_ReadPoint(u16 x,u16 y)
 
 //画透明矩形
 //alpha为透明指数,取值范围0~32
-uint16_t color;
+u16 color;
 void LCDDrawRectAlphaBlend(u16 x,u16 y,u16 width,u16 height,u8 alpha)
 {
-    uint16_t i = 0,j = 0;
+    u16 i = 0,j = 0;
 		
-	  uint16_t colortmp = POINT_COLOR;
+	  u16 colortmp = POINT_COLOR;
 		for(i = x;i < x+width;i++)
 		{
 			for(j = y;j < y+height;j++)
@@ -466,6 +469,27 @@ void LCD_SetBackColor(u16 color)
 {
 	BACK_COLOR = color;
 }
+
+/**
+  * @brief  Sets the Text Font.
+  * @param  fonts: specifies the font to be used.
+  * @retval None
+  */
+void LCD_SetFont(sFONT *fonts)
+{
+  LCD_Currentfonts = fonts;
+}
+
+/**
+  * @brief  Gets the Text Font.
+  * @param  None.
+  * @retval the used font.
+  */
+sFONT *LCD_GetFont(void)
+{
+  return LCD_Currentfonts;
+}
+
 
 //设定窗口区域写数据
 //Xsta , Ysta:起点横坐标和纵坐标
@@ -837,7 +861,138 @@ void LCD_Draw_Circle(u16 x0,u16 y0,u8 r)
 			b--;
 		} 						    
 	}
-} 	
+}
+
+
+//查找汉字内码在LCD_Currentfonts->list中的位置顺序
+static u8 SEARCH_word(const u16 *base, u8 cnt, u16 key)
+{
+	u8 low, high, mid;
+	
+	low = 0; 
+	high = cnt - 1;
+	
+	while (low <= high) 
+	{
+		mid = (low + high) / 2;
+		if (base[mid] == key)
+			return mid;
+		if (base[mid] > key)
+			high = mid - 1;
+		else 
+			low = mid + 1;
+	}
+	
+	return 0;
+}
+
+//根据汉字在LCD_Currentfonts->list中的顺序号查找到字符在显示代码数组LCD_Currentfonts->table中的位置
+//仅限于内部调用
+static u8 *GetDisplayCodeAddr(const u8 *base, u16 c)
+{
+	u16 idx;
+	
+	idx = SEARCH_word(LCD_Currentfonts->list, LCD_Currentfonts->TableSize, c);
+	return (u8 *)&base[idx * LCD_Currentfonts->BytesPerChar];
+}
+
+//显示文字(仅限于内部调用)
+void LCD_DrawChar(u16 Xpos, u16 Ypos, u16 CharIndex)
+{
+	u32 index = 0, i = 0;
+	u16 temp;
+	u8 *CharCode;
+  
+	CharCode = GetDisplayCodeAddr(LCD_Currentfonts->table,CharIndex);             //获取当前显示代码地址
+	LCD_SetDomain(Xpos,Ypos,Xpos+LCD_Currentfonts->Width-1, Ypos+LCD_Currentfonts->Height-1); //设定显示地址
+	for(index = 0; index < LCD_Currentfonts->BytesPerChar; index++)               //写入字节
+	{
+		temp = *CharCode;
+		for(i = 0; i < 8; i++)
+		{
+			if(temp & 0x0001)
+			{
+				LCD_WR_DATA(POINT_COLOR); //为1则写入前景色
+			}
+			else
+			{
+				LCD_WR_DATA(BACK_COLOR); //为0则写入背景色
+			}
+			temp = temp>>1;                                             
+		 }
+		 CharCode++;                                                  //指向下一个显示字节
+	}
+}
+
+//显示文字字符串
+void LCD_DrawString(u16 Xpos, u16 Ypos, u8 *str)
+{
+	 unsigned char c1, c2;
+	
+	 while (*str) 
+	 {
+		 c1 = *str++;
+		 if (c1 < 0x80)                    //ASCII字符只占用一个字节
+			 LCD_DrawChar(Xpos, Ypos, c1); //显示当前ascii字符
+		 else                            
+		 {
+			 c2 = *str++;                  //汉字则占用两个字节
+			 LCD_DrawChar(Xpos, Ypos, (c1 << 8) | c2); //显示当前字符
+		 }
+		 Xpos += LCD_Currentfonts->wWidth; //指向下一个显示位置
+	 } 	
+}
+
+/*********************************************
+以十进制形式显示无符号长整型数
+入口参数：(x，y) 是显示内容的右上角坐标；
+			 num是欲显示的无符号长整型数
+	       num的数值范围为：0~4,294,967,295(十进制)，
+			 也就是说利用该函数，我们最多将一个10位十进制数显示在LCD屏上；
+			 color:颜色,b_color:背景颜色。
+出口参数: 无
+说明：将一个无符号长整型数以十进制形式显示在TFT屏上。
+注意：在使用该函数时，不论最终显示的数有几位，它都将在LCD屏幕上
+      占10个字符的空间（显示的多位十进制数不足10位时，
+		本函数会在有效显示数字前面补空格）。
+**********************************************/
+void LCD_wrul(u16 x, u16 y, u8 w, u32 num, u8 xy)
+{
+	unsigned long temp; 
+	u8 i;
+	if(num == 0)
+	{
+		LCD_DrawChar(x,y,'0');
+		for(i = 1; i < w; i++)
+		{
+			x=x-LCD_Currentfonts->Width;
+			if(xy)
+				LCD_DrawChar(x,y,' ');
+			else
+				LCD_DrawChar(x,y,'0');
+		}
+	}
+	else
+	{
+		for(i = 0; i < w; i++)
+		{
+			if(num != 0)
+			{
+				temp = num/10;
+				LCD_DrawChar( x, y, (num-temp*10)+'0');
+				num=temp;
+			}
+			else/*往前写满ｗ位，也就是前面都写空格*/
+			{
+				if(xy)
+					LCD_DrawChar(x,y,' ');
+				else
+					LCD_DrawChar(x,y,'0');
+			}
+			x=x-LCD_Currentfonts->Width;/*设置光标在文字插入后自动左移*/
+		}
+	}
+}
 
 //显示数字,高位为0,则不显示
 //x,y :起点坐标	 
@@ -1285,22 +1440,6 @@ void LCD_ShowChar_hz16x16(u16 x,u16 y,const u8* p,u8 char_high,u8 mode)
 	u8 bytes_per_lie;
 	int pos;
 	u32 hz_offset;
-	
-	
-	//if(x>MAX_CHAR_POSX||y>MAX_CHAR_POSY)return; 
-	//设置窗口
- 
-	//得到偏移后的值（ASCII字库是从空格开始取模，所以-' '就是对应字符的字库）
-	/*
-	if( char_high == 128 )
-	{
-		char_id=char_id-'0';
-	}
-	else
-	{
-		char_id=char_id-' ';
-	}
-	*/
 	
 	hz_offset = get_GB2312_offset(p) + GB2312_16X16_HZ_OFFSET;
 	SPI_Flash_Read(hz_buff,hz_offset,32);

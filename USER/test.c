@@ -139,9 +139,9 @@ int main(void)
 		if(gPageInfo.cur_page_idx != gPageInfo.pre_page_idx)
 		{
 			gPageInfo.pre_page_idx = gPageInfo.cur_page_idx;
-			gPageInfo.p_page[gPageInfo.cur_page_idx].page_init(); //页面初始化
+			gPageInfo.p_page[gPageInfo.cur_page_idx]->page_init(); //页面初始化
 		}
-		gPageInfo.p_page[gPageInfo.cur_page_idx].page_update(); //页面更新		
+		gPageInfo.p_page[gPageInfo.cur_page_idx]->page_update(); //页面更新		
 	}	
 }
 
