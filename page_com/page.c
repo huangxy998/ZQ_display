@@ -30,6 +30,12 @@ static void pageBasicItemAdd(void);
 static void pageBasicItemShowDenoCnt(void);
 static void pageBasicItemEnterMenu(void);
 static void pageBasicItemShowTime(void);
+static void pageBasicItemShowCurCnt(void);
+static void pageBasicItemShowCnt(void);
+static void pageBasicItemShowSum(void);
+static void pageBasicItemShowSDStatus(void);
+static void pageBasicItemShowNetStatus(void);
+static void pageBasicItemShowSerialNum(void);
 
 
 ///////////////////////////////////////////////////////////
@@ -95,6 +101,60 @@ const PAGE_ITEM_T page_basic_item[] =
 		400, 20,     //字符长宽
 		pageBasicItemShowDenoCnt //显示更新函数
 	},
+
+	{
+		//当前计数
+		BASIC_ITEM_CUR_CNT,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowCurCnt //显示更新函数
+	},
+
+	{
+		//上次计数
+		BASIC_ITEM_CNT,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowCnt //显示更新函数
+	},
+
+	{
+		//金额
+		BASIC_ITEM_SUM,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowSum //显示更新函数
+	},
+
+	{
+		//金额
+		BASIC_ITEM_SERIAL,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowSerialNum //显示更新函数
+	},
+
+	{
+		//金额
+		BASIC_ITEM_NET,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowNetStatus //显示更新函数
+	},
+
+	{
+		//金额
+		BASIC_ITEM_SD,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowSDStatus //显示更新函数
+	},
 	
 };
 
@@ -146,20 +206,6 @@ const u8 page_item_DZG_name[4][3] =
 const _bmp_info bmp_mainPage =
 {
 	BASIC_PAGE_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
-
-const _bmp_info bmp_menuPageOff =
-{
-	MENU_PAGE_UP_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
-
-const _bmp_info bmp_menuPageOn =
-{
-	MENU_PAGE_DOWN_OFFSET,
 	LCD_HOR_SIZE,
 	LCD_VER_SIZE
 };
@@ -340,7 +386,7 @@ static void pageBasicItemEnterMenu(void)
 {
 	if(gPageInfo.toucged_up)
 	{
-//		gPageInfo.cur_page_idx = PAGE_ID_MENU;     
+		gPageInfo.cur_page_idx = PAGE_ID_MENU;     
 	}
 }
 
@@ -368,35 +414,57 @@ static void pageBasicItemShowDenoCnt(void)
 //显示当前张数
 static void pageBasicItemShowCurCnt(void)
 {
-	
+	LCD_SetFrontColor(LIGHTBLUE);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_CUR_CNT].start_pos_x, page_basic_item[BASIC_ITEM_CUR_CNT].start_pos_y,gPageMainPara.cur_cnt%10000,5,128);
 }
 
 //显示张数
 static void pageBasicItemShowCnt(void)
 {
-	
+	LCD_SetFrontColor(LIGHTBLUE);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_CNT].start_pos_x, page_basic_item[BASIC_ITEM_CNT].start_pos_y,gPageMainPara.total_cnt%10000,5,24);	
 }
 
 //显示金额
 static void pageBasicItemShowSum(void)
 {
 	
+	LCD_SetFrontColor(LIGHTBLUE);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_SUM].start_pos_x, page_basic_item[BASIC_ITEM_SUM].start_pos_y,gPageMainPara.sum%10000,5,24);	
 }
 
 //显示SD卡状态
 static void pageBasicItemShowSDStatus(void)
 {
-	
+	if (gPageMainPara.sd_flg)
+	{
+		show_bmp_in_flash(page_basic_item[BASIC_ITEM_SD].start_pos_x, page_basic_item[BASIC_ITEM_SD].start_pos_y,bmp_menuPageSDOn.width,bmp_menuPageSDOn.height,bmp_menuPageSDOn.addr);
+	}
+	else
+	{
+		show_bmp_in_flash(page_basic_item[BASIC_ITEM_SD].start_pos_x, page_basic_item[BASIC_ITEM_SD].start_pos_y,bmp_menuPageSDOff.width,bmp_menuPageSDOff.height,bmp_menuPageSDOff.addr);
+	}
 }
 
 //显示网络状态
 static void pageBasicItemShowNetStatus(void)
 {
-	
+	if (gPageMainPara.net_flg)
+	{
+		;
+	}
+	else
+	{
+		;
+	}
 }
 
 //显示冠字号
 static void pageBasicItemShowSerialNum(void)
 {
-	
+	LCD_ShowString(page_basic_item[BASIC_ITEM_SERIAL].start_pos_x, page_basic_item[BASIC_ITEM_SERIAL].start_pos_y, 144, 24, 24, gPageMainPara.serial);
 }
+
