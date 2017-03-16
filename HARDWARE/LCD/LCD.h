@@ -2,6 +2,7 @@
 #define __LCD_H		
 #include "sys.h"	 
 #include "stdlib.h"
+#include "fonts.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK MiniSTM32F103开发板
@@ -225,13 +226,16 @@ void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);		   				//填充单色
 void LCD_Color_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 *color);				//填充指定颜色
 void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode);						//显示一个字符
 void LCD_ShowNum(u16 x,u16 y,u32 num,u8 len,u8 size);  						//显示一个数字
-void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size,u8 mode);				//显示 数字
+void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size);				//显示 数字
 void LCD_ShowString(u16 x,u16 y,u16 total_width,u16 height,u8 size,u8 *p);		//显示一个字符串,12/16字体
-
+void LCD_ShowHZ(u16 x,u16 y,u16 char_id,u8 char_high,u8 mode); 
 void LCD_ShowString_hz16x16(u16 x,u16 y,u16 total_width,u16 char_high,u8 char_width,const u8* p);
 
 void LCD_SetFrontColor(u16 color);
 void LCD_SetBackColor(u16 color);
+
+void LCD_SetFont(sFONT *fonts);
+sFONT *LCD_GetFont(void);
 void LCDDrawRectAlphaBlend(u16 x,u16 y,u16 width,u16 height,u8 alpha);
 
 void LCD_DrawString(u16 Xpos, u16 Ypos, u8 *str);

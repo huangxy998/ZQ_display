@@ -29,6 +29,7 @@ extern sFONT Font8x16;
 extern sFONT Font16x24;
 extern sFONT FontNUM;
 
+#endif
 /**
   * @}
   */ 

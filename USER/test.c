@@ -8,79 +8,20 @@
 #include "touch.h"  
 #include "flash.h"  
 
-#include "../page_com/page_define.h" 
-#include "../page_com/page.h" 
-#include "../page_com/lcd_com.h" 
+#include "page_define.h" 
+#include "page.h" 
+#include "lcd_com.h" 
 #include "main.h"  
 
 
 //全局变量
 PAGE_INFO_T  gPageInfo;
-
-
-const _bmp_info bmp_mainPage =
-{
-	BASIC_PAGE_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
-
-const _bmp_info bmp_menuPageOff =
-{
-	MENU_PAGE_UP_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
-
-const _bmp_info bmp_menuPageOn =
-{
-	MENU_PAGE_DOWN_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
-
-const _bmp_info bmp_menuPageProgressOn =
-{
-	MENU_PAGE_PROGRESSFULL_OFFSET - 5600,
-	222,
-	13
-};
-
-const _bmp_info bmp_menuPageSDOn =
-{
-	BASIC_PAGE_SD_ON_OFFSET - 5600,
-	32,
-	28
-};
-
-const _bmp_info bmp_menuPageSDOff =
-{
-	BASIC_PAGE_SD_OFF_OFFSET - 5600,
-	32,
-	28
-};
-
-const _bmp_info bmp_menuPageAddOn =
-{
-	BASIC_PAGE_ADD_ON_OFFSET - 5600,
-	43,
-	22
-};
-
-const _bmp_info bmp_menuPageAddOff =
-{
-	BASIC_PAGE_ADD_OFF_OFFSET - 5600,
-	43,
-	22
-};
-
 u32 main_task_mask = 0;
 
 
 int main(void)
 {	
 		//u32 FLASH_SIZE;
-	int i,j;
 	
  	Stm32_Clock_Init(9);	//系统时钟设置
 	uart_init(72,115200);	//串口初始化为9600
@@ -117,10 +58,13 @@ int main(void)
 	
 	LCD_Clear(WHITE);	
 	//初始化显示页面参数
-	gPageInfo.cur_page_idx = PAGE_ID_INIT;//点钞机初始化页面
+	gPageInfo.cur_page_idx = PAGE_ID_BASIC;//点钞机初始化页面
 	gPageInfo.page_init_finished = 0;     //页面未初始化
 	gPageInfo.pre_page_idx = PAGE_ID_MAX;//保留上一次页面ID
 	gPageInfo.total_pages  = PAGE_ID_MAX;
+	
+	gPageInfo.p_page[PAGE_ID_BASIC] = &page_basic;
+		
 	//加载页面，将页面结构体指针指向实际的页面数据结构
 	
 	while(1)

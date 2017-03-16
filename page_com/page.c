@@ -1,3 +1,4 @@
+#include<string.h>
 #include "sys.h"
 #include "usart.h"		
 #include "delay.h"	
@@ -9,8 +10,6 @@
 #include "flash.h"  
 #include "rtc.h" 
 
-
-#include "page_define.h"
 #include "char_model.h"
 #include "page.h"
 #include "touch.h"
@@ -26,7 +25,11 @@ static void pageBasicUpdate(void);
 
 static void pageBasicItemMode(void);
 static void pageBasicItemSensity(void);
-
+static void pageBasicItemPreset(void);
+static void pageBasicItemAdd(void);
+static void pageBasicItemShowDenoCnt(void);
+static void pageBasicItemEnterMenu(void);
+static void pageBasicItemShowTime(void);
 
 
 ///////////////////////////////////////////////////////////
@@ -34,7 +37,7 @@ static void pageBasicItemSensity(void);
 const PAGE_ITEM_T page_basic_item[] =
 {
 	{  //模式
-		0,	
+		BASIC_ITEM_MODE,	
 		1,			//触控							
 		160, 0,     //起始坐标
 		96, 48,     //字符长宽
@@ -42,28 +45,71 @@ const PAGE_ITEM_T page_basic_item[] =
 	},
 	
 	{  //灵敏度
-		0,	
+		BASIC_ITEM_SENSITY,	
 		1,			//触控							
 		300, 0,     //起始坐标
 		100, 22,    //字符长宽
-		pageBasicItemMode	//显示更新函数	
+		pageBasicItemSensity	//显示更新函数	
+	},
+
+	{  //预置
+		BASIC_ITEM_PRESET,	
+		1,			//触控							
+		300, 25,     //起始坐标
+		100, 22,    //字符长宽
+		pageBasicItemPreset	//显示更新函数	
 	},
 	
-	{},
-}
+	{
+		//累加开关
+		BASIC_ITEM_ADD,	
+		1,			//触控							
+		5, 124,     //起始坐标
+		43, 22,     //字符长宽
+		pageBasicItemAdd //显示更新函数
+	},
+
+	{
+		//进入菜单
+		BASIC_ITEM_MENU,	
+		1,			//触控							
+		0, 0,     //起始坐标
+		120, 50,     //字符长宽
+		pageBasicItemEnterMenu //显示更新函数
+	},
+
+	{
+		//时间显示
+		BASIC_ITEM_TIME,	
+		0,			//触控无							
+		56, 218,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowTime //显示更新函数
+	},
+
+	{
+		//面额计数
+		BASIC_ITEM_DENO,	
+		0,			//触控无							
+		42, 52,     //起始坐标
+		400, 20,     //字符长宽
+		pageBasicItemShowDenoCnt //显示更新函数
+	},
+	
+};
 
 //页面结构体
-const PAGE_S page_basic = 
+const PAGE_T page_basic = 
 {
 		
-	PAGE_ID_INIT,	
+	PAGE_ID_BASIC,	
 	0,	0,
 	LCD_HOR_SIZE, LCD_VER_SIZE,
 	sizeof(page_basic_item)/sizeof(PAGE_ITEM_T),
 	
  	pageBasicInit,	
  	pageBasicUpdate
-}
+};
 
 //////////////////////////////////////////////////////////
 //智能 混点 分版 清点
@@ -168,20 +214,20 @@ static void pageBasicUpdate(void)
 
 	for(item = 0; item < page_basic.page_item_num; item++)
 	{
-		if(page_basic_item.touch_en)
+		if(page_basic_item[item].touch_en)
 		{
 			if(gPageInfo.toucged_down || gPageInfo.toucged_up)
 			{
 				if( ( touch_up_pos.x >= page_basic_item[item].start_pos_x ) && ( touch_up_pos.x < page_basic_item[item].start_pos_x + page_basic_item[item].width)  && \
 					( touch_up_pos.y >= page_basic_item[item].start_pos_y ) && ( touch_up_pos.y < page_basic_item[item].start_pos_y + page_basic_item[item].height) )
 				{
-					page_basic_item.item_event();
+					page_basic_item[item].item_event();
 				}
 			}
 		}
 		else
 		{
-			page_basic_item.item_event();
+			page_basic_item[item].item_event();
 		}
 	}
 }
@@ -190,12 +236,6 @@ static void pageBasicUpdate(void)
 //模式更新
 static void pageBasicItemMode(void)
 {
-	if(gPageInfo.toucged_down)
-	{
-		LCD_Fill(page_basic_item[0].start_pos_x, page_basic_item[0].start_pos_y,
-			page_basic_item[0].start_pos_x + page_basic_item[0].width, 
-			page_basic_item[0].start_pos_y+ page_basic_item[0].height, PAGE_MAIN_BACK_COLOR);
-	}
 	if(gPageInfo.toucged_up)
 	{
 		gPageMainPara.mode++;
@@ -203,11 +243,11 @@ static void pageBasicItemMode(void)
 			gPageMainPara.mode = 0;
 		LCD_SetFrontColor(page_item_func_name_color[gPageMainPara.mode]);  //字颜色
 		LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);                            //背景颜色
-		LCD_ShowHZ(	page_basic_item[0].start_pos_x, 
-					page_basic_item[0].start_pos_y, 
+		LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x, 
+					page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
 					page_item_func_name[gPageMainPara.mode][0], 48, 0 );
-		LCD_ShowHZ(	page_basic_item[0].start_pos_x, 
-					page_basic_item[0].start_pos_y, 
+		LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x+48, 
+					page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
 					page_item_func_name[gPageMainPara.mode][1], 48, 0 );
 	}
 }
@@ -215,21 +255,15 @@ static void pageBasicItemMode(void)
 //灵敏度更新
 static void pageBasicItemSensity(void)
 {
-	if(gPageInfo.toucged_down)
-	{
-		LCD_Fill(page_basic_item[1].start_pos_x + 45, page_basic_item[1].start_pos_y + 2,
-			page_basic_item[1].start_pos_x + page_basic_item[1].width - 5, 
-			page_basic_item[1].start_pos_y+ page_basic_item[1].height - 2, PAGE_MAIN_BACK_COLOR);
-	}
 	if(gPageInfo.toucged_up)
 	{
 		gPageMainPara.sensity++;
 		if(gPageMainPara.sensity >= 3)
 			gPageMainPara.sensity = 0;
 
-		LCD_Fill(page_basic_item[1].start_pos_x + 45, page_basic_item[1].start_pos_y + 2,
-			page_basic_item[1].start_pos_x + page_basic_item[1].width - 5, 
-			page_basic_item[1].start_pos_y+ page_basic_item[1].height - 2, page_item_sensity_color[gPageMainPara.sensity]);
+		LCD_Fill(page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + 45, page_basic_item[BASIC_ITEM_SENSITY].start_pos_y + 2,
+			page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + page_basic_item[BASIC_ITEM_SENSITY].width - 5, 
+			page_basic_item[BASIC_ITEM_SENSITY].start_pos_y+ page_basic_item[BASIC_ITEM_SENSITY].height - 2, page_item_sensity_color[gPageMainPara.sensity]);
 	}
 }
 
@@ -238,50 +272,30 @@ static void pageBasicItemPreset(void)
 {		
 	u8 tmp_buff[8];
 	
-	if(gPageInfo.toucged_down)
-	{
-		if( gPageMainPara.pre_set >= 1000 )
-		{
-			sprintf(tmp_buff," %d ", gPageMainPara.pre_set );
-		}
-		else if( gPageMainPara.pre_set >= 100 )
-		{
-			sprintf(tmp_buff,"  %d ", gPageMainPara.pre_set );
-		}
-		else if( gPageMainPara.pre_set >= 10 )
-		{
-			sprintf(tmp_buff,"  %d  ", gPageMainPara.pre_set );
-		}
-		LCD_SetFrontColor(PAGE_MAIN_BACK_COLOR);  //字颜色
-		LCD_SetBackColor(WHITE);                  //背景色
-		LCD_SetFont(&Font8x16);
-		LCD_DrawString(page_basic_item[2].start_pos_x + 45, page_basic_item[2].start_pos_y + 4, tmp_buff);
-//		LCD_ShowString(page_basic_item[2].start_pos_x + 45, page_basic_item[2].start_pos_y + 4, 100, 16, 16, tmp_buff);
-	}
 	if(gPageInfo.toucged_up)
 	{
 		gPageMainPara.pre_set += 10;
-		if(gPageMainPara.sensity > 100)
-			gPageMainPara.sensity = 0;
+		if(gPageMainPara.pre_set > 100)
+			gPageMainPara.pre_set = 0;
 	
 		if( gPageMainPara.pre_set >= 1000 )
 		{
-			sprintf(tmp_buff," %d ", gPageMainPara.pre_set );
+			sprintf((char*)tmp_buff," %d ", gPageMainPara.pre_set );
 		}
 		else if( gPageMainPara.pre_set >= 100 )
 		{
-			sprintf(tmp_buff,"  %d ", gPageMainPara.pre_set );
+			sprintf((char*)tmp_buff,"  %d ", gPageMainPara.pre_set );
 		}
 		else if( gPageMainPara.pre_set >= 10 )
 		{
-			sprintf(tmp_buff,"  %d  ", gPageMainPara.pre_set );
+			sprintf((char*)tmp_buff,"  %d  ", gPageMainPara.pre_set );
 		}
 		LCD_SetFrontColor(WHITE);  //字颜色
 		LCD_SetBackColor(PAGE_MAIN_BACK_COLOR); 
 		
-		LCD_SetFont(&Font8x16);
-		LCD_DrawString(page_basic_item[2].start_pos_x + 45, page_basic_item[2].start_pos_y + 4, tmp_buff);
-//		LCD_ShowString(page_basic_item[2].start_pos_x + 45, page_basic_item[1].start_pos_y + 4, 100, 16, 16, tmp_buff);
+//		LCD_SetFont(&Font8x16);
+//		LCD_DrawString(page_basic_item[2].start_pos_x + 45, page_basic_item[2].start_pos_y + 4, tmp_buff);
+		LCD_ShowString(page_basic_item[BASIC_ITEM_PRESET].start_pos_x + 45, page_basic_item[BASIC_ITEM_PRESET].start_pos_y + 4, 100, 16, 16, tmp_buff);
 	}
 }
 
@@ -293,11 +307,11 @@ static void pageBasicItemAdd(void)
 		gPageMainPara.add_flg = !gPageMainPara.add_flg;
 		if(gPageMainPara.add_flg)
 		{
-			show_bmp_in_flash(page_basic_item[3].start_pos_x, page_basic_item[3].start_pos_y, bmp_menuPageAddOn.width, bmp_menuPageAddOn.height, bmp_menuPageAddOn.addr);
+			show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOn.width, bmp_menuPageAddOn.height, bmp_menuPageAddOn.addr);
 		}
 		else
 		{
-			show_bmp_in_flash(page_basic_item[3].start_pos_x, page_basic_item[3].start_pos_y, bmp_menuPageAddOff.width, bmp_menuPageAddOff.height, bmp_menuPageAddOff.addr);
+			show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOff.width, bmp_menuPageAddOff.height, bmp_menuPageAddOff.addr);
 		}
 	}
 }
@@ -305,13 +319,20 @@ static void pageBasicItemAdd(void)
 //时间显示
 static void pageBasicItemShowTime(void)
 {
-	u8 tmp_buff[24];
-	
-	sprintf(tmp_buff,"20%2d-%2d-%2d %2d:%2d:%2d", 
-		calendar.w_year, calendar.w_month, calendar.w_date, 
-		calendar.hour, calendar.min, calendar.sec);
-	LCD_SetFont(&Font8x16);
-	LCD_DrawString(page_basic_item[4].start_pos_x, page_basic_item[4].start_pos_y, tmp_buff);
+	LCD_SetFrontColor(WHITE);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR); 
+	LCD_ShowString(page_basic_item[BASIC_ITEM_TIME].start_pos_x, page_basic_item[BASIC_ITEM_TIME].start_pos_y, 16, 16, 16, "20");
+	LCD_ShowxNum(page_basic_item[BASIC_ITEM_TIME].start_pos_x+16, page_basic_item[BASIC_ITEM_TIME].start_pos_y,calendar.w_year,2,16);
+	LCD_ShowString(page_basic_item[BASIC_ITEM_TIME].start_pos_x+32, page_basic_item[BASIC_ITEM_TIME].start_pos_y, 140, 16, 16, "-");
+	LCD_ShowxNum(page_basic_item[BASIC_ITEM_TIME].start_pos_x+40, page_basic_item[BASIC_ITEM_TIME].start_pos_y,calendar.w_year,2,16);
+	LCD_ShowString(page_basic_item[BASIC_ITEM_TIME].start_pos_x+56, page_basic_item[BASIC_ITEM_TIME].start_pos_y, 140, 16, 16, "-");
+	LCD_ShowxNum(page_basic_item[BASIC_ITEM_TIME].start_pos_x+64, page_basic_item[BASIC_ITEM_TIME].start_pos_y,calendar.w_year,2,16);
+	LCD_ShowString(page_basic_item[BASIC_ITEM_TIME].start_pos_x+80, page_basic_item[BASIC_ITEM_TIME].start_pos_y, 140, 16, 16, " ");
+	LCD_ShowxNum(page_basic_item[BASIC_ITEM_TIME].start_pos_x+88, page_basic_item[BASIC_ITEM_TIME].start_pos_y,calendar.w_year,2,16);
+	LCD_ShowString(page_basic_item[BASIC_ITEM_TIME].start_pos_x+104, page_basic_item[BASIC_ITEM_TIME].start_pos_y, 140, 16, 16, ":");
+	LCD_ShowxNum(page_basic_item[BASIC_ITEM_TIME].start_pos_x+112, page_basic_item[BASIC_ITEM_TIME].start_pos_y,calendar.w_year,2,16);
+	LCD_ShowString(page_basic_item[BASIC_ITEM_TIME].start_pos_x+128, page_basic_item[BASIC_ITEM_TIME].start_pos_y, 140, 16, 16, ":");
+	LCD_ShowxNum(page_basic_item[BASIC_ITEM_TIME].start_pos_x+136, page_basic_item[BASIC_ITEM_TIME].start_pos_y,calendar.w_year,2,16);
 }
 
 //当触控logo时进入菜单界面
@@ -319,14 +340,63 @@ static void pageBasicItemEnterMenu(void)
 {
 	if(gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_MENU;     
+//		gPageInfo.cur_page_idx = PAGE_ID_MENU;     
 	}
 }
 
-//当触控logo时进入菜单界面
+//面额显示
 static void pageBasicItemShowDenoCnt(void)
 {
-
+	u16 tmp;
+	
+	LCD_SetFrontColor(WHITE);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR); 
+	tmp = gPageMainPara.hundred_cnt%1000;
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_DENO].start_pos_x, page_basic_item[BASIC_ITEM_DENO].start_pos_y,tmp,4,16);
+	tmp = gPageMainPara.fifty_cnt%1000;
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_DENO].start_pos_x+68, page_basic_item[BASIC_ITEM_DENO].start_pos_y,tmp,4,16);
+	tmp = gPageMainPara.twenty_cnt%1000;
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_DENO].start_pos_x+138, page_basic_item[BASIC_ITEM_DENO].start_pos_y,tmp,4,16);
+	tmp = gPageMainPara.ten_cnt%1000;
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_DENO].start_pos_x+200, page_basic_item[BASIC_ITEM_DENO].start_pos_y,tmp,4,16);
+	tmp = gPageMainPara.five_cnt%1000;
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_DENO].start_pos_x+258, page_basic_item[BASIC_ITEM_DENO].start_pos_y,tmp,4,16);
+	tmp = gPageMainPara.error_cnt%1000;
+	LCD_ShowNum(page_basic_item[BASIC_ITEM_DENO].start_pos_x+328, page_basic_item[BASIC_ITEM_DENO].start_pos_y,tmp,4,16);	
 }
 
+//显示当前张数
+static void pageBasicItemShowCurCnt(void)
+{
+	
+}
 
+//显示张数
+static void pageBasicItemShowCnt(void)
+{
+	
+}
+
+//显示金额
+static void pageBasicItemShowSum(void)
+{
+	
+}
+
+//显示SD卡状态
+static void pageBasicItemShowSDStatus(void)
+{
+	
+}
+
+//显示网络状态
+static void pageBasicItemShowNetStatus(void)
+{
+	
+}
+
+//显示冠字号
+static void pageBasicItemShowSerialNum(void)
+{
+	
+}

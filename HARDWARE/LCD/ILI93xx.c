@@ -3,7 +3,7 @@
 #include "font.h" 
 #include "usart.h"
 #include "delay.h"	 
-#include "font.h"	
+#include "fonts.h"	
 
 
 #include "flash.h"	
@@ -1011,12 +1011,31 @@ void LCD_ShowNum(u16 x,u16 y,u32 num,u8 len,u8 size)
 		{
 			if(temp==0)
 			{
-				LCD_ShowChar(x+(size/2)*t,y,' ',size,0);
+//				LCD_ShowChar(x+(size/2)*t,y,' ',size,0);
 				continue;
 			}else enshow=1; 
 		 	 
 		}
-	 	LCD_ShowChar(x+(size/2)*t,y,temp+'0',size,0); 
+	 	LCD_ShowChar(x,y,temp+'0',size,0); 
+		x += size/2;
+	}
+} 
+
+//显示数字,高位为0显示
+//x,y :起点坐标	 
+//len :数字的位数
+//size:字体大小
+//color:颜色 
+//num:数值(0~4294967295);	 
+void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size)
+{         	
+	u8 t,temp;
+	u8 enshow=0;						   
+	for(t=0;t<len;t++)
+	{
+		temp=(num/LCD_Pow(10,len-t-1))%10;
+	 	LCD_ShowChar(x,y,temp+'0',size,0); 
+		x += size/2;
 	}
 } 
 

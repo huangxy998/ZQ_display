@@ -7,6 +7,8 @@
 #define PAGE_EXT
 #endif
 
+#include "page_define.h"
+
 //第一行Y位置
 #define PAGE_BASIC_LINE1_POS_Y					3
 
@@ -37,6 +39,18 @@
 #define LJ_START_POS_X									(HW_START_POS_X)
 #define LJ_START_POS_Y									(71+25*2)
 
+enum
+{
+	BASIC_ITEM_MODE,
+	BASIC_ITEM_SENSITY,
+	BASIC_ITEM_PRESET,
+	BASIC_ITEM_ADD,
+	BASIC_ITEM_MENU,
+	BASIC_ITEM_TIME,
+	BASIC_ITEM_DENO,
+
+};
+
 typedef struct 
 {
 	u8  mode;
@@ -59,6 +73,8 @@ typedef struct
 	u8  error_cnt;
 }PAGE_MAIN_PARA_T;
 extern PAGE_MAIN_PARA_T gPageMainPara;
+extern const PAGE_T page_basic;
+
 
 #endif //#ifndef PAGE_H
 

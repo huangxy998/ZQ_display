@@ -38,9 +38,9 @@ void page_base_parse(void)
 	
 	
 	//位域转换成变量
-	lmd_grade = basic_page_data.lmd_grade;
+	//lmd_grade = basic_page_data.lmd_grade;
 	
-	basic_page_data.function = 1;
+	//basic_page_data.function = 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,18 +62,6 @@ void uart_to_main_cmd_parse(void)
 		//页面数据包
 		case LC_PACKET_PAGE:
 			
-			switch(uart_to_main_cmd_parse_buff[5])
-			{
-				//基本工作页面
-				case PAGE_BASIC:
-					page_base_parse();
-					//page_basic_updated();
-						curr_page_id = PAGE_ID_BASIC;
-						page_init_public( (void*)&page_array[PAGE_ID_BASIC] );
-					break;
-				
-				default:break;
-			}
 			break;
 			
 		default:break;
