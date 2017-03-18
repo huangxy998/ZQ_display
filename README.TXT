@@ -36,16 +36,6 @@
 	3,LCD模块在开发板的LCD接口上面，必须靠右插
 	4,不要把1820和PA0的跳线帽跳上,否则可能导致按键"不灵". 
 
-
-					正点原子@ALIENTEK
-					2014-3-11
-					广州市星翼电子科技有限公司
-					电话：020-38271790
-					传真：020-36773971
-					购买：http://shop62103354.taobao.com
-					http://shop62057469.taobao.com
-					公司网站：www.alientek.com
-					技术论坛：www.openedv.com
 					
 					
 					

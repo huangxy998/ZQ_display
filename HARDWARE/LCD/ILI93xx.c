@@ -563,7 +563,7 @@ void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color)
 			LCD_WR_DATA(color);
 		}
 	}
-//	LCD_SetDomain(0,0,LCD_HOR_SIZE, LCD_VER_SIZE);
+	LCD_SetDomain(0,0,LCD_HOR_SIZE, LCD_VER_SIZE);
 }
 
 
@@ -1038,6 +1038,35 @@ void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size)
 		x += size/2;
 	}
 } 
+
+//显示数字,高位为0,则用空格代替
+//x,y :起点坐标	 
+//len :数字的位数
+//size:字体大小
+//color:颜色 
+//num:数值(0~4294967295);	 
+void LCD_ShowNumNull(u16 x,u16 y,u32 num,u8 len,u8 size)
+{         	
+	u8 t,temp;
+	u8 enshow=0;						   
+	for(t=0;t<len;t++)
+	{
+		temp=(num/LCD_Pow(10,len-t-1))%10;
+		if(enshow==0&&t<(len-1))
+		{
+			if(temp==0)
+			{
+				LCD_ShowChar(x,y,'0',size,0);
+				x += size/2;
+				continue;
+			}else enshow=1; 
+		 	 
+		}
+	 	LCD_ShowChar(x,y,temp+'0',size,0); 
+		x += size/2;
+	}
+} 
+
 
 //在指定位置显示一个字符
 //x:0~LCD_W

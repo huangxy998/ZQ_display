@@ -89,7 +89,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		BASIC_ITEM_TIME,	
 		0,			//触控无							
 		56, 218,     //起始坐标
-		400, 20,     //字符长宽
+		200, 20,     //字符长宽
 		pageBasicItemShowTime //显示更新函数
 	},
 
@@ -106,8 +106,8 @@ const PAGE_ITEM_T page_basic_item[] =
 		//当前计数
 		BASIC_ITEM_CUR_CNT,	
 		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
+		80, 72,     //起始坐标
+		320, 128,     //字符长宽
 		pageBasicItemShowCurCnt //显示更新函数
 	},
 
@@ -115,8 +115,8 @@ const PAGE_ITEM_T page_basic_item[] =
 		//上次计数
 		BASIC_ITEM_CNT,	
 		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
+		310, 176,     //起始坐标
+		60, 24,     //字符长宽
 		pageBasicItemShowCnt //显示更新函数
 	},
 
@@ -124,22 +124,22 @@ const PAGE_ITEM_T page_basic_item[] =
 		//金额
 		BASIC_ITEM_SUM,	
 		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
+		310, 212,     //起始坐标
+		60, 24,     //字符长宽
 		pageBasicItemShowSum //显示更新函数
 	},
 
 	{
-		//金额
+		//冠字号码
 		BASIC_ITEM_SERIAL,	
 		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
+		72, 176,     //起始坐标
+		144, 24,     //字符长宽
 		pageBasicItemShowSerialNum //显示更新函数
 	},
 
 	{
-		//金额
+		//网络状态
 		BASIC_ITEM_NET,	
 		0,			//触控无							
 		42, 52,     //起始坐标
@@ -148,11 +148,11 @@ const PAGE_ITEM_T page_basic_item[] =
 	},
 
 	{
-		//金额
+		//sd卡状态
 		BASIC_ITEM_SD,	
 		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
+		5, 210,     //起始坐标
+		48, 48,     //字符长宽
 		pageBasicItemShowSDStatus //显示更新函数
 	},
 	
@@ -250,7 +250,43 @@ const _bmp_info bmp_menuPageAddOff =
 //基本页面初始化
 static void pageBasicInit(void)
 {
+	u8 tmp_buff[8];
 	show_bmp_in_flash(0,0,bmp_mainPage.width,bmp_mainPage.height,bmp_mainPage.addr);
+	if(gPageMainPara.add_flg)
+	{
+		show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOn.width, bmp_menuPageAddOn.height, bmp_menuPageAddOn.addr);
+	}
+	else
+	{
+		show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOff.width, bmp_menuPageAddOff.height, bmp_menuPageAddOff.addr);
+	}
+	LCD_SetFrontColor(page_item_func_name_color[gPageMainPara.mode]);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);                            //背景颜色
+	LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x, 
+				page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
+				page_item_func_name[gPageMainPara.mode][0], 48, 0 );
+	LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x+48, 
+				page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
+				page_item_func_name[gPageMainPara.mode][1], 48, 0 );
+	LCD_Fill(page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + 45, page_basic_item[BASIC_ITEM_SENSITY].start_pos_y + 2,
+			page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + page_basic_item[BASIC_ITEM_SENSITY].width - 5, 
+			page_basic_item[BASIC_ITEM_SENSITY].start_pos_y+ page_basic_item[BASIC_ITEM_SENSITY].height - 2, page_item_sensity_color[gPageMainPara.sensity]);
+	if( gPageMainPara.pre_set >= 1000 )
+	{
+		sprintf((char*)tmp_buff," %d ", gPageMainPara.pre_set );
+	}
+	else if( gPageMainPara.pre_set >= 100 )
+	{
+		sprintf((char*)tmp_buff,"  %d ", gPageMainPara.pre_set );
+	}
+	else if( gPageMainPara.pre_set >= 10 )
+	{
+		sprintf((char*)tmp_buff,"  %d  ", gPageMainPara.pre_set );
+	}
+	LCD_SetFrontColor(WHITE);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR); 	
+	LCD_ShowString(page_basic_item[BASIC_ITEM_PRESET].start_pos_x + 45, page_basic_item[BASIC_ITEM_PRESET].start_pos_y + 4, 100, 16, 16, tmp_buff);
+
 }
 
 //基本页面刷新
@@ -416,7 +452,7 @@ static void pageBasicItemShowCurCnt(void)
 {
 	LCD_SetFrontColor(LIGHTBLUE);  //字颜色
 	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);
-	LCD_ShowNum(page_basic_item[BASIC_ITEM_CUR_CNT].start_pos_x, page_basic_item[BASIC_ITEM_CUR_CNT].start_pos_y,gPageMainPara.cur_cnt%10000,5,128);
+	LCD_ShowNumNull(page_basic_item[BASIC_ITEM_CUR_CNT].start_pos_x, page_basic_item[BASIC_ITEM_CUR_CNT].start_pos_y,gPageMainPara.cur_cnt%10000,5,128);
 }
 
 //显示张数

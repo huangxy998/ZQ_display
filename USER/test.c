@@ -10,6 +10,9 @@
 
 #include "page_define.h" 
 #include "page.h" 
+#include "page_menu.h"
+#include "page_version.h"
+
 #include "lcd_com.h" 
 #include "main.h"  
 
@@ -64,6 +67,8 @@ int main(void)
 	gPageInfo.total_pages  = PAGE_ID_MAX;
 	
 	gPageInfo.p_page[PAGE_ID_BASIC] = &page_basic;
+	gPageInfo.p_page[PAGE_ID_MENU] = &page_menu;
+	gPageInfo.p_page[PAGE_ID_VERSION] = &page_version;
 		
 	//加载页面，将页面结构体指针指向实际的页面数据结构
 	
