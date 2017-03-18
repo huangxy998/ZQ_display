@@ -48,20 +48,6 @@
 #define LCD_COM_EXT
 #endif
 
-
-
-//#include "p24hxxxx.h"
-//#include "com_prot.h"
-#include "lcd_com_prot.h"
-
-
-
-
-extern BASIC_PAGE_DATA_T basic_page_data;
-extern u8 lmd_grade;
-extern u8 LJ_on_off;
-
-
 extern void uart_to_main_cmd_parse(void);
 
 

@@ -88,60 +88,46 @@ u8 uart_to_main_cmd_parse_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN];     	//½ÓÊÕ»º³å,×
 u16 uart1_rcv_cnt = 0;       //½ÓÊÕ×´Ì¬±ê¼Ç	 
 u16 total_len = 0;
 
+u8  endflg[3] = {0};
+u8  endflgcnt = 0;
 void USART1_IRQHandler(void)
 {
-	u8 rcv_byte;	
-	static u32 sync_byte = 0x00;
-	
-	
+	u8 rcv_byte = 0;	
+		
 #if SYSTEM_SUPPORT_OS 		//Èç¹ûSYSTEM_SUPPORT_OSÎªÕæ£¬ÔòÐèÒªÖ§³ÖOS.
 	OSIntEnter();    
 #endif
 	
-if(USART1->SR&(1<<5))	//½ÓÊÕµ½Êý¾Ý
+	if(USART1->SR&(1<<5))	//½ÓÊÕµ½Êý¾Ý
 	{	 
 		rcv_byte=USART1->DR; 
 			
-		//ÒÑÍ¬²½
-		if( uart1_rcv_cnt >= 4 )
+		//´æÈë»º³åÇø
+		uart_to_main_cmd_rcv_buff[uart1_rcv_cnt] = rcv_byte;
+		uart1_rcv_cnt++;
+		if(uart1_rcv_cnt >= 3)
 		{
-			//´æÈë»º³åÇø
-			uart_to_main_cmd_rcv_buff[uart1_rcv_cnt] = rcv_byte;
-			uart1_rcv_cnt++;
-			
-			//µ±Ç°°ü×Ü³¤¶È
-			if( uart1_rcv_cnt == 7 )
+			if((uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 3] == 0xff) && 
+				(uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 2] == 0xff) &&
+				(uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 1] == 0xff)) //ÊÕµ½Ò»ÌõÍêÕû±¨ÎÄ
 			{
-				total_len = (uart_to_main_cmd_rcv_buff[7]<<8) + uart_to_main_cmd_rcv_buff[6] + 10;
-			}
-			
-			//½ÓÊÕÍê³É	
-			if( uart1_rcv_cnt >= total_len )
-			{
-				memcpy ( uart_to_main_cmd_parse_buff, uart_to_main_cmd_rcv_buff, total_len );
-					
-				uart1_rcv_cnt = 0;
-				total_len = 0;
-				sync_byte = 0x00;
-				
-				
+				memcpy ( uart_to_main_cmd_parse_buff, uart_to_main_cmd_rcv_buff, uart1_rcv_cnt - 3 );
+				uart_to_main_cmd_parse_buff[uart1_rcv_cnt - 3] = 0; //¼ÓÈëÒ»¸ö½áÊø·û	
+				uart1_rcv_cnt = 0;				
 				main_task_mask |= MAIN_TASK_MASK_UART_TO_MAIN_CMD_PARSE;
-					
 			}
-		}
-		//Î´Í¬²½
-		else
-		{
-			sync_byte = (sync_byte<<8) + rcv_byte;
-			if( sync_byte == DC_SYNC_BYTE )
+			else  //¼ì²âÉÙ½Óµ½0xffµÄÇé¿ö
 			{
-				uart_to_main_cmd_rcv_buff[0] = DC_SYNC_BYTE1;
-				uart_to_main_cmd_rcv_buff[1] = DC_SYNC_BYTE2;	
-				uart_to_main_cmd_rcv_buff[2] = DC_SYNC_BYTE3;
-				uart_to_main_cmd_rcv_buff[3] = DC_SYNC_BYTE4;	
-				
-				uart1_rcv_cnt = 4;
-				total_len = UART_TO_MAIN_CMD_RCV_BUFF_LEN;
+				if((uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 3] == 0xff))
+				{
+					if((uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 2] != 0xff) ||
+						(uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 1] != 0xff))
+					{
+						uart_to_main_cmd_rcv_buff[0] = uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 2];
+						uart_to_main_cmd_rcv_buff[1] = uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 1];
+						uart1_rcv_cnt = 2;
+					}
+				}
 			}
 		}
 	}
