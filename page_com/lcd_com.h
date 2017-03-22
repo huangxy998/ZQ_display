@@ -48,6 +48,17 @@
 #define LCD_COM_EXT
 #endif
 
+typedef struct
+{
+	u8 t_string[32][10];
+	u8 n_val[32][10];
+	u8 g_string[2][50];
+	u8 j_percent[2][4];
+	u8 x_str[4][50];
+	u8 f_str[2][30];
+}page_para;
+
+extern page_para gPagePara;
 extern void uart_to_main_cmd_parse(void);
 
 
