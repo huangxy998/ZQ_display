@@ -273,9 +273,10 @@ static void parse_p_buff(char *buff)
 		{
 			for(j = 0; j < sizeof(page_str)/sizeof(page_str[0]); j++)
 			{
-				if(strcmp(&buff[i], page_str[i]) == 0)
+				if(strcmp(&buff[i], page_str[j]) == 0)
 				{
 					//在此更新页面序号
+					gPageInfo.cur_page_idx = j;
 					break;
 				}
 			}

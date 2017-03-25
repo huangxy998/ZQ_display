@@ -212,35 +212,35 @@ const _bmp_info bmp_mainPage =
 
 const _bmp_info bmp_menuPageProgressOn =
 {
-	MENU_PAGE_PROGRESSFULL_OFFSET - 5600,
+	MENU_PAGE_PROGRESSFULL_OFFSET,
 	222,
 	13
 };
 
 const _bmp_info bmp_menuPageSDOn =
 {
-	BASIC_PAGE_SD_ON_OFFSET - 5600,
+	BASIC_PAGE_SD_ON_OFFSET,
 	32,
 	28
 };
 
 const _bmp_info bmp_menuPageSDOff =
 {
-	BASIC_PAGE_SD_OFF_OFFSET - 5600,
+	BASIC_PAGE_SD_OFF_OFFSET,
 	32,
 	28
 };
 
 const _bmp_info bmp_menuPageAddOn =
 {
-	BASIC_PAGE_ADD_ON_OFFSET - 5600,
+	BASIC_PAGE_ADD_ON_OFFSET,
 	43,
 	22
 };
 
 const _bmp_info bmp_menuPageAddOff =
 {
-	BASIC_PAGE_ADD_OFF_OFFSET - 5600,
+	BASIC_PAGE_ADD_OFF_OFFSET,
 	43,
 	22
 };
