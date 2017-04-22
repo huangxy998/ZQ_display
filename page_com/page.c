@@ -162,7 +162,7 @@ const PAGE_ITEM_T page_basic_item[] =
 const PAGE_T page_basic = 
 {
 		
-	PAGE_ID_BASIC,	
+	PAGE_ID_STANDTIME,	
 	0,	0,
 	LCD_HOR_SIZE, LCD_VER_SIZE,
 	sizeof(page_basic_item)/sizeof(PAGE_ITEM_T),
@@ -422,7 +422,9 @@ static void pageBasicItemEnterMenu(void)
 {
 	if(gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_MENU;     
+//		gPageInfo.cur_page_idx = PAGE_ID_MENU;  
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.touchStatus = PAGE_ID_MAIN;
 	}
 }
 

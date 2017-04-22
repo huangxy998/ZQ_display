@@ -34,7 +34,7 @@ const PAGE_ITEM_T page_KeyBoard_item[] =
 //页面结构体
 const PAGE_T page_KeyBoard =
 { 
-	PAGE_ID_VERSION,
+	PAGE_ID_BLACKKEY,
 	0,	0,
 	LCD_HOR_SIZE, LCD_VER_SIZE,
 	sizeof(page_KeyBoard_item)/sizeof(PAGE_ITEM_T),
@@ -62,7 +62,10 @@ static void pageKeyBoardUpdate(void)
 //	LCD_ShowString_hz16x16(10,100,200,16,16,"菜单子页面演示");
 	if(gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_MENU;
+//		gPageInfo.cur_page_idx = PAGE_ID_MENU;
+	gIDInfo.cmdUpdate = 1;
+	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKKEY;
+
 	}
 	
 }

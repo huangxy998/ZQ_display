@@ -52,7 +52,7 @@
 
 //#include "p24hxxxx.h"
 
-
+#include "lcd_com_prot.h"
 
 //∞¸¿‡–Õ
 typedef enum
@@ -106,7 +106,6 @@ typedef enum
 	PAGE_CIS_DW_AUTO_ADJUST,
 
 }LC_PACKET_PAGE_T;
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

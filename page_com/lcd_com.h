@@ -48,6 +48,8 @@
 #define LCD_COM_EXT
 #endif
 
+
+
 typedef struct
 {
 	u8 t_string[32][10];
@@ -58,7 +60,25 @@ typedef struct
 	u8 f_str[2][30];
 }page_para;
 
+typedef struct
+{
+	unsigned char start;
+	unsigned char pageID;
+	unsigned char touchStatus;
+	unsigned char cmdEnd[3];
+}CMD_PAGE_ID;
+
+typedef struct
+{
+	unsigned char  cmdUpdate;
+	CMD_PAGE_ID    cmdPage;
+}CMD_PAGE_ID_INFO;
+
+
+extern CMD_PAGE_ID_INFO  gIDInfo;
+
 extern page_para gPagePara;
+
 extern void uart_to_main_cmd_parse(void);
 
 

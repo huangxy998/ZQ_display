@@ -277,6 +277,7 @@ static void parse_p_buff(char *buff)
 				{
 					//在此更新页面序号
 					gPageInfo.cur_page_idx = j;
+					memset(&gPagePara, 0, sizeof(page_para));
 					break;
 				}
 			}

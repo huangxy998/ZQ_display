@@ -115,7 +115,7 @@ const PAGE_ITEM_T page_menu_item[] =
 //页面结构体
 const PAGE_T page_menu =
 { 
-	PAGE_ID_MENU,
+	PAGE_ID_MAIN,
 	0,	0,
 	LCD_HOR_SIZE, LCD_VER_SIZE,
 	sizeof(page_menu_item)/sizeof(PAGE_ITEM_T),
@@ -163,7 +163,11 @@ static void pageMenuUpdate(void)
 	if(gPageInfo.toucged_up) 
 	{
 		if(pressvalid == 0)//按空白处退出菜单
-			gPageInfo.cur_page_idx = PAGE_ID_BASIC;
+		{
+//			gPageInfo.cur_page_idx = PAGE_ID_STANDTIME;
+				gIDInfo.cmdUpdate = 1;
+				gIDInfo.cmdPage.touchStatus = PAGE_ID_STANDTIME;
+		}
 		pressed = 0;
 		preitem = 0xff;
 	}
@@ -180,7 +184,10 @@ static void pageMenuItemVersion(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+	gIDInfo.cmdUpdate = 1;
+	gIDInfo.cmdPage.touchStatus = PAGE_ID_VERSION;
+
 	}	
 }
 
@@ -195,7 +202,10 @@ static void pageMenuItemBlacklist(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_BLACKLIST;
+	gIDInfo.cmdUpdate = 1;
+	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
+
 	}	
 }
 
@@ -210,7 +220,10 @@ static void pageMenuItemPictureSet(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+	gIDInfo.cmdUpdate = 1;
+	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
+
 	}	
 }
 
@@ -225,7 +238,10 @@ static void pageMenuItemUpdate(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSUPDATA;
+
 
 	}	
 }
@@ -241,7 +257,10 @@ static void pageMenuItemNetSet(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.touchStatus = PAGE_ID_NETSET;
+
 
 	}	
 }
@@ -257,7 +276,10 @@ static void pageMenuItemSerial(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.touchStatus = PAGE_ID_GZHMDIS;
+
 
 	}	
 }
@@ -273,7 +295,10 @@ static void pageMenuItemSystem(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSEMSET;
+
 
 	}	
 }
@@ -289,7 +314,10 @@ static void pageMenuItemTime(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.touchStatus = PAGE_ID_CLOCKDISP;
+
 
 	}	
 }

@@ -62,7 +62,7 @@ static void pageParaSetUpdate(void)
 //	LCD_ShowString_hz16x16(10,100,200,16,16,"菜单子页面演示");
 	if(gPageInfo.toucged_up)
 	{
-		gPageInfo.cur_page_idx = PAGE_ID_MENU;
+		gPageInfo.cur_page_idx = PAGE_ID_MAIN;
 	}
 	
 }

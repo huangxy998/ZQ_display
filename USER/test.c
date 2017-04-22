@@ -12,6 +12,16 @@
 #include "page.h" 
 #include "page_menu.h"
 #include "page_version.h"
+#include "page_blacklist.h"
+#include "page_cisconfig.h"
+#include "page_cistest.h"
+#include "page_dialog.h"
+#include "page_keyboard.h"
+#include "page_netconfig.h"
+#include "page_paraset.h"
+#include "page_serial.h"
+#include "page_systemset.h"
+#include "page_timeset.h"
 
 #include "lcd_com.h" 
 #include "main.h"  
@@ -19,6 +29,8 @@
 
 //全局变量
 PAGE_INFO_T  gPageInfo;
+CMD_PAGE_ID_INFO  gIDInfo;
+
 u32 main_task_mask = 0;
 
 
@@ -33,7 +45,14 @@ int main(void)
 	LCD_Init();			   	//初始化LCD 	
 	KEY_Init();				//按键初始化	
 	SPI_Flash_Init();  		//SPI FLASH 初始化 	
-	
+
+	gIDInfo.cmdUpdate = 0;
+	gIDInfo.cmdPage.start = 0x65;
+	gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
+	gIDInfo.cmdPage.touchStatus = 0x00;
+	gIDInfo.cmdPage.cmdEnd[0] = 0xff;
+	gIDInfo.cmdPage.cmdEnd[1] = 0xff;
+	gIDInfo.cmdPage.cmdEnd[2] = 0xff;
 
 	LCD_Clear(BLACK);
 	LCD_SetFrontColor(RED);//设置字体为红色 
@@ -61,14 +80,36 @@ int main(void)
 	
 	LCD_Clear(WHITE);	
 	//初始化显示页面参数
-	gPageInfo.cur_page_idx = PAGE_ID_BASIC;//点钞机初始化页面
+	gPageInfo.cur_page_idx = PAGE_ID_STANDTIME;//点钞机初始化页面
 	gPageInfo.page_init_finished = 0;     //页面未初始化
-	gPageInfo.pre_page_idx = PAGE_ID_MAX;//保留上一次页面ID
-	gPageInfo.total_pages  = PAGE_ID_MAX;
+	gPageInfo.pre_page_idx = PAGE_ID_NUM;//保留上一次页面ID
+	gPageInfo.total_pages  = PAGE_ID_NUM;
 	
-	gPageInfo.p_page[PAGE_ID_BASIC] = &page_basic;
-	gPageInfo.p_page[PAGE_ID_MENU] = &page_menu;
-	gPageInfo.p_page[PAGE_ID_VERSION] = &page_version;
+	gPageInfo.p_page[PAGE_ID_STANDTIME] = &page_basic;
+	gPageInfo.p_page[PAGE_ID_MAIN] = &page_menu;
+	gPageInfo.p_page[PAGE_ID_SYSVERSION] = &page_version;
+	gPageInfo.p_page[PAGE_ID_BLACKLIST] = &page_Blacklist;
+	gPageInfo.p_page[PAGE_ID_BLACKKEY] = &page_KeyBoard;
+	gPageInfo.p_page[PAGE_ID_CISCHEK] = &page_CISConfig;
+	gPageInfo.p_page[PAGE_ID_CISSET1] = &page_CISConfig;
+	gPageInfo.p_page[PAGE_ID_SYSUPDATA] = &page_version;
+	gPageInfo.p_page[PAGE_ID_ZBUPDATA] = &page_version;
+	gPageInfo.p_page[PAGE_ID_NETSET] = &page_NetConfig;
+	gPageInfo.p_page[PAGE_ID_GZHMDIS] = &page_Serial;
+	gPageInfo.p_page[PAGE_ID_SYSEMSET] = &page_SystemSet;
+	gPageInfo.p_page[PAGE_ID_SENSORCHECK] = &page_SystemSet;
+	gPageInfo.p_page[PAGE_ID_GEARSET1] = &page_SystemSet;
+	gPageInfo.p_page[PAGE_ID_GEARSET2] = &page_SystemSet;
+	gPageInfo.p_page[PAGE_ID_DISPLIGHT] = &page_SystemSet;
+	gPageInfo.p_page[PAGE_ID_CLOCKDISP] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_CLOCKSET] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_SPEAK] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_INPUT] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_OUTPUT] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_CONFIRM] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_CONFIRM1] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_ERRER] = &page_TimeSet;
+	
 		
 	//加载页面，将页面结构体指针指向实际的页面数据结构
 	
@@ -90,7 +131,13 @@ int main(void)
 			gPageInfo.pre_page_idx = gPageInfo.cur_page_idx;
 			gPageInfo.p_page[gPageInfo.cur_page_idx]->page_init(); //页面初始化
 		}
-		gPageInfo.p_page[gPageInfo.cur_page_idx]->page_update(); //页面更新		
+		gPageInfo.p_page[gPageInfo.cur_page_idx]->page_update(); //页面更新	
+		if(gIDInfo.cmdUpdate == 1)
+		{
+			gIDInfo.cmdUpdate = 0;
+			uartSendbuffer((u8*)&gIDInfo.cmdPage, sizeof(CMD_PAGE_ID));
+		}
+		
 	}	
 }
 

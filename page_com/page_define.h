@@ -14,6 +14,7 @@ enum
 	PAGE_ID_BASIC,
 	PAGE_ID_MENU,
 	PAGE_ID_VERSION,
+	
 	PAGE_ID_MAX
 };
 
@@ -117,7 +118,7 @@ typedef	struct
 	u8 page_init_finished;                        //页面初始化完成标志
 	u8 page_need_update;                          //页面数据更新标志
 	
-	const PAGE_T*	p_page[PAGE_ID_MAX];		  //页项指针
+	const PAGE_T*	p_page[PAGE_ID_NUM];		  //页项指针
 }PAGE_INFO_T;
 
 

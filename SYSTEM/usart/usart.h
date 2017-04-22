@@ -54,6 +54,8 @@ extern u8 uart_to_main_cmd_parse_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN];     	//½ÓÊ
 
 //Èç¹ûÏë´®¿ÚÖĞ¶Ï½ÓÊÕ£¬Çë²»Òª×¢ÊÍÒÔÏÂºê¶¨Òå
 void uart_init(u32 pclk2,u32 bound);
+void uartSendbuffer(u8* ch, int len);
+
 
 #endif	   
 
