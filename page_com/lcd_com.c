@@ -70,12 +70,12 @@ static void parse_t_buff(u8 *buff)
 					{
 						switch(i-2)
 						{
-							case 1:
-								idx = buff[i-1];
+							case 0:
+								idx = buff[i-1]-0x30;
 								status = 1;
 								break;
-							case 2:
-								idx = (buff[i-2]<<8) | buff[i-1];
+							case 1:
+								idx = ((buff[i-2])-0x30)*10 + buff[i-1]-0x30;
 								status = 1;
 								break;
 							default: break;
@@ -91,7 +91,7 @@ static void parse_t_buff(u8 *buff)
 					}
 					break;
 				case 2:
-					if ((idx < 32) && (j < 9))
+					if ((idx < 44) && (j < 23))
 					{
 						gPagePara.t_string[idx][j] = buff[i];
 						j++;
@@ -101,6 +101,8 @@ static void parse_t_buff(u8 *buff)
 					break;
 			}
 			i++;
+			if(buff[i] == '"')
+				break;
 		}
 		gPagePara.t_string[idx][j] = 0;
 	}
@@ -122,12 +124,12 @@ static void parse_n_buff(u8 *buff)
 					{
 						switch(i-2)
 						{
-							case 1:
-								idx = buff[i-1];
+							case 0:
+								idx = buff[i-1]-0x30;
 								status = 1;
 								break;
-							case 2:
-								idx = (buff[i-2]<<8) | buff[i-1];
+							case 1:
+								idx = ((buff[i-2])-0x30)*10 + buff[i-1]-0x30;
 								status = 1;
 								break;
 							default: break;
@@ -173,12 +175,12 @@ static void parse_j_buff(u8 *buff)
 					{
 						switch(i-2)
 						{
-							case 1:
-								idx = buff[i-1];
+							case 0:
+								idx = buff[i-1]-0x30;
 								status = 1;
 								break;
-							case 2:
-								idx = (buff[i-2]<<8) | buff[i-1];
+							case 1:
+								idx = ((buff[i-2])-0x30)*10 + buff[i-1]-0x30;
 								status = 1;
 								break;
 							default: break;
@@ -226,12 +228,12 @@ static void parse_g_buff(u8 *buff)
 					{
 						switch(i-2)
 						{
-							case 1:
-								idx = buff[i-1];
+							case 0:
+								idx = buff[i-1]-0x30;
 								status = 1;
 								break;
-							case 2:
-								idx = (buff[i-2]<<8) | buff[i-1];
+							case 1:
+								idx = ((buff[i-2])-0x30)*10 + buff[i-1]-0x30;
 								status = 1;
 								break;
 							default: break;
@@ -257,6 +259,8 @@ static void parse_g_buff(u8 *buff)
 					break;
 			}
 			i++;
+			if(buff[i] == '"')
+				break;
 		}
 		gPagePara.g_string[idx][j] = 0;
 	}
@@ -271,18 +275,19 @@ static void parse_p_buff(char *buff)
 	{
 		if((buff[i] != ' ') && (buff[i-1] == ' '))
 		{
-			for(j = 0; j < sizeof(page_str)/sizeof(page_str[0]); j++)
-			{
-				if(strcmp(&buff[i], page_str[j]) == 0)
-				{
-					//在此更新页面序号
-					gPageInfo.cur_page_idx = j;
-					memset(&gPagePara, 0, sizeof(page_para));
-					break;
-				}
-			}
+			break;
 		}
 		i++;
+	}
+	for(j = 0; j < sizeof(page_str)/sizeof(page_str[0]); j++)
+	{
+		if(strcmp(&buff[i], page_str[j]) == 0)
+		{
+			//在此更新页面序号
+			gPageInfo.cur_page_idx = j;
+			memset(&gPagePara, 0, sizeof(page_para));
+			break;
+		}
 	}
 }
 
@@ -296,13 +301,34 @@ static void parse_x_buff(u8 *buff)
 	{
 		if((buff[i] != ' ') && (buff[i-1] == ' '))
 		{
-			if (j < 49)
-			{
-				gPagePara.x_str[0][j] = buff[i];
-				j++;
-			}
+			break;
 		}
 		i++;
+	}
+	while(buff[i] != 0)
+	{
+		if(buff[i] == '"')
+		{
+			i++;
+			break;
+		}
+		i++;
+	}
+	while(buff[i] != 0)
+	{
+		if (j < 29)
+		{
+			gPagePara.x_str[0][j] = buff[i];
+			j++;
+		}
+		else
+			break;
+		i++;
+		if(buff[i] == '"')
+		{
+			break;
+		}
+		
 	}
 	gPagePara.x_str[0][j] = 0;
 }
@@ -317,18 +343,102 @@ static void parse_f_buff(u8 *buff)
 	{
 		if((buff[i] != ' ') && (buff[i-1] == ' '))
 		{
-			if (j < 29)
-			{
-				gPagePara.f_str[0][j] = buff[i];
-				j++;
-			}
+			break;
 		}
+		i++;
+	}
+
+	while(buff[i] != 0)
+	{
+		if(buff[i] >= 'A')
+		{
+			break;
+		}
+		i++;
+	}
+
+	while(buff[i] != 0)
+	{
+		if (j < 29)
+		{
+			gPagePara.f_str[0][j] = buff[i];
+			j++;
+		}
+		else
+			break;
 		i++;
 	}
 	gPagePara.f_str[0][j] = 0;
 }
 
-void uart_to_main_cmd_parse(void)
+//按钮信息
+static void parse_b_buff(u8 *buff)
+{
+	u8 i = 2, j = 0;
+	u8 status = 0;
+	u8 idx = 0;
+	u8 bc = 0; //背景色标志
+	if((buff[1] >= '0') && ((buff[1] <= '9')))
+	{
+		while(buff[i] != 0)
+		{
+			switch(status)
+			{
+				case 0:
+					if(buff[i] == '.')
+					{
+						switch(i-2)
+						{
+							case 0:
+								idx = buff[i-1]-0x30;
+								status = 1;
+								break;
+							case 1:
+								idx = ((buff[i-2])-0x30)*10 + buff[i-1]-0x30;
+								status = 1;
+								break;
+							default: break;
+						}
+					}
+					break;
+				case 1:
+					if(buff[i] == '=')
+					{
+						if(buff[i+1] == '"')
+							i += 1;
+						else
+							bc = 1;
+						status = 2;
+						j = 0;
+					}
+					break;
+				case 2:
+					if ((idx < 24) && (j < 9))
+					{	
+						if(bc == 1)
+							gPagePara.b_bc[idx][j] = buff[i];
+						else
+							gPagePara.b_str[idx][j] = buff[i];
+						j++;
+					}
+					break;
+				default:
+					break;
+			}
+			i++;
+			if(buff[i] == '"')
+			{
+				break;
+			}
+		}
+		if(bc == 1)
+			gPagePara.b_bc[idx][j] = 0;
+		else
+			gPagePara.b_str[idx][j] = 0;
+	}
+}
+
+void uart_to_main_cmd_parse(u8 *uart_to_main_cmd_parse_buff)
 {	
 	//类型
 	switch( uart_to_main_cmd_parse_buff[0] )
@@ -345,7 +455,7 @@ void uart_to_main_cmd_parse(void)
 			break;	
 		case 'f':parse_f_buff(uart_to_main_cmd_parse_buff);
 			break;
-		case 'b':
+		case 'b':parse_b_buff(uart_to_main_cmd_parse_buff);
 			break;
 		case 'x':parse_x_buff(uart_to_main_cmd_parse_buff);
 			break;
@@ -353,3 +463,65 @@ void uart_to_main_cmd_parse(void)
 		
 	}
 }
+
+void uart_buff_cmd_parse(void)
+{
+	static u16 uart1_parse_cnt = 0;
+	u16 idx = 0;
+	u16 parselen = 0;
+	u16 rcv_cnt_tmp = 0;
+
+	rcv_cnt_tmp = uart1_rcv_cnt;
+
+	if(rcv_cnt_tmp == uart1_parse_cnt)
+	{
+		return;
+	}
+	if(rcv_cnt_tmp > uart1_parse_cnt)
+	{
+		parselen = rcv_cnt_tmp - uart1_parse_cnt;
+	}
+	else
+	{
+		parselen = UART_TO_MAIN_CMD_RCV_BUFF_LEN - uart1_parse_cnt + rcv_cnt_tmp;
+	}
+	if(parselen > 8)
+	{
+		while(idx < parselen)
+		{
+			if(uart1_parse_cnt + idx < UART_TO_MAIN_CMD_RCV_BUFF_LEN)
+			{
+				uart_to_main_cmd_parse_buff[idx] = uart_to_main_cmd_rcv_buff[uart1_parse_cnt + idx];
+			}
+			else
+			{
+				uart_to_main_cmd_parse_buff[idx] = uart_to_main_cmd_rcv_buff[uart1_parse_cnt + idx - UART_TO_MAIN_CMD_RCV_BUFF_LEN];	
+			}
+			if(uart_to_main_cmd_parse_buff[0] == 0xff)
+			{
+				parselen--;
+				uart1_parse_cnt++;
+				uart1_parse_cnt %= UART_TO_MAIN_CMD_RCV_BUFF_LEN;
+				continue;
+			}
+			if(uart_to_main_cmd_parse_buff[idx] == 0xff)
+			{
+				uart1_parse_cnt += idx;
+				uart1_parse_cnt %= UART_TO_MAIN_CMD_RCV_BUFF_LEN;
+				if(idx > 3)
+				{
+					uart_to_main_cmd_parse_buff[idx] = 0;
+					uart_to_main_cmd_parse(uart_to_main_cmd_parse_buff);
+					gPageInfo.need_update = 1;
+				}
+				parselen -=  idx + 1;
+				idx = 0;	
+			}
+			else
+			{
+				idx++;
+			}
+		}
+	}
+}
+

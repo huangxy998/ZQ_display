@@ -14,7 +14,6 @@ enum
 	PAGE_ID_BASIC,
 	PAGE_ID_MENU,
 	PAGE_ID_VERSION,
-	
 	PAGE_ID_MAX
 };
 
@@ -76,18 +75,29 @@ enum
 };
 
 //页项数据结构定义
+//页项数据结构定义
 typedef	struct	PAGE_ITEM_S  
 {
-	u8 type;													//类型
-	u8 touch_en;                                 				//触摸使能
+	u8 id;	//控件编号
+	u8 touch_en;    //触摸使能 1,触控 0 无触控
 	
-	u16 start_pos_x;											//开始位置X
-	u16 start_pos_y;											//开始位置Y
-	u16 width;												    //宽度	
-	u16 height;												    //高度	
-
+	u16 start_pos_x;//开始位置X
+	u16 start_pos_y;//开始位置Y
+	u16 width;//宽度	
+	u16 height;//高度	
+	
+	u8 com_data[16];	
 	void (*item_event)(void);                                    //项目处理函数
 }PAGE_ITEM_T;
+
+typedef	struct	ITEM_IDX_S  
+{
+	u8 id;	     //控件编号
+	u8 itemType; //控件类型
+	u8 itemIndx; //在类型中的序号
+}ITEM_IDX_T;
+
+
 
 //页面数据结构定义
 typedef	struct	PAGE_S  
@@ -111,6 +121,7 @@ typedef	struct
 	u8 cur_page_idx;															//当前页面序号
 	u8 pre_page_idx;                              //保存上一次页面序号
 	u8 total_pages;								  //页项数
+	u8 need_update;
 
 	u8 toucged_up;                                //触摸屏按下抬起标志
 	u8 toucged_down;                              //触摸屏被按下标志(未松开)

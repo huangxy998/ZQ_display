@@ -48,22 +48,25 @@
 #define LCD_COM_EXT
 #endif
 
-
+#define TOUCH_CMD_LEN      7
 
 typedef struct
 {
-	u8 t_string[32][10];
+	u8 t_string[44][24];
 	u8 n_val[32][10];
 	u8 g_string[2][50];
 	u8 j_percent[2][4];
 	u8 x_str[4][50];
 	u8 f_str[2][30];
+	u8 b_str[24][10];
+	u8 b_bc[24][10];
 }page_para;
 
 typedef struct
 {
 	unsigned char start;
 	unsigned char pageID;
+	unsigned char btnID;
 	unsigned char touchStatus;
 	unsigned char cmdEnd[3];
 }CMD_PAGE_ID;
@@ -78,8 +81,7 @@ typedef struct
 extern CMD_PAGE_ID_INFO  gIDInfo;
 
 extern page_para gPagePara;
-
-extern void uart_to_main_cmd_parse(void);
+extern void uart_buff_cmd_parse(void);
 
 
 #endif //#ifndef LCD_COM_H

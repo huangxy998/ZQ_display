@@ -15,20 +15,298 @@
 #include "touch.h"
 #include "lcd_com.h"
 
+#define PAGE_SENSOR_L1			8
+#define PAGE_SENSOR_L2			57
+#define PAGE_SENSOR_L3			140
+#define PAGE_SENSOR_L4			195
+#define PAGE_SENSOR_L5			272
+#define PAGE_SENSOR_L6			326
+#define PAGE_SENSOR_H1			33
+#define PAGE_SENSOR_H2			56
+#define PAGE_SENSOR_H3			80
+#define PAGE_SENSOR_H4			102
+#define PAGE_SENSOR_H5			125
+#define PAGE_SENSOR_H6			149
+#define PAGE_SENSOR_H7			172
+#define PAGE_SENSOR_H8			195
+#define PAGE_SENSOR_WT     45
+#define PAGE_SENSOR_WD     80
+#define PAGE_SENSOR_H          19
+
+
 static void pageParaSetInit(void);
 static void pageParaSetUpdate(void);
+static void pageParaSetItemUpdate(void);
+
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
 const PAGE_ITEM_T page_ParaSet_item[] =
 {
-	{ 
-		0,	
-		1,			//触控							
-		0,	0,
-		LCD_HOR_SIZE, LCD_VER_SIZE,
-		0	//显示更新函数	
+	             //t0控件
+	{
+		2,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H1,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
 	},
+	              //t1控件
+	{
+		3,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H2,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	             //t2控件
+	{
+		4,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H3,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t3控件
+	{
+		5,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H4,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	             //t4控件
+	{
+		6,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H5,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	           //t5控件
+	{
+		7,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H6,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	            //t6控件
+	{
+		8,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H7,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t7控件
+	{
+		9,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L2,PAGE_SENSOR_H8,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t8控件
+	{
+		10,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H1,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	             //t9控件
+	{
+		11,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H2,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	             //t10控件
+	{
+		12,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H3,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t11控件
+	{
+		13,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H4,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t12控件
+	{
+		14,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H5,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t13控件
+	{
+		15,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H6,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t14控件
+	{
+		16,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L4,PAGE_SENSOR_H7,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t15控件
+	{
+		17,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H1,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t16控件
+	{
+		18,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H2,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t17控件
+	{
+		19,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H3,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t18控件
+	{
+		20,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H4,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t19控件
+	{
+		21,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H5,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t20控件
+	{
+		22,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H6,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //t21控件
+	{
+		23,     //id
+		0,      //不支持触控
+		
+		PAGE_SENSOR_L6,PAGE_SENSOR_H7,    //开始坐标
+		PAGE_SENSOR_WD,PAGE_SENSOR_H , //宽高
+		
+		{0},
+		0       //默认0
+	},
+	              //b0控件
+	{
+		46,     //id
+		1,      //支持触控
+		
+		169,198,    //开始坐标
+		88,34, //宽高
+		
+		{0x65,0x0d,0x08,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+	          //b1控件
+	{
+		47,     //id
+		1,      //支持触控
+		
+		279,198,    //开始坐标
+		88,34, //宽高
+		
+	{0x65,0x0d,0x09,0x00,0xff,0xff,0xff},
+		0       //默认0
+	}
 };
 
 //页面结构体
@@ -57,6 +335,7 @@ static void pageParaSetInit(void)
 
 static void pageParaSetUpdate(void)
 {
+#if 0
 	LCD_SetFrontColor(WHITE);  //字颜色
 	LCD_SetBackColor(BLACK); 
 //	LCD_ShowString_hz16x16(10,100,200,16,16,"菜单子页面演示");
@@ -64,6 +343,47 @@ static void pageParaSetUpdate(void)
 	{
 		gPageInfo.cur_page_idx = PAGE_ID_MAIN;
 	}
+#endif
+	u8 item;
+	if(gPageInfo.toucged_up)
+	{
+		for(item = 0; item < page_ParaSet.page_item_num; item++)
+		{
+			if((page_ParaSet_item[item].touch_en))  //检查触控
+			{
+			
+				if( ( touch_up_pos.x >= page_ParaSet_item[item].start_pos_x ) && ( touch_up_pos.x < page_ParaSet_item[item].start_pos_x + page_ParaSet_item[item].width)  && \
+					( touch_up_pos.y >= page_ParaSet_item[item].start_pos_y ) && ( touch_up_pos.y < page_ParaSet_item[item].start_pos_y + page_ParaSet_item[item].height) )
+				{
+					gIDInfo.cmdUpdate = 1;
+					memcpy(&gIDInfo.cmdPage.start, &page_ParaSet_item[item].com_data[0], TOUCH_CMD_LEN);
+					break;
+				}
+			}	
+		}
+	}
+	if(gPageInfo.need_update == 1)
+	{
+		gPageInfo.need_update = 0;
+		pageParaSetItemUpdate();   //页面刷新
+	}
 	
 }
+
+static void pageParaSetItemUpdate(void)
+{
+	int item = 0;
+
+	for(item = 0; item < 22; item++)
+	{
+		LCD_ShowString(page_ParaSet_item[item].start_pos_x, 
+					page_ParaSet_item[item].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
+	}
+	for(; item < 44; item++)
+	{
+		LCD_ShowString(page_ParaSet_item[item-22].start_pos_x - 55, 
+					page_ParaSet_item[item-22].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
+	}
+}
+
 

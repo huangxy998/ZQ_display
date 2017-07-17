@@ -1398,7 +1398,8 @@ void LCD_ShowString(u16 x,u16 y,u16 total_width,u16 char_high,u8 char_width,u8 *
 	//当前X位置,显示最右边位置
 	u16 curr_x_pos, rightest_x_pos;
 	
-	
+	if(*p == 0)
+		return;
 	
 	curr_x_pos = x;
 	rightest_x_pos = x + total_width;
@@ -1647,34 +1648,42 @@ void LCD_ShowString_hz16x16(u16 x,u16 y,u16 total_width,u16 char_high,u8 char_wi
     while(*p!=0x00)//判断是不是非法字符!
     { 
         if(curr_x_pos>rightest_x_pos)
-				{	
-					//下一行从开始位置显示
-					x=x0;
-					
-					if( y <= LCD_VER_SIZE )
-					{
-						//换下一行
-						y += char_high;
-					}
-					else
-					{
-						//到达屏幕最下方
-						return;
-					}
-				}
-				
-				//hz_offset = get_GB2312_offset((unsigned char *)"川");;
-				//hz_offset = get_GB2312_offset(p);
-				
-				LCD_ShowChar_hz16x16(x,y,p,char_high,0);
-				
-				//右移
-        x = x+char_width;
-				
-				//指向下一个汉字
-        p+=2;
-				
-				curr_x_pos += char_width;
+		{	
+			//下一行从开始位置显示
+			x=x0;
+			
+			if( y <= LCD_VER_SIZE )
+			{
+				//换下一行
+				y += char_high;
+			}
+			else
+			{
+				//到达屏幕最下方
+				return;
+			}
+		}
+		
+		//hz_offset = get_GB2312_offset((unsigned char *)"川");;
+		//hz_offset = get_GB2312_offset(p);
+		if(*p < 127)
+		{
+			LCD_ShowChar(x,y,*p,char_high,0);				
+			//右移
+    		x += ((char_width+1)>>1);				
+			//指向下一个汉字
+    		p+=1;				
+			curr_x_pos += ((char_width+1)>>1);
+		}
+		else
+		{
+			LCD_ShowChar_hz16x16(x,y,p,char_high,0);				
+			//右移
+    		x += char_width;				
+			//指向下一个汉字
+    		p+=2;				
+			curr_x_pos += char_width;
+		}
     }  
 }
   	

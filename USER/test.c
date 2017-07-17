@@ -22,6 +22,12 @@
 #include "page_serial.h"
 #include "page_systemset.h"
 #include "page_timeset.h"
+#include "page_start.h"
+#include "page_mainpara.h"
+#include "page_confirm.h"
+#include "page_error.h"
+
+
 
 #include "lcd_com.h" 
 #include "main.h"  
@@ -37,7 +43,6 @@ u32 main_task_mask = 0;
 int main(void)
 {	
 		//u32 FLASH_SIZE;
-	
  	Stm32_Clock_Init(9);	//系统时钟设置
 	uart_init(72,115200);	//串口初始化为9600
 	delay_init(72);	   	 	//延时初始化 
@@ -63,11 +68,12 @@ int main(void)
 		LCD_ShowString(10,150,200,16,16,"Please Check!      ");
 		delay_ms(500);
 	}	
-	LCD_ShowString(10,150,200,16,16,"25Q32 Check OK!");
-	delay_ms(500);
+//	LCD_ShowString(10,150,200,16,16,"25Q32 Check OK!");
+//	delay_ms(500);
 	
 	LCD_Clear(WHITE);		
 	tp_dev.init();			//触摸屏初始化
+#if 0
  	LCD_SetFrontColor(RED);//设置字体为红色 
 	
 	LCD_ShowString_hz16x16(10,70,200,16,16,"恒强电子");	
@@ -79,47 +85,50 @@ int main(void)
 	delay_ms(3000);	
 	
 	LCD_Clear(WHITE);	
+#endif
 	//初始化显示页面参数
-	gPageInfo.cur_page_idx = PAGE_ID_STANDTIME;//点钞机初始化页面
+	gPageInfo.cur_page_idx = PAGE_ID_START;//点钞机初始化页面
 	gPageInfo.page_init_finished = 0;     //页面未初始化
 	gPageInfo.pre_page_idx = PAGE_ID_NUM;//保留上一次页面ID
 	gPageInfo.total_pages  = PAGE_ID_NUM;
-	
+
+	gPageInfo.p_page[PAGE_ID_START] = &page_start;
 	gPageInfo.p_page[PAGE_ID_STANDTIME] = &page_basic;
 	gPageInfo.p_page[PAGE_ID_MAIN] = &page_menu;
 	gPageInfo.p_page[PAGE_ID_SYSVERSION] = &page_version;
 	gPageInfo.p_page[PAGE_ID_BLACKLIST] = &page_Blacklist;
 	gPageInfo.p_page[PAGE_ID_BLACKKEY] = &page_KeyBoard;
-	gPageInfo.p_page[PAGE_ID_CISCHEK] = &page_CISConfig;
+	gPageInfo.p_page[PAGE_ID_CISCHEK] = &page_CISTest;
 	gPageInfo.p_page[PAGE_ID_CISSET1] = &page_CISConfig;
 	gPageInfo.p_page[PAGE_ID_SYSUPDATA] = &page_version;
 	gPageInfo.p_page[PAGE_ID_ZBUPDATA] = &page_version;
 	gPageInfo.p_page[PAGE_ID_NETSET] = &page_NetConfig;
 	gPageInfo.p_page[PAGE_ID_GZHMDIS] = &page_Serial;
 	gPageInfo.p_page[PAGE_ID_SYSEMSET] = &page_SystemSet;
-	gPageInfo.p_page[PAGE_ID_SENSORCHECK] = &page_SystemSet;
-	gPageInfo.p_page[PAGE_ID_GEARSET1] = &page_SystemSet;
-	gPageInfo.p_page[PAGE_ID_GEARSET2] = &page_SystemSet;
+	gPageInfo.p_page[PAGE_ID_SENSORCHECK] = &page_ParaSet;
+	gPageInfo.p_page[PAGE_ID_GEARSET1] = &page_mainpara;
+	gPageInfo.p_page[PAGE_ID_GEARSET2] = &page_dialog;
 	gPageInfo.p_page[PAGE_ID_DISPLIGHT] = &page_SystemSet;
 	gPageInfo.p_page[PAGE_ID_CLOCKDISP] = &page_TimeSet;
 	gPageInfo.p_page[PAGE_ID_CLOCKSET] = &page_TimeSet;
 	gPageInfo.p_page[PAGE_ID_SPEAK] = &page_TimeSet;
 	gPageInfo.p_page[PAGE_ID_INPUT] = &page_TimeSet;
-	gPageInfo.p_page[PAGE_ID_OUTPUT] = &page_TimeSet;
-	gPageInfo.p_page[PAGE_ID_CONFIRM] = &page_TimeSet;
-	gPageInfo.p_page[PAGE_ID_CONFIRM1] = &page_TimeSet;
-	gPageInfo.p_page[PAGE_ID_ERRER] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_OUTPUT] = &page_dialog;
+	gPageInfo.p_page[PAGE_ID_CONFIRM] = &page_confirm;
+	gPageInfo.p_page[PAGE_ID_CONFIRM1] = &page_confirm;
+	gPageInfo.p_page[PAGE_ID_ERRER] = &page_error;
 	
 		
 	//加载页面，将页面结构体指针指向实际的页面数据结构
-	
+	LCD_SetBackColor(BLACK);
 	while(1)
 	{		
 		//显示模块与主控通讯命令解析
-		if( main_task_mask & MAIN_TASK_MASK_UART_TO_MAIN_CMD_PARSE )
-		{
-			uart_to_main_cmd_parse();
-		}
+		//if( main_task_mask & MAIN_TASK_MASK_UART_TO_MAIN_CMD_PARSE )
+		//{
+		//	main_task_mask = 0;
+			uart_buff_cmd_parse();
+		//}
 		
 		//获取触控状态
 		gPageInfo.toucged_up = touch_up_check();
@@ -128,16 +137,19 @@ int main(void)
 		//页面显示
 		if(gPageInfo.cur_page_idx != gPageInfo.pre_page_idx)
 		{
-			gPageInfo.pre_page_idx = gPageInfo.cur_page_idx;
 			gPageInfo.p_page[gPageInfo.cur_page_idx]->page_init(); //页面初始化
+			gPageInfo.pre_page_idx = gPageInfo.cur_page_idx;
 		}
-		gPageInfo.p_page[gPageInfo.cur_page_idx]->page_update(); //页面更新	
-		if(gIDInfo.cmdUpdate == 1)
+		gPageInfo.p_page[gPageInfo.cur_page_idx]->page_update(); //页面更新		
+		if(gIDInfo.cmdUpdate != 0)
 		{
+			u8 sendlen = sizeof(CMD_PAGE_ID);
+			if(gIDInfo.cmdUpdate == 2)
+				sendlen = 4;
 			gIDInfo.cmdUpdate = 0;
-			uartSendbuffer((u8*)&gIDInfo.cmdPage, sizeof(CMD_PAGE_ID));
-		}
-		
+			uartSendbuffer((u8*)&gIDInfo.cmdPage, sendlen);
+		}	
+
 	}	
 }
 

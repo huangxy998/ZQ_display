@@ -40,26 +40,47 @@
 ////////////////////////////////////////////////////////////////////////////////// 	  
  
 //////////////////////////////////////////////////////////////////
-
+//加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
+#if 1
+#pragma import(__use_no_semihosting)             
+//标准库需要的支持函数                 
+struct __FILE 
+{ 
+	int handle; 
+	/* Whatever you require here. If the only file you are using is */ 
+	/* standard output using printf() for debugging, no file handling */ 
+	/* is required. */ 
+}; 
+/* FILE is typedef’ d in stdio.h. */ 
+FILE __stdout;       
+//定义_sys_exit()以避免使用半主机模式    
+_sys_exit(int x) 
+{ 
+	x = x; 
+} 
 //重定向fputc函数
 //printf的输出，指向fputc，由fputc输出到串口
 //这里使用串口1(USART1)输出printf信息
-void uartSendChar(u8 ch)
+int fputc(int ch, FILE *f)
 {      
 	while((USART1->SR&0X40)==0);//等待上一次串口数据发送完成  
-	USART1->DR = ch;      	//写DR,串口1将发送数据
+	USART1->DR = (u8) ch;      	//写DR,串口1将发送数据
+	return ch;
 }
 
-void uartSendbuffer(u8* ch, int len)
+void uartSendbuffer(u8* buff, int len)
 {
-	int i;
-	for(i = 0; i < len; i++)
+	int i = 0;
+	FILE f;
+	int ch;
+	for( i = 0; i < len; i++)
 	{
-		uartSendChar(ch[i]);
+		ch = buff[i];
+		fputc(ch, &f);
 	}
 }
-
-
+#endif 
+//end
 //////////////////////////////////////////////////////////////////
 
 #if EN_USART1_RX   //如果使能了接收
@@ -74,7 +95,7 @@ u8 uart_to_main_com_sm;
 //串口1中断服务程序
 //注意,读取USARTx->SR能避免莫名其妙的错误   	
 u8 uart_to_main_cmd_rcv_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN];     		//接收缓冲,最大USART_REC_LEN个字节.
-u8 uart_to_main_cmd_parse_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN];     	//接收缓冲,最大USART_REC_LEN个字节.
+u8 uart_to_main_cmd_parse_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN/4];     	//接收缓冲,最大USART_REC_LEN个字节.
 
 u16 uart1_rcv_cnt = 0;       //接收状态标记	 
 u16 total_len = 0;
@@ -96,32 +117,11 @@ void USART1_IRQHandler(void)
 		//存入缓冲区
 		uart_to_main_cmd_rcv_buff[uart1_rcv_cnt] = rcv_byte;
 		uart1_rcv_cnt++;
-		if(uart1_rcv_cnt >= 3)
-		{
-			if((uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 3] == 0xff) && 
-				(uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 2] == 0xff) &&
-				(uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 1] == 0xff)) //收到一条完整报文
-			{
-				memcpy ( uart_to_main_cmd_parse_buff, uart_to_main_cmd_rcv_buff, uart1_rcv_cnt - 3 );
-				uart_to_main_cmd_parse_buff[uart1_rcv_cnt - 3] = 0; //加入一个结束符	
-				uart1_rcv_cnt = 0;				
-				main_task_mask |= MAIN_TASK_MASK_UART_TO_MAIN_CMD_PARSE;
-			}
-			else  //检测少接到0xff的情况
-			{
-				if((uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 3] == 0xff))
-				{
-					if((uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 2] != 0xff) ||
-						(uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 1] != 0xff))
-					{
-						uart_to_main_cmd_rcv_buff[0] = uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 2];
-						uart_to_main_cmd_rcv_buff[1] = uart_to_main_cmd_rcv_buff[uart1_rcv_cnt - 1];
-						uart1_rcv_cnt = 2;
-					}
-				}
-			}
-		}
+		if(uart1_rcv_cnt >= UART_TO_MAIN_CMD_RCV_BUFF_LEN)
+			uart1_rcv_cnt = 0;
 	}
+
+	
 	
 #if SYSTEM_SUPPORT_OS 	//如果SYSTEM_SUPPORT_OS为真，则需要支持OS.
 	OSIntExit();  											 

@@ -36,7 +36,7 @@
 #define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
 
 
-#define UART_TO_MAIN_CMD_RCV_BUFF_LEN		128
+#define UART_TO_MAIN_CMD_RCV_BUFF_LEN		1024
 
 
 //扫描串口通讯状态机
@@ -48,14 +48,14 @@ enum
 	
 };
 
+extern u8 uart_to_main_cmd_rcv_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN];     		//接收缓冲,最大USART_REC_LEN个字节.
+extern u8 uart_to_main_cmd_parse_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN/4];
 
-extern u8 uart_to_main_cmd_parse_buff[UART_TO_MAIN_CMD_RCV_BUFF_LEN];     	//接收缓冲,最大USART_REC_LEN个字节.
-	  	
+extern u16 uart1_rcv_cnt;	  	
 
 //如果想串口中断接收，请不要注释以下宏定义
 void uart_init(u32 pclk2,u32 bound);
 void uartSendbuffer(u8* ch, int len);
-
 
 #endif	   
 

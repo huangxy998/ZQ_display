@@ -52,6 +52,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		6, 22,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x01,0x00,0xff,0xff,0xff},
 		pageMenuItemVersion	//显示更新函数	
 	},
 
@@ -60,6 +61,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		110, 22,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x02,0x00,0xff,0xff,0xff},
 		pageMenuItemBlacklist//显示更新函数	
 	},
 
@@ -68,6 +70,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		214, 22,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x04,0x00,0xff,0xff,0xff},
 		pageMenuItemPictureSet//显示更新函数	
 	},
 
@@ -76,6 +79,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		320, 22,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x05,0x00,0xff,0xff,0xff},
 		pageMenuItemUpdate//显示更新函数	
 	},
 
@@ -84,6 +88,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		6, 128,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x03,0x00,0xff,0xff,0xff},
 		pageMenuItemNetSet//显示更新函数	
 	},
 
@@ -92,6 +97,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		110, 128,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x06,0x00,0xff,0xff,0xff},
 		pageMenuItemSerial//显示更新函数	
 	},
 
@@ -100,6 +106,7 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		214, 128,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x07,0x00,0xff,0xff,0xff},
 		pageMenuItemSystem//显示更新函数	
 	},
 
@@ -108,9 +115,22 @@ const PAGE_ITEM_T page_menu_item[] =
 		1,			//触控							
 		320, 128,     //起始坐标
 		76, 92,     //字符长宽
+		{0x65,0x03,0x08,0x00,0xff,0xff,0xff},
 		pageMenuItemTime//显示更新函数	
 	},
 };
+
+const PAGE_ITEM_T g0=             //g0控件
+{
+	9,     //id
+	0,      //不支持触控
+  0,220,   //开始坐标
+	400,20,//宽高
+	
+	{0},
+	0       //默认0
+};
+
 
 //页面结构体
 const PAGE_T page_menu =
@@ -166,27 +186,30 @@ static void pageMenuUpdate(void)
 		{
 //			gPageInfo.cur_page_idx = PAGE_ID_STANDTIME;
 				gIDInfo.cmdUpdate = 1;
-				gIDInfo.cmdPage.touchStatus = PAGE_ID_STANDTIME;
+				gIDInfo.cmdPage.touchStatus = 0;
+				gIDInfo.cmdPage.btnID = 0;
+				gIDInfo.cmdPage.pageID = PAGE_ID_MAIN;
 		}
 		pressed = 0;
 		preitem = 0xff;
 	}
+	LCD_ShowString(g0.start_pos_x, g0.start_pos_y, 300, 16, 16, gPagePara.g_string[0]);
 }
 
 static void pageMenuItemVersion(void)
 {
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
-		pressed = 1;
-		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
-		show_pressed_icon_in_flash( page_menu_item[0].start_pos_x, page_menu_item[0].start_pos_y,
-			 page_menu_item[0].width,  page_menu_item[0].height, MENU_PAGE_DOWN_OFFSET );
+			pressed = 1;
+			show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
+			show_pressed_icon_in_flash( page_menu_item[0].start_pos_x, page_menu_item[0].start_pos_y,
+			page_menu_item[0].width,  page_menu_item[0].height, MENU_PAGE_DOWN_OFFSET );
 	}
 	else if (gPageInfo.toucged_up)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
-	gIDInfo.cmdUpdate = 1;
-	gIDInfo.cmdPage.touchStatus = PAGE_ID_VERSION;
+		gIDInfo.cmdUpdate = 1;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[0].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }
@@ -203,8 +226,12 @@ static void pageMenuItemBlacklist(void)
 	else if (gPageInfo.toucged_up)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_BLACKLIST;
-	gIDInfo.cmdUpdate = 1;
-	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
+		gIDInfo.cmdUpdate = 1;
+//		gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[1].com_data[0], TOUCH_CMD_LEN);
+		gPageInfo.cur_page_idx = PAGE_ID_BLACKLIST;
+		memset(&gPagePara, 0, sizeof(page_para));
+
 
 	}	
 }
@@ -222,7 +249,8 @@ static void pageMenuItemPictureSet(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
 	gIDInfo.cmdUpdate = 1;
-	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
+//	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[2].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }
@@ -240,8 +268,8 @@ static void pageMenuItemUpdate(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
 		gIDInfo.cmdUpdate = 1;
-		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSUPDATA;
-
+//		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSUPDATA;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[3].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }
@@ -259,8 +287,10 @@ static void pageMenuItemNetSet(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
 		gIDInfo.cmdUpdate = 1;
-		gIDInfo.cmdPage.touchStatus = PAGE_ID_NETSET;
-
+//		gIDInfo.cmdPage.touchStatus = PAGE_ID_NETSET;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[4].com_data[0], TOUCH_CMD_LEN);
+		gPageInfo.cur_page_idx = PAGE_ID_NETSET;
+		memset(&gPagePara, 0, sizeof(page_para));
 
 	}	
 }
@@ -278,8 +308,8 @@ static void pageMenuItemSerial(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
 		gIDInfo.cmdUpdate = 1;
-		gIDInfo.cmdPage.touchStatus = PAGE_ID_GZHMDIS;
-
+//		gIDInfo.cmdPage.touchStatus = PAGE_ID_GZHMDIS;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[5].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }
@@ -297,8 +327,8 @@ static void pageMenuItemSystem(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
 		gIDInfo.cmdUpdate = 1;
-		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSEMSET;
-
+//		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSEMSET;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[6].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }
@@ -316,9 +346,8 @@ static void pageMenuItemTime(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
 		gIDInfo.cmdUpdate = 1;
-		gIDInfo.cmdPage.touchStatus = PAGE_ID_CLOCKDISP;
-
-
+//		gIDInfo.cmdPage.touchStatus = PAGE_ID_CLOCKDISP;
+		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[7].com_data[0], TOUCH_CMD_LEN);
 	}	
 }
 

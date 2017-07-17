@@ -19,10 +19,11 @@
 
 PAGE_MAIN_PARA_T gPageMainPara;
 
+static void pageBasicItemMode(void);
 
 static void pageBasicInit(void);
 static void pageBasicUpdate(void);
-
+#if 0
 static void pageBasicItemMode(void);
 static void pageBasicItemSensity(void);
 static void pageBasicItemPreset(void);
@@ -36,10 +37,13 @@ static void pageBasicItemShowSum(void);
 static void pageBasicItemShowSDStatus(void);
 static void pageBasicItemShowNetStatus(void);
 static void pageBasicItemShowSerialNum(void);
-
+#else
+static void pageBasicItemUpdate(void);
+#endif
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
+#if 0
 const PAGE_ITEM_T page_basic_item[] =
 {
 	{  //模式
@@ -157,7 +161,272 @@ const PAGE_ITEM_T page_basic_item[] =
 	},
 	
 };
+#else
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//STANDtime
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
+static const ITEM_IDX_T item_id2indx[] = 
+{
+	{ 14, 'n', 0},  //n0
+	{ 8, 'n', 1},  //n1
+	{ 9, 'n', 2},  //n2
+	{ 10, 'n', 3},  //n3
+	{ 11, 'n', 4},  //n4
+	{ 12, 'n', 5}, //n5
+	{ 13, 'n', 6}, //n6
+	{ 7, 'n', 14}, //n14
+
+	{ 16, 't', 0}, //t0
+	{ 17, 't', 5}, //t5
+	{ 15, 't', 6}, //t6
+	{ 18, 't', 7}, //t7
+
+	{ 23, 'x', 0}, 
+	{ 3, 'f', 0}, 
+};
+
+const PAGE_ITEM_T page_basic_item[] =
+{           //b0控件
+	{
+		0,     //id
+		1,      //支持触控
+		
+		0,0,    //开始坐标
+		95,48, //宽高
+		
+		{0x65,0x01,0x21,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+ //b5控件
+	{
+		1,     //id
+		1,      //支持触控
+		
+		142,4,    //开始坐标
+		110,46, //宽高
+		
+		{0x65,0x01,0x16,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	            //b4控件
+	{
+		2,     //id
+		1,      //支持触控
+		
+		260,1,    //开始坐标
+		64,24, //宽高
+		
+		{0x65,0x01,0x02,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	             //b3控件
+	{
+		3,     //id
+		1,      //支持触控
+		
+		260,28,    //开始坐标
+		64,24, //宽高
+		
+		{0x65,0x01,0x01,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	            //bt0控件
+	{
+		4,     //id
+		1,      //支持触控
+		
+		0,71,    //开始坐标
+		48,24,//宽高
+		
+		{0x65,0x01,0x1d,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	             //bt1控件
+	{
+		5,     //id
+		1,      //支持触控
+		
+		6,75,    //开始坐标
+		60,30,//宽高
+		
+		{0x65,0x01,0x1e,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	            //bt2控件
+	{
+		6,     //id
+		1,      //支持触控
+		
+		6,112,    //开始坐标
+		60,30,//宽高
+		
+		{0x65,0x01,0x1d,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+
+	            //n14控件
+	{	
+		7,      //id
+		0,      //不支持触控
+		
+		330,30,  //开始坐标
+		66, 22,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	            //n1控件
+	{	
+		8,      //id
+		0,      //不支持触控
+		
+		30,52,  //开始坐标
+		45,16,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n2控件
+	{	
+		9,      //id
+		0,      //不支持触控
+		
+		96,52,  //开始坐标
+		45,16,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n3控件
+	{	
+		10,      //id
+		0,      //不支持触控
+		
+		162,52,  //开始坐标
+		45,16,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n4控件
+	{	
+		11,      //id
+		0,      //不支持触控
+		
+		224,52,  //开始坐标
+		40,16,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n5控件
+	{	
+		12,      //id
+		0,      //不支持触控
+		
+		278,52,  //开始坐标
+		45,16,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	            //n6控件
+	{	
+		13,      //id
+		0,      //不支持触控
+		
+		354,52,  //开始坐标
+		29,16,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+
+	          //n0控件
+	{	
+		14,      //id
+		0,      //不支持触控
+		
+		86,77,  //开始坐标
+		260,100,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+	            //t6控件
+	{	
+		15,      //id
+		0,      //不支持触控
+		
+		351,132,  //开始坐标
+		39,30,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+	          //t0控件
+	{	
+		16,      //id
+		0,      //不支持触控
+		
+		60,182,  //开始坐标
+		190,30,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+	          //t5控件
+	{	
+		17,      //id
+		0,      //不支持触控
+		
+		292,184,  //开始坐标
+		104,26,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //t7控件
+	{	
+		18,      //id
+		0,      //不支持触控
+		
+		292,214,  //开始坐标
+		104,26,//宽高
+		
+		{0},
+		0       //默认0
+	}
+};
+
+#endif
 //页面结构体
 const PAGE_T page_basic = 
 {
@@ -252,41 +521,14 @@ static void pageBasicInit(void)
 {
 	u8 tmp_buff[8];
 	show_bmp_in_flash(0,0,bmp_mainPage.width,bmp_mainPage.height,bmp_mainPage.addr);
-	if(gPageMainPara.add_flg)
-	{
-		show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOn.width, bmp_menuPageAddOn.height, bmp_menuPageAddOn.addr);
-	}
-	else
-	{
-		show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOff.width, bmp_menuPageAddOff.height, bmp_menuPageAddOff.addr);
-	}
-	LCD_SetFrontColor(page_item_func_name_color[gPageMainPara.mode]);  //字颜色
-	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);                            //背景颜色
-	LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x, 
-				page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
-				page_item_func_name[gPageMainPara.mode][0], 48, 0 );
-	LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x+48, 
-				page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
-				page_item_func_name[gPageMainPara.mode][1], 48, 0 );
-	LCD_Fill(page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + 45, page_basic_item[BASIC_ITEM_SENSITY].start_pos_y + 2,
-			page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + page_basic_item[BASIC_ITEM_SENSITY].width - 5, 
-			page_basic_item[BASIC_ITEM_SENSITY].start_pos_y+ page_basic_item[BASIC_ITEM_SENSITY].height - 2, page_item_sensity_color[gPageMainPara.sensity]);
-	if( gPageMainPara.pre_set >= 1000 )
-	{
-		sprintf((char*)tmp_buff," %d ", gPageMainPara.pre_set );
-	}
-	else if( gPageMainPara.pre_set >= 100 )
-	{
-		sprintf((char*)tmp_buff,"  %d ", gPageMainPara.pre_set );
-	}
-	else if( gPageMainPara.pre_set >= 10 )
-	{
-		sprintf((char*)tmp_buff,"  %d  ", gPageMainPara.pre_set );
-	}
-	LCD_SetFrontColor(WHITE);  //字颜色
-	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR); 	
-	LCD_ShowString(page_basic_item[BASIC_ITEM_PRESET].start_pos_x + 45, page_basic_item[BASIC_ITEM_PRESET].start_pos_y + 4, 100, 16, 16, tmp_buff);
-
+//	if(gPageMainPara.add_flg)
+//	{
+//		show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOn.width, bmp_menuPageAddOn.height, bmp_menuPageAddOn.addr);
+//	}
+//	else
+//	{
+//		show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOff.width, bmp_menuPageAddOff.height, bmp_menuPageAddOff.addr);
+//	}
 }
 
 //基本页面刷新
@@ -294,45 +536,91 @@ static void pageBasicUpdate(void)
 {
 	u8 item;
 
-	for(item = 0; item < page_basic.page_item_num; item++)
+	if(gPageInfo.toucged_up)
 	{
-		if(page_basic_item[item].touch_en)
+		for(item = 0; item < page_basic.page_item_num; item++)
 		{
-			if(gPageInfo.toucged_down || gPageInfo.toucged_up)
+			if(page_basic_item[item].touch_en)  //检查触控
 			{
 				if( ( touch_up_pos.x >= page_basic_item[item].start_pos_x ) && ( touch_up_pos.x < page_basic_item[item].start_pos_x + page_basic_item[item].width)  && \
 					( touch_up_pos.y >= page_basic_item[item].start_pos_y ) && ( touch_up_pos.y < page_basic_item[item].start_pos_y + page_basic_item[item].height) )
 				{
-					page_basic_item[item].item_event();
+					gIDInfo.cmdUpdate = 1;
+					memcpy(&gIDInfo.cmdPage.start, &page_basic_item[item].com_data[0], TOUCH_CMD_LEN);
+					break;
 				}
-			}
-		}
-		else
-		{
-			page_basic_item[item].item_event();
+			}	
 		}
 	}
+	if(gPageInfo.need_update == 1)
+	{
+		gPageInfo.need_update = 0;
+		pageBasicItemUpdate();   //页面刷新
+	}
 }
+
+const char* modeTable[] = {"智能", "混点", "分版", "清点"};
+///////////////////////////////////////////////////////////
+//显示更新
+static void pageBasicItemUpdate(void)
+{	
+	int j = 0;
+	
+	for( j = 0; j < sizeof(item_id2indx)/sizeof(ITEM_IDX_T); j++ )
+	{
+		switch(item_id2indx[j].itemType)
+		{
+			case 'n':
+				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
+					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, gPagePara.n_val[item_id2indx[j].itemIndx]);
+				break;
+			case 't':
+				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
+					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, gPagePara.t_string[item_id2indx[j].itemIndx]);
+				break;
+			case 'x':
+				break;
+			case 'f':
+				break;
+			default:
+				break;
+		}
+	}
+	pageBasicItemMode();
+	LCD_Fill(page_basic_item[2].start_pos_x + 70, page_basic_item[2].start_pos_y + 2,
+			page_basic_item[2].start_pos_x + page_basic_item[2].width + 70, 
+			page_basic_item[2].start_pos_y+ page_basic_item[2].height - 2, atoi((const char *)gPagePara.b_bc[1]));
+}
+
+
 
 ///////////////////////////////////////////////////////////
 //模式更新
 static void pageBasicItemMode(void)
 {
-	if(gPageInfo.toucged_up)
+	u8 i;
+
+	for(i = 0; i < 4; i++)
 	{
-		gPageMainPara.mode++;
-		if(gPageMainPara.mode >= 4)
-			gPageMainPara.mode = 0;
-		LCD_SetFrontColor(page_item_func_name_color[gPageMainPara.mode]);  //字颜色
-		LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);                            //背景颜色
-		LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x, 
-					page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
-					page_item_func_name[gPageMainPara.mode][0], 48, 0 );
-		LCD_ShowHZ(	page_basic_item[BASIC_ITEM_MODE].start_pos_x+48, 
-					page_basic_item[BASIC_ITEM_MODE].start_pos_y, 
-					page_item_func_name[gPageMainPara.mode][1], 48, 0 );
+		if(strcmp( (const char*)gPagePara.x_str, modeTable[i]) == 0)
+		{
+			break;
+		}
+	}
+	if(i < 4)
+	{
+		LCD_SetFrontColor(page_item_func_name_color[i]);  //字颜色
+		LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
+		LCD_ShowHZ(	page_basic_item[1].start_pos_x, 
+					page_basic_item[1].start_pos_y, 
+					page_item_func_name[i][0], 48, 0 );
+		LCD_ShowHZ(	page_basic_item[1].start_pos_x+48, 
+					page_basic_item[1].start_pos_y, 
+					page_item_func_name[i][1], 48, 0 );
 	}
 }
+
+#if 0
 
 //灵敏度更新
 static void pageBasicItemSensity(void)
@@ -346,6 +634,11 @@ static void pageBasicItemSensity(void)
 		LCD_Fill(page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + 45, page_basic_item[BASIC_ITEM_SENSITY].start_pos_y + 2,
 			page_basic_item[BASIC_ITEM_SENSITY].start_pos_x + page_basic_item[BASIC_ITEM_SENSITY].width - 5, 
 			page_basic_item[BASIC_ITEM_SENSITY].start_pos_y+ page_basic_item[BASIC_ITEM_SENSITY].height - 2, page_item_sensity_color[gPageMainPara.sensity]);
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.start = 0x65;
+		gIDInfo.cmdPage.touchStatus = 1;
+		gIDInfo.cmdPage.btnID = 0x03;
+		gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
 	}
 }
 
@@ -356,6 +649,12 @@ static void pageBasicItemPreset(void)
 	
 	if(gPageInfo.toucged_up)
 	{
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.start = 0x65;
+		gIDInfo.cmdPage.touchStatus = 1;
+		gIDInfo.cmdPage.btnID = 0x02;
+		gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
+		
 		gPageMainPara.pre_set += 10;
 		if(gPageMainPara.pre_set > 100)
 			gPageMainPara.pre_set = 0;
@@ -395,6 +694,11 @@ static void pageBasicItemAdd(void)
 		{
 			show_bmp_in_flash(page_basic_item[BASIC_ITEM_ADD].start_pos_x, page_basic_item[BASIC_ITEM_ADD].start_pos_y, bmp_menuPageAddOff.width, bmp_menuPageAddOff.height, bmp_menuPageAddOff.addr);
 		}
+		gIDInfo.cmdUpdate = 1;
+		gIDInfo.cmdPage.start = 0x65;
+		gIDInfo.cmdPage.touchStatus = 1;
+		gIDInfo.cmdPage.btnID = 0x1f;
+		gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
 	}
 }
 
@@ -424,7 +728,10 @@ static void pageBasicItemEnterMenu(void)
 	{
 //		gPageInfo.cur_page_idx = PAGE_ID_MENU;  
 		gIDInfo.cmdUpdate = 1;
-		gIDInfo.cmdPage.touchStatus = PAGE_ID_MAIN;
+		gIDInfo.cmdPage.start = 0x65;
+		gIDInfo.cmdPage.touchStatus = 1;
+		gIDInfo.cmdPage.btnID = 0x21;
+		gIDInfo.cmdPage.pageID = PAGE_ID_MAIN;
 	}
 }
 
@@ -505,4 +812,5 @@ static void pageBasicItemShowSerialNum(void)
 {
 	LCD_ShowString(page_basic_item[BASIC_ITEM_SERIAL].start_pos_x, page_basic_item[BASIC_ITEM_SERIAL].start_pos_y, 144, 24, 24, gPageMainPara.serial);
 }
+#endif
 
