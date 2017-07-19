@@ -71,6 +71,12 @@ const PAGE_ITEM_T page_Confirm_item[] =
 
 };
 
+const u8* dialogStr[] =
+{
+	"确认",
+	"取消",
+};
+
 //页面结构体
 const PAGE_T page_confirm =
 { 
@@ -87,12 +93,13 @@ extern const _bmp_info bmp_Dialog_Page;
 
 static void pageConfirmInit(void)
 {
-	u16 color;
+	u16 color, bccolor;
 	u16 i;
 	show_bmp_in_flash(page_Confirm_item[0].start_pos_x,page_Confirm_item[0].start_pos_y,
 		              bmp_Dialog_Page.width,bmp_Dialog_Page.height,bmp_Dialog_Page.addr);
 	//画按键b0，b1
 	color = POINT_COLOR;
+	bccolor = BACK_COLOR;
 	POINT_COLOR = BLACK;
 	for(i = 1; i < 3; i++)
 	{
@@ -107,8 +114,11 @@ static void pageConfirmInit(void)
 		LCD_DrawLine(page_Confirm_item[i].start_pos_x,page_Confirm_item[i].start_pos_y+page_Confirm_item[i].height,
 			     page_Confirm_item[i].start_pos_x+page_Confirm_item[i].width,
 			     page_Confirm_item[i].start_pos_y+page_Confirm_item[i].height);
+		BACK_COLOR = GRAY;
+		LCD_ShowString_hz16x16(page_Confirm_item[i].start_pos_x+20, page_Confirm_item[i].start_pos_y+7, 100, 16, 16, dialogStr[i - 1]);
 	}	
 	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 }
 
 static void pageConfirmUpdate(void)
@@ -135,8 +145,17 @@ static void pageConfirmUpdate(void)
 }
 
 static void pageConfirmItemUpdate(void)
-{
+{	
+	u16 color, bccolor;
+
+	color = POINT_COLOR;
+	bccolor = BACK_COLOR;
+
+	POINT_COLOR = BLACK;
+	BACK_COLOR = WHITE;
 	LCD_ShowString_hz16x16(page_Confirm_item[3].start_pos_x+2, 
-					page_Confirm_item[3].start_pos_y+2, 100, 16, 16, gPagePara.t_string[0]);
+					page_Confirm_item[3].start_pos_y+2, 100, 16, 16, gPagePara.g_string[0]);
+	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 }
 

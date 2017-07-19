@@ -302,8 +302,8 @@ static void pageTimeSetUpdate(void)
 				if( ( touch_up_pos.x >= page_TimeSet_item[item].start_pos_x ) && ( touch_up_pos.x < page_TimeSet_item[item].start_pos_x + page_TimeSet_item[item].width)  && \
 					( touch_up_pos.y >= page_TimeSet_item[item].start_pos_y ) && ( touch_up_pos.y < page_TimeSet_item[item].start_pos_y + page_TimeSet_item[item].height) )
 				{
-					gIDInfo.cmdUpdate = 1;
-					memcpy(&gIDInfo.cmdPage.start, &page_TimeSet_item[item].com_data[0], TOUCH_CMD_LEN);
+//					gIDInfo.cmdUpdate = 1;
+//					memcpy(&gIDInfo.cmdPage.start, &page_TimeSet_item[item].com_data[0], TOUCH_CMD_LEN);
 					break;
 				}
 			}	

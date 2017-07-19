@@ -589,7 +589,7 @@ static void pageBasicItemUpdate(void)
 			default:
 				break;
 		}
-	}
+	} 
 	pageBasicItemMode();
 	LCD_Fill(page_basic_item[2].start_pos_x + 70, page_basic_item[2].start_pos_y + 2,
 			page_basic_item[2].start_pos_x + page_basic_item[2].width + 70, 
