@@ -290,7 +290,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		8,      //id
 		0,      //不支持触控
 		
-		30,52,  //开始坐标
+		30,54,  //开始坐标
 		45,16,//宽高
 		
 		{0},
@@ -303,7 +303,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		9,      //id
 		0,      //不支持触控
 		
-		96,52,  //开始坐标
+		96,54,  //开始坐标
 		45,16,//宽高
 		
 		{0},
@@ -316,7 +316,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		10,      //id
 		0,      //不支持触控
 		
-		162,52,  //开始坐标
+		162,54,  //开始坐标
 		45,16,//宽高
 		
 		{0},
@@ -329,7 +329,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		11,      //id
 		0,      //不支持触控
 		
-		224,52,  //开始坐标
+		224,54,  //开始坐标
 		40,16,//宽高
 		
 		{0},
@@ -342,7 +342,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		12,      //id
 		0,      //不支持触控
 		
-		278,52,  //开始坐标
+		278,54,  //开始坐标
 		45,16,//宽高
 		
 		{0},
@@ -355,7 +355,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		13,      //id
 		0,      //不支持触控
 		
-		354,52,  //开始坐标
+		354,54,  //开始坐标
 		29,16,//宽高
 		
 		{0},
@@ -393,7 +393,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		16,      //id
 		0,      //不支持触控
 		
-		60,182,  //开始坐标
+		60,186,  //开始坐标
 		190,30,//宽高
 		
 		{0},
@@ -405,7 +405,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		17,      //id
 		0,      //不支持触控
 		
-		292,184,  //开始坐标
+		292,186,  //开始坐标
 		104,26,//宽高
 		
 		{0},
@@ -418,7 +418,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		18,      //id
 		0,      //不支持触控
 		
-		292,214,  //开始坐标
+		292,216,  //开始坐标
 		104,26,//宽高
 		
 		{0},
@@ -559,18 +559,22 @@ static void pageBasicUpdate(void)
 	}
 }
 
-const char* modeTable[] = {"智能", "混点", "分版", "清点"};
+const char* modeTable[] = {"智能", "混点", "清分", "清点"};
 ///////////////////////////////////////////////////////////
 //显示更新
 static void pageBasicItemUpdate(void)
 {	
 	int j = 0;
-	
+	u8 timebuff[22];
+	LCD_SetFrontColor(GREEN);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
 	for( j = 0; j < sizeof(item_id2indx)/sizeof(ITEM_IDX_T); j++ )
 	{
 		switch(item_id2indx[j].itemType)
 		{
 			case 'n':
+				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
+					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, "    ");
 				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
 					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, gPagePara.n_val[item_id2indx[j].itemIndx]);
 				break;
@@ -590,6 +594,10 @@ static void pageBasicItemUpdate(void)
 	LCD_Fill(page_basic_item[2].start_pos_x + 70, page_basic_item[2].start_pos_y + 2,
 			page_basic_item[2].start_pos_x + page_basic_item[2].width + 70, 
 			page_basic_item[2].start_pos_y+ page_basic_item[2].height - 2, atoi((const char *)gPagePara.b_bc[1]));
+	LCD_SetFrontColor(GREEN);  //字颜色
+	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
+	Get_TimeStr(timebuff);
+	LCD_ShowString(60, 216, 190, 16, 16, timebuff);
 }
 
 

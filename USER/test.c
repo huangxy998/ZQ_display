@@ -1,7 +1,8 @@
 #include "sys.h"
 #include "usart.h"		
 #include "delay.h"	
-#include "led.h"   
+#include "led.h"  
+#include "rtc.h"
 #include "lcd.h"  
 #include "key.h"  
 #include "24cxx.h"  
@@ -42,15 +43,15 @@ u32 main_task_mask = 0;
 
 int main(void)
 {	
-		//u32 FLASH_SIZE;
- 	Stm32_Clock_Init(9);	//系统时钟设置
+	u32 timeUpdatePeriod = 0;
+ 	Stm32_Clock_Init(9);	//系统时钟设置 	
 	uart_init(72,115200);	//串口初始化为9600
 	delay_init(72);	   	 	//延时初始化 
 	LED_Init();		  		//初始化与LED连接的硬件接口
 	LCD_Init();			   	//初始化LCD 	
 	KEY_Init();				//按键初始化	
 	SPI_Flash_Init();  		//SPI FLASH 初始化 	
-
+//	RTC_Init();
 	gIDInfo.cmdUpdate = 0;
 	gIDInfo.cmdPage.start = 0x65;
 	gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
@@ -65,7 +66,7 @@ int main(void)
 	while(SPI_Flash_ReadID()!=W25Q32)							//检测不到W25Q32
 	{
 		LCD_ShowString(10,150,200,16,16,"25Q64 Check Failed!");
-		LCD_ShowString(10,150,200,16,16,"Please Check!      ");
+		LCD_ShowString(10,150,220,16,16,"Please Check!      ");
 		delay_ms(500);
 	}	
 //	LCD_ShowString(10,150,200,16,16,"25Q32 Check OK!");
@@ -148,7 +149,16 @@ int main(void)
 				sendlen = 4;
 			gIDInfo.cmdUpdate = 0;
 			uartSendbuffer((u8*)&gIDInfo.cmdPage, sendlen);
-		}	
+		}
+		//时间更新
+		timeUpdatePeriod++;
+		if (timeUpdatePeriod > 600)
+		{
+			timeUpdatePeriod = 0;
+//			RTC_Get();
+			if (gPageInfo.cur_page_idx == PAGE_ID_BASIC)
+				gPageInfo.need_update = 1;
+		}
 
 	}	
 }
