@@ -524,6 +524,11 @@ static void pageKeyBoardUpdate(void)
 
 static void pageKeyBoardItemUpdate(void)
 {
+	LCD_Fill(page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x, 
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y,
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x+100, 
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y+20, WHITE);
+	
 	LCD_ShowString_hz16x16(page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x, 
 				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y, 100, 16, 16, gPagePara.t_string[0]);
 }

@@ -33,14 +33,14 @@
 #define PAGE_BLALKLIST_SL3      157 
 #define PAGE_BLALKLIST_SL4      204
 
-#define PAGE_BLALKLIST_SH1      26
-#define PAGE_BLALKLIST_SH2      52
-#define PAGE_BLALKLIST_SH3      80
-#define PAGE_BLALKLIST_SH4      108
-#define PAGE_BLALKLIST_SH5      134
-#define PAGE_BLALKLIST_SH6      160
-#define PAGE_BLALKLIST_SH7      188
-#define PAGE_BLALKLIST_SH8      214
+#define PAGE_BLALKLIST_SH1      30
+#define PAGE_BLALKLIST_SH2      56
+#define PAGE_BLALKLIST_SH3      84
+#define PAGE_BLALKLIST_SH4      112
+#define PAGE_BLALKLIST_SH5      138
+#define PAGE_BLALKLIST_SH6      164
+#define PAGE_BLALKLIST_SH7      192
+#define PAGE_BLALKLIST_SH8      218
 
 #define PAGE_BLALKLIST_SW1      42
 #define PAGE_BLALKLIST_SHH1     25
@@ -469,7 +469,7 @@ static void pageBlacklistInit(void)
 	{
 		memset(&keyBoardInfo, 0, sizeof(KEYBOARD_INFO));		
 	}
-	else if (blackListInfo.totalItem < 14)
+	else if (blackListInfo.totalItem < 16)
 	{
 		if (keyBoardInfo.strUpdate == 1)
 		{
@@ -487,8 +487,9 @@ static void pageBlacklistInit(void)
 		for (i = 0; i < blackListInfo.totalItem; i++)
 		{
 			memcpy(gPagePara.t_string[i], blackListInfo.blackList[i], 12);
-			sprintf((char*)gPagePara.n_val[i], "%d", i);
+			sprintf((char*)gPagePara.n_val[i], "%d", i+1);
 		}
+		gPageInfo.need_update = 1;
 	}
 	show_bmp_in_flash(0,0,bmp_Blacklist_Page.width,bmp_Blacklist_Page.height,bmp_Blacklist_Page.addr);
 	prePage = gPageInfo.pre_page_idx;
@@ -534,11 +535,23 @@ static void pageBlackListItemUpdate(void)
 	int j;
 	for( j = 0; j < 16; j++ )
 	{
+		if (j == blackListInfo.curItem)
+		{
+			LCD_SetFrontColor(BLACK);
+			LCD_SetBackColor(WHITE);
+		}
+		else
+		{
+			LCD_SetFrontColor(WHITE);
+			LCD_SetBackColor(BLACK);
+		}
 		LCD_ShowString(page_Blacklist_item[j].start_pos_x, 
 			page_Blacklist_item[j].start_pos_y, 100, 16, 16, gPagePara.n_val[j]);
-		LCD_ShowString(page_Blacklist_item[j+16].start_pos_x-74, 
+		LCD_ShowString(page_Blacklist_item[j+16].start_pos_x, 
 			page_Blacklist_item[j+16].start_pos_y, 100, 16, 16, gPagePara.t_string[j]);
 	}
+	LCD_SetFrontColor(WHITE);
+	LCD_SetBackColor(BLACK);
 }
 
 static void pageBlackListTPUpdate(u8 item)
@@ -557,15 +570,19 @@ static void pageBlackListTPUpdate(u8 item)
 		case sizeof(page_Blacklist_item)/sizeof(PAGE_ITEM_T)-4://删除
 			if (blackListInfo.totalItem > 0)
 			{
-				if (blackListInfo.curItem < blackListInfo.totalItem - 1) //把后面的前移
+				if (blackListInfo.curItem < blackListInfo.totalItem) //把后面的前移
 				{
 					for (i = blackListInfo.curItem; i < blackListInfo.totalItem; i++)
 					{
-						memcpy(gPagePara.t_string[blackListInfo.curItem], gPagePara.t_string[blackListInfo.curItem+1], 12);
-						memcpy(blackListInfo.blackList[blackListInfo.curItem], gPagePara.t_string[blackListInfo.curItem], 12);
+						memcpy(gPagePara.t_string[i], gPagePara.t_string[i+1], 12);
+						memcpy(blackListInfo.blackList[i], gPagePara.t_string[i], 12);
 					}
-					gPagePara.n_val[i][0] = 0;
+					gPagePara.n_val[i-1][0] = 0;
 					blackListInfo.totalItem--;
+					if ((blackListInfo.totalItem > 0) && (blackListInfo.curItem >= blackListInfo.totalItem))
+					{
+						blackListInfo.curItem = blackListInfo.totalItem - 1;
+					}
 					pageBlacklistInit();
 				}
 			}
