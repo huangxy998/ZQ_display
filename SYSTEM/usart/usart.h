@@ -36,7 +36,7 @@
 #define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
 
 
-#define UART_TO_MAIN_CMD_RCV_BUFF_LEN		1024
+#define UART_TO_MAIN_CMD_RCV_BUFF_LEN		1536
 
 
 //扫描串口通讯状态机

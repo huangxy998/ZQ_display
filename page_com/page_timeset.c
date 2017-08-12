@@ -16,6 +16,35 @@
 #include "lcd_com.h"
 #include "page_timeset.h"
 
+#ifdef LCD_SIZE_480X320
+	#define PAGE_CLOCKSET_L1		56
+	#define PAGE_CLOCKSET_L2		110
+	#define PAGE_CLOCKSET_L3		164
+	#define PAGE_CLOCKSET_L4		251
+	#define PAGE_CLOCKSET_L5		306
+
+	#define PAGE_CLOCKSET_H1	  64
+	#define PAGE_CLOCKSET_H2	  106
+	#define PAGE_CLOCKSET_H3	  147
+	#define PAGE_CLOCKSET_H4	  189
+
+	#define PAGE_CLOCKSET_W     36
+	#define PAGE_CLOCKSET_H     30
+#else
+	#define PAGE_CLOCKSET_L1		56
+	#define PAGE_CLOCKSET_L2		124
+	#define PAGE_CLOCKSET_L3		190
+	#define PAGE_CLOCKSET_L4		300
+	#define PAGE_CLOCKSET_L5		366
+
+	#define PAGE_CLOCKSET_H1	  90
+	#define PAGE_CLOCKSET_H2	  146
+	#define PAGE_CLOCKSET_H3	  200
+	#define PAGE_CLOCKSET_H4	  252
+
+	#define PAGE_CLOCKSET_W     60
+	#define PAGE_CLOCKSET_H     54
+#endif
 static void pageTimeSetInit(void);
 static void pageTimeSetUpdate(void);
 static void pageTimeItemUpdate(void);

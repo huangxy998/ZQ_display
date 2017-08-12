@@ -15,44 +15,61 @@
 #include "touch.h"
 #include "lcd_com.h"
 
+#ifdef LCD_SIZE_480X320
 
-#define PAGE_SENSOR_L1			2
-#define PAGE_SENSOR_L2			57
-#define PAGE_SENSOR_L3			140
-#define PAGE_SENSOR_L4			195
-#define PAGE_SENSOR_L5			272
-#define PAGE_SENSOR_L6			327
-#define PAGE_SENSOR_H1			33
-#define PAGE_SENSOR_H2			56
-#define PAGE_SENSOR_H3			80
-#define PAGE_SENSOR_H4			102
-#define PAGE_SENSOR_H5			125
-#define PAGE_SENSOR_H6			149
-#define PAGE_SENSOR_H7			172
-#define PAGE_SENSOR_H8			195
-#define PAGE_SENSOR_WT     45
-#define PAGE_SENSOR_WD     80
-#define PAGE_SENSOR_H          19
+	#define PAGE_PARA_LIE1_X			5
+	#define PAGE_PARA_LIE2_X			106
+	#define PAGE_PARA_LIE3_X			162
+	#define PAGE_PARA_LIE4_X			258
+	#define PAGE_PARA_LIE5_X			320
+	#define PAGE_PARA_LIE6_X			416
+	#define PAGE_PARA_HANG1_Y		6
+	#define PAGE_PARA_HANG2_Y		40
+	#define PAGE_PARA_HANG3_Y		74
+	#define PAGE_PARA_HANG4_Y		108
+	#define PAGE_PARA_HANG5_Y		142
+	#define PAGE_PARA_HANG6_Y		174
+	#define PAGE_PARA_HANG7_Y		208
+	#define PAGE_PARA_HANG8_Y		242
+	#define PAGE_PARA_KEY_WIDTH    94
+	#define PAGE_PARA_KEY_HIGH     24
+	#define PAGE_PARA_DATA_WIDTH   50
+	#define PAGE_PARA_DATA_HIGH    24
+	#define PAGE_PARA_BH1          270
+	#define PAGE_PARA_BL1          36
+	#define PAGE_PARA_BL2          160
+	#define PAGE_PARA_BL3          356
+	#define PAGE_PARA_BW1          106
+	#define PAGE_PARA_BW2          160
+	#define PAGE_PARA_BH           46
+#else
 
-#define PAGE_PARA_LIE1_X			4
-#define PAGE_PARA_LIE2_X			90
-#define PAGE_PARA_LIE3_X			135
-#define PAGE_PARA_LIE4_X			216
-#define PAGE_PARA_LIE5_X			264
-#define PAGE_PARA_LIE6_X			350
-#define PAGE_PARA_HANG1_Y		6
-#define PAGE_PARA_HANG2_Y		31
-#define PAGE_PARA_HANG3_Y		56
-#define PAGE_PARA_HANG4_Y		81
-#define PAGE_PARA_HANG5_Y		106
-#define PAGE_PARA_HANG6_Y		131
-#define PAGE_PARA_HANG7_Y		156
-#define PAGE_PARA_HANG8_Y		181
-#define PAGE_PARA_KEY_WIDTH    82
-#define PAGE_PARA_KEY_HIGH     22
-#define PAGE_PARA_DATA_WIDTH   42
-#define PAGE_PARA_DATA_HIGH    20
-
+	#define PAGE_PARA_LIE1_X			4
+	#define PAGE_PARA_LIE2_X			90
+	#define PAGE_PARA_LIE3_X			135
+	#define PAGE_PARA_LIE4_X			216
+	#define PAGE_PARA_LIE5_X			264
+	#define PAGE_PARA_LIE6_X			350
+	#define PAGE_PARA_HANG1_Y		6
+	#define PAGE_PARA_HANG2_Y		31
+	#define PAGE_PARA_HANG3_Y		56
+	#define PAGE_PARA_HANG4_Y		81
+	#define PAGE_PARA_HANG5_Y		106
+	#define PAGE_PARA_HANG6_Y		131
+	#define PAGE_PARA_HANG7_Y		156
+	#define PAGE_PARA_HANG8_Y		181
+	#define PAGE_PARA_KEY_WIDTH    82
+	#define PAGE_PARA_KEY_HIGH     22
+	#define PAGE_PARA_DATA_WIDTH   42
+	#define PAGE_PARA_DATA_HIGH    20
+	#define PAGE_PARA_BH1          202
+	#define PAGE_PARA_BL1          32
+	#define PAGE_PARA_BL2          130
+	#define PAGE_PARA_BL3          294
+	#define PAGE_PARA_BW1          74
+	#define PAGE_PARA_BW2          138
+	#define PAGE_PARA_BH           32
+#endif
 
 static void pageMainParaInit(void);
 static void pageMainParaUpdate(void);
@@ -356,8 +373,8 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		42,     //id
 		1,      //支持触控
 		
-		32,202,    //开始坐标
-		74,32 , //宽高
+		PAGE_PARA_BL1,PAGE_PARA_BH1,    //开始坐标
+		PAGE_PARA_BW1,PAGE_PARA_BH , //宽高
 		
 		{0x65,0x0e,0x32,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -368,8 +385,8 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		44,     //id
 			1,      //支持触控
 		
-		130,202,    //开始坐标
-		138,32 , //宽高
+		PAGE_PARA_BL2,PAGE_PARA_BH1,    //开始坐标
+		PAGE_PARA_BW2,PAGE_PARA_BH , //宽高
 		
 		{0x65,0x0e,0x33,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -380,8 +397,8 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		45,     //id
 		1,      //支持触控
 		
-		294,202,    //开始坐标
-		80,32 , //宽高
+		PAGE_PARA_BL3,PAGE_PARA_BH1,    //开始坐标
+		PAGE_PARA_BW1,PAGE_PARA_BH , //宽高
 		
 		{0x65,0x0e,0x34,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -456,10 +473,10 @@ static void pageMainParaItemUpdate(void)
 			     page_mainpara_item[item].start_pos_y+16, BLACK);
 		LCD_ShowString_hz16x16(page_mainpara_item[item].start_pos_x, 
 					page_mainpara_item[item].start_pos_y, page_mainpara_item[item].width, 16, 16, gPagePara.b_str[item]);
-		LCD_Fill(page_mainpara_item[item].start_pos_x+86, page_mainpara_item[item].start_pos_y,
-			     page_mainpara_item[item].start_pos_x+86+32,
+		LCD_Fill(page_mainpara_item[item].start_pos_x+page_mainpara_item[item].width+6, page_mainpara_item[item].start_pos_y,
+			     page_mainpara_item[item].start_pos_x+page_mainpara_item[item].width+6+32,
 			     page_mainpara_item[item].start_pos_y+16, BLACK);
-		LCD_ShowString_hz16x16(page_mainpara_item[item].start_pos_x+86, 
+		LCD_ShowString_hz16x16(page_mainpara_item[item].start_pos_x+page_mainpara_item[item].width+6, 
 					page_mainpara_item[item].start_pos_y, 32, 16, 16, gPagePara.n_val[item]);
 	}
 }

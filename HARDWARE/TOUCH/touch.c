@@ -375,10 +375,6 @@ void TP_Adjust(void)
  	cnt=0;				
 	POINT_COLOR=BLUE;
 	BACK_COLOR =WHITE;
-	LCD_Clear(WHITE);//清屏   
-	POINT_COLOR=RED;//红色 
-	LCD_Clear(WHITE);//清屏 	   
-	POINT_COLOR=BLACK;
 	LCD_ShowString(40,40,160,100,16,(u8*)TP_REMIND_MSG_TBL);//显示提示信息
 	TP_Drow_Touch_Point(20,20,RED);//画点1 
 	tp_dev.sta=0;//消除触发信号
@@ -508,7 +504,7 @@ void TP_Adjust(void)
 		}
 		delay_ms(10);
 		outtime++;
-		if(outtime>1000)
+		if(outtime>5000)
 		{
 			TP_Get_Adjdata();
 			break;
@@ -562,9 +558,12 @@ u8 TP_Init(void)
 		
 		
 		TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]);//第一次读取初始化	 
-		//AT24CXX_Init();		//初始化24CXX
-		if(TP_Get_Adjdata())return 0;//已经校准
-		else			   //未校准?
+		AT24CXX_Init();		//初始化24CXX
+		if(TP_Get_Adjdata())
+		{
+			return 0;//已经校准
+		}
+		else			   //未校准
 		{ 										    
 			LCD_Clear(WHITE);//清屏
 			TP_Adjust();  	//屏幕校准 
@@ -605,14 +604,13 @@ static void touch_init(void)
 	
 }
 
-
 u8 touch_up_check(void)
 {
-	u8 key;
+//	u8 key;
 	u8 i=0;	
 	u32 tmp32;
 
-	key=KEY_Scan(0);
+	KEY_Scan(0);
 	tp_dev.scan(0); 		 
 	if(tp_dev.sta&TP_PRES_DOWN)			//触摸屏被按下
 	{	

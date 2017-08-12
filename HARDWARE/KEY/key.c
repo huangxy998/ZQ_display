@@ -27,7 +27,8 @@ void KEY_Init(void)
 	GPIOA->ODR|=1<<15;	   	//PA15上拉,PA0默认下拉
 	GPIOC->CRL&=0XFF0FFFFF;	//PC5设置成输入	  
 	GPIOC->CRL|=0X00800000;   
-	GPIOC->ODR|=1<<5;	   	//PC5上拉 
+	GPIOC->ODR|=1<<5;	   	//PC5
+	
 } 
 //按键处理函数
 //返回按键值

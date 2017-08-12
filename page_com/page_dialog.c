@@ -19,6 +19,14 @@ static void pageDialogInit(void);
 static void pageDialogUpdate(void);
 static void pageDialogItemUpdate(void);
 
+#ifdef LCD_SIZE_480X320
+	#define PAGE_DIALOG_ADD_X 40
+	#define PAGE_DIALOG_ADD_Y 4
+#else
+	#define PAGE_DIALOG_ADD_X 0
+	#define PAGE_DIALOG_ADD_Y 0
+#endif
+
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
@@ -44,7 +52,7 @@ const PAGE_ITEM_T page_Dialog_item[] =
 		2,	   //id
 		1,		//支持触控
 		
-		80,96,	  //开始坐标
+		80+PAGE_DIALOG_ADD_X,96+PAGE_DIALOG_ADD_Y,	  //开始坐标
 		45,30, //宽高
 		
 	{0x65,0x0f,0x02,0x00,0xff,0xff,0xff},
@@ -55,7 +63,7 @@ const PAGE_ITEM_T page_Dialog_item[] =
 		3,	   //id
 		1,		//支持触控
 		
-		80,134,    //开始坐标
+		80+PAGE_DIALOG_ADD_X,134+PAGE_DIALOG_ADD_Y,    //开始坐标
 		45,30, //宽高
 		
 	{0x65,0x0f,0x03,0x00,0xff,0xff,0xff},
@@ -66,7 +74,7 @@ const PAGE_ITEM_T page_Dialog_item[] =
 		4,	   //id
 		1,		//支持触控
 		
-		262,102,	//开始坐标
+		262+PAGE_DIALOG_ADD_X,102+PAGE_DIALOG_ADD_Y,	//开始坐标
 		68,56, //宽高
 		
 	{0x65,0x0f,0x04,0x00,0xff,0xff,0xff},
@@ -77,7 +85,7 @@ const PAGE_ITEM_T page_Dialog_item[] =
 		5,	   //id
 		0,		//不支持触控
 		
-		150,114,	//开始坐标
+		150+PAGE_DIALOG_ADD_X,114+PAGE_DIALOG_ADD_Y,	//开始坐标
 		100,30, //宽高
 		
 		{0},
@@ -105,12 +113,23 @@ const PAGE_T page_dialog =
  	pageDialogUpdate
 };
 
+#ifdef LCD_SIZE_480X320
+const _bmp_info bmp_Dialog_Page =
+{
+	BASIC_PAGE_DIALOG_OFFSET,
+	374,
+	142
+};
+#else
 const _bmp_info bmp_Dialog_Page =
 {
 	BASIC_PAGE_DIALOG_OFFSET,
 	280,
 	106
 };
+#endif
+
+
 
 static void pageDialogInit(void)
 {

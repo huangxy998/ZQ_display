@@ -76,8 +76,7 @@
 //V3.0 20150423
 //修改SSD1963 LCD屏的驱动参数.
 //////////////////////////////////////////////////////////////////////////////////	 
-
-
+#define LCD_SIZE_480X320 
 	 
 //LCD重要参数集
 typedef struct  
@@ -176,14 +175,15 @@ extern u16  BACK_COLOR; //背景颜色.默认为白色
 #define BRED             0XF81F
 #define GRED 			 0XFFE0
 #define GBLUE			 0X07FF
-#define RED           	 0xF800
+#define RED           	 0xF800  //11111000000000
 #define MAGENTA       	 0xF81F
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
 #define BROWN 			 0XBC40 //棕色
 #define BRRED 			 0XFC07 //棕红色
-#define GRAY  			 0X8430 //灰色
+#define GRAY  			 0X8430 //灰色 1000010000110000
+#define SEABLUE          0X14DA
 //GUI颜色
 
 #define DARKBLUE      	 0X01CF	//深蓝色
@@ -261,9 +261,13 @@ LCD_WR_CLR;\
 LCD_WR_SET;\
 LCD_CS_SET;\
 } 
-
-#define LCD_HOR_SIZE    400
-#define LCD_VER_SIZE    240
+#ifdef LCD_SIZE_480X320
+	#define LCD_HOR_SIZE    480
+	#define LCD_VER_SIZE    320
+#else
+	#define LCD_HOR_SIZE    400
+	#define LCD_VER_SIZE    240
+#endif
 
  //LCD分辨率设置
 #define SSD_HOR_RESOLUTION		800		//LCD水平分辨率

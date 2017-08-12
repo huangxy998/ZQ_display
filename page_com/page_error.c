@@ -15,6 +15,34 @@
 #include "touch.h"
 #include "lcd_com.h"
 
+#ifdef LCD_SIZE_480X320
+	#define PAGE_ERROR_B1X     315 
+	#define PAGE_ERROR_B1Y     132
+	#define PAGE_ERROR_B1W     64
+	#define PAGE_ERROR_B1H     30
+	#define PAGE_ERROR_T0X     143 
+	#define PAGE_ERROR_T0Y     134
+	#define PAGE_ERROR_T0W     160
+	#define PAGE_ERROR_T0H     30
+	#define PAGE_ERROR_T1X     118 
+	#define PAGE_ERROR_T1Y     172
+	#define PAGE_ERROR_T1W     260
+	#define PAGE_ERROR_T1H     30
+#else
+	#define PAGE_ERROR_B1X     270 
+	#define PAGE_ERROR_B1Y     100
+	#define PAGE_ERROR_B1W     64
+	#define PAGE_ERROR_B1H     30
+	#define PAGE_ERROR_T0X     98 
+	#define PAGE_ERROR_T0Y     100
+	#define PAGE_ERROR_T0W     166
+	#define PAGE_ERROR_T0H     30
+	#define PAGE_ERROR_T1X     74 
+	#define PAGE_ERROR_T1Y     136
+	#define PAGE_ERROR_T1W     260
+	#define PAGE_ERROR_T1H     30
+#endif
+
 static void pageErrorInit(void);
 static void pageErrorUpdate(void);
 static void pageErrorItemUpdate(void);
@@ -40,8 +68,8 @@ const PAGE_ITEM_T page_Error_item[] =
 		2,	   //id
 		1,		//支持触控
 		
-		270,100,	  //开始坐标
-		64,30, //宽高
+		PAGE_ERROR_B1X,PAGE_ERROR_B1Y,	  //开始坐标
+		PAGE_ERROR_B1W,PAGE_ERROR_B1H, //宽高
 		
 	{0x65,0x19,0x02,0x00,0xff,0xff,0xff},
 		0		//默认0
@@ -51,8 +79,8 @@ const PAGE_ITEM_T page_Error_item[] =
 		3,	   //id
 		0,		//不支持触控
 		
-		98,100,	//开始坐标
-		166,30, //宽高
+		PAGE_ERROR_T0X,PAGE_ERROR_T0Y,	//开始坐标
+		PAGE_ERROR_T0W,PAGE_ERROR_T0H, //宽高
 		
 		{0},
 		0		//默认0
@@ -63,8 +91,8 @@ const PAGE_ITEM_T page_Error_item[] =
 		4,	   //id
 		0,		//不支持触控
 		
-		74,136,	//开始坐标
-		260,30, //宽高
+		PAGE_ERROR_T1X,PAGE_ERROR_T1Y,	//开始坐标
+		PAGE_ERROR_T1W,PAGE_ERROR_T1H, //宽高
 		
 		{0},
 		0		//默认0

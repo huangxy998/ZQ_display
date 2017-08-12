@@ -35,8 +35,139 @@ static void pageKeyBoardInit(void);
 static void pageKeyBoardUpdate(void);
 static void pageKeyBoardTPUpdate(u8 item);
 static void pageKeyBoardItemUpdate(void);
+static u8 pageKeyBoardMakeReplyFrame(u8* buff);
 
-
+#ifdef LCD_SIZE_480X320
+	#define PAGE_KEY_TXTL		98
+	#define PAGE_KEY_TXTH1	30
+	#define PAGE_KEY_TXTW		300
+	#define PAGE_KEY_TXTH		40
+	
+	#define PAGE_KEY_LINE1    90
+	#define PAGE_KEY_L1K1	    24
+	#define PAGE_KEY_L1K2	    68
+	#define PAGE_KEY_L1K3     110
+	#define PAGE_KEY_L1K4     154
+	#define PAGE_KEY_L1K5	    196
+	#define PAGE_KEY_L1K6	    236
+	#define PAGE_KEY_L1K7	    282
+	#define PAGE_KEY_L1K8     326
+	#define PAGE_KEY_L1K9	    370
+	#define PAGE_KEY_L1KA     414
+	#define PAGE_KEY_LINE2    140
+	#define PAGE_KEY_L2K1	    0
+	#define PAGE_KEY_L2K2	    44
+	#define PAGE_KEY_L2K3	    88
+	#define PAGE_KEY_L2K4     132
+	#define PAGE_KEY_L2K5	    176
+	#define PAGE_KEY_L2K6	    220
+	#define PAGE_KEY_L2K7	    262
+	#define PAGE_KEY_L2K8     306
+	#define PAGE_KEY_L2K9	    350
+	#define PAGE_KEY_L2KA     394
+	#define PAGE_KEY_L2KB     438
+	#define PAGE_KEY_LINE3    184
+	#define PAGE_KEY_L3K1	    20
+	#define PAGE_KEY_L3K2	    64
+	#define PAGE_KEY_L3K3	    106
+	#define PAGE_KEY_L3K4     150
+	#define PAGE_KEY_L3K5	    194
+	#define PAGE_KEY_L3K6	    236
+	#define PAGE_KEY_L3K7	    278
+	#define PAGE_KEY_L3K8     322
+	#define PAGE_KEY_L3K9	    366
+	#define PAGE_KEY_L3KA     408
+	#define PAGE_KEY_LINE4    228
+	#define PAGE_KEY_L4K1	    0
+	#define PAGE_KEY_L4K2	    44
+	#define PAGE_KEY_L4K3	    86
+	#define PAGE_KEY_L4K4     130
+	#define PAGE_KEY_L4K5	    172
+	#define PAGE_KEY_L4K6	    214
+	#define PAGE_KEY_L4K7	    258
+	#define PAGE_KEY_L4K8     300
+	#define PAGE_KEY_L4K9	    342
+	#define PAGE_KEY_L4KA     384
+	#define PAGE_KEY_L4KB     426
+	#define PAGE_KEY_LINE5    274
+	#define PAGE_KEY_L5K1	    0
+	#define PAGE_KEY_L5K2	    132
+	#define PAGE_KEY_L5K3	    342
+	#define PAGE_KEY_L5K4     438
+	
+	#define PAGE_KEY_W        40
+	#define PAGE_KEY_H        40
+	
+	#define PAGE_KEY_CW       70
+	#define PAGE_KEY_RW       120
+	#define PAGE_KEY_NW       202
+	#define PAGE_KEY_BW       92
+#else
+	#define PAGE_KEY_TXTL		82
+	#define PAGE_KEY_TXTH1	    24
+	#define PAGE_KEY_TXTW		250
+	#define PAGE_KEY_TXTH		30
+	
+	#define PAGE_KEY_LINE1    90
+	#define PAGE_KEY_L1K1	    24
+	#define PAGE_KEY_L1K2	    68
+	#define PAGE_KEY_L1K3     110
+	#define PAGE_KEY_L1K4     154
+	#define PAGE_KEY_L1K5	    196
+	#define PAGE_KEY_L1K6	    236
+	#define PAGE_KEY_L1K7	    282
+	#define PAGE_KEY_L1K8     326
+	#define PAGE_KEY_L1K9	    370
+	#define PAGE_KEY_L1KA     414
+	#define PAGE_KEY_LINE2    140
+	#define PAGE_KEY_L2K1	    0
+	#define PAGE_KEY_L2K2	    44
+	#define PAGE_KEY_L2K3	    88
+	#define PAGE_KEY_L2K4     132
+	#define PAGE_KEY_L2K5	    176
+	#define PAGE_KEY_L2K6	    220
+	#define PAGE_KEY_L2K7	    262
+	#define PAGE_KEY_L2K8     306
+	#define PAGE_KEY_L2K9	    350
+	#define PAGE_KEY_L2KA     394
+	#define PAGE_KEY_L2KB     438
+	#define PAGE_KEY_LINE3    184
+	#define PAGE_KEY_L3K1	    20
+	#define PAGE_KEY_L3K2	    64
+	#define PAGE_KEY_L3K3	    106
+	#define PAGE_KEY_L3K4     150
+	#define PAGE_KEY_L3K5	    194
+	#define PAGE_KEY_L3K6	    236
+	#define PAGE_KEY_L3K7	    278
+	#define PAGE_KEY_L3K8     322
+	#define PAGE_KEY_L3K9	    366
+	#define PAGE_KEY_L3KA     408
+	#define PAGE_KEY_LINE4    228
+	#define PAGE_KEY_L4K1	    0
+	#define PAGE_KEY_L4K2	    44
+	#define PAGE_KEY_L4K3	    86
+	#define PAGE_KEY_L4K4     130
+	#define PAGE_KEY_L4K5	    172
+	#define PAGE_KEY_L4K6	    214
+	#define PAGE_KEY_L4K7	    258
+	#define PAGE_KEY_L4K8     300
+	#define PAGE_KEY_L4K9	    342
+	#define PAGE_KEY_L4KA     384
+	#define PAGE_KEY_L4KB     426
+	#define PAGE_KEY_LINE5    274
+	#define PAGE_KEY_L5K1	    0
+	#define PAGE_KEY_L5K2	    132
+	#define PAGE_KEY_L5K3	    342
+	#define PAGE_KEY_L5K4     438
+	
+	#define PAGE_KEY_W        40
+	#define PAGE_KEY_H        40
+	
+	#define PAGE_KEY_CW       70
+	#define PAGE_KEY_RW       120
+	#define PAGE_KEY_NW       202
+	#define PAGE_KEY_BW       92													
+#endif
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
@@ -45,8 +176,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'1',	
 		1,			//触控							
-		20,	66,
-		34, 34,
+		PAGE_KEY_L1K1,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -54,8 +185,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'2',	
 		1,			//触控							
-		56,	66,
-		34, 34,
+		PAGE_KEY_L1K2,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -63,8 +194,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'3',	
 		1,			//触控							
-		92,	66,
-		34, 34,
+		PAGE_KEY_L1K3,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -72,8 +203,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'4',	
 		1,			//触控							
-		128, 66,
-		34, 34,
+		PAGE_KEY_L1K4, PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -81,8 +212,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'5',	
 		1,			//触控							
-		164,	66,
-		34, 34,
+		PAGE_KEY_L1K5,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -90,8 +221,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'6',	
 		1,			//触控							
-		200,	66,
-		34, 34,
+		PAGE_KEY_L1K6,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -99,8 +230,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'7',	
 		1,			//触控							
-		234,	66,
-		34, 34,
+		PAGE_KEY_L1K7,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -108,8 +239,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'8',	
 		1,			//触控							
-		272, 66,
-		34, 34,
+		PAGE_KEY_L1K8, PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -117,8 +248,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'9',	
 		1,			//触控							
-		308,	66,
-		34, 34,
+		PAGE_KEY_L1K9,	PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -126,8 +257,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'0',	
 		1,			//触控							
-		346, 66,
-		34, 34,
+		PAGE_KEY_L1KA, PAGE_KEY_LINE1,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -135,8 +266,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'q',	
 		1,			//触控							
-		0,	102,
-		34, 34,
+		PAGE_KEY_L2K1,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -144,8 +275,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'w',	
 		1,			//触控							
-		36,	102,
-		34, 34,
+		PAGE_KEY_L2K2,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -153,8 +284,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'e',	
 		1,			//触控							
-		74,	102,
-		34, 34,
+		PAGE_KEY_L2K3,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -162,8 +293,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'r',	
 		1,			//触控							
-		110, 102,
-		34, 34,
+		PAGE_KEY_L2K4, PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -171,8 +302,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		't',	
 		1,			//触控							
-		146,	102,
-		34, 34,
+		PAGE_KEY_L2K5,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -180,8 +311,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'y',	
 		1,			//触控							
-		182,	102,
-		34, 34,
+		PAGE_KEY_L2K6,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -189,8 +320,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'u',	
 		1,			//触控							
-		218,	102,
-		34, 34,
+		PAGE_KEY_L2K7,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -198,8 +329,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'i',	
 		1,			//触控							
-		256, 102,
-		34, 34,
+		PAGE_KEY_L2K8, PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -207,8 +338,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'o',	
 		1,			//触控							
-		292,	102,
-		34, 34,
+		PAGE_KEY_L2K9,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -216,8 +347,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'p',	
 		1,			//触控							
-		328, 102,
-		34, 34,
+		PAGE_KEY_L2KA, PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -225,8 +356,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'<',	
 		1,			//触控							
-		364,	102,
-		34, 34,
+		PAGE_KEY_L2KB,	PAGE_KEY_LINE2,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -234,8 +365,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'a',	
 		1,			//触控							
-		16,	138,
-		34, 32,
+		PAGE_KEY_L3K1,	PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -243,8 +374,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		's',	
 		1,			//触控							
-		52,	138,
-		34, 32,
+		PAGE_KEY_L3K2,	PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -252,8 +383,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'd',	
 		1,			//触控							
-		88, 138,
-		34, 32,
+		PAGE_KEY_L3K3, PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -261,8 +392,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'f',	
 		1,			//触控							
-		124,	138,
-		34, 32,
+		PAGE_KEY_L3K4,	PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -270,8 +401,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'g',	
 		1,			//触控							
-		158,	138,
-		34, 32,
+		PAGE_KEY_L3K5,	PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -279,8 +410,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'h',	
 		1,			//触控							
-		194,	138,
-		34, 32,
+		PAGE_KEY_L3K6,	PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -288,8 +419,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'j',	
 		1,			//触控							
-		232, 138,
-		34, 32,
+		PAGE_KEY_L3K7, PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -297,8 +428,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'k',	
 		1,			//触控							
-		266,	138,
-		34, 32,
+		PAGE_KEY_L3K8,	PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -306,8 +437,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'l',	
 		1,			//触控							
-		302, 138,
-		34, 32,
+		PAGE_KEY_L3K9, PAGE_KEY_LINE3,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -315,8 +446,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'>',	
 		1,			//触控							
-		342,	138,
-		58, 32,
+		PAGE_KEY_L3KA,	PAGE_KEY_LINE3,
+		PAGE_KEY_CW, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -324,8 +455,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'.',	
 		1,			//触控							
-		0,	170,
-		34, 34,
+		PAGE_KEY_L4K1,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -333,8 +464,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'z',	
 		1,			//触控							
-		36,	170,
-		34, 34,
+		PAGE_KEY_L4K2,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -342,8 +473,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'x',	
 		1,			//触控							
-		72, 170,
-		34, 34,
+		PAGE_KEY_L4K3, PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -351,8 +482,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'c',	
 		1,			//触控							
-		108,	170,
-		34, 34,
+		PAGE_KEY_L4K4,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -360,8 +491,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'v',	
 		1,			//触控							
-		142,	170,
-		34, 34,
+		PAGE_KEY_L4K5,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -369,8 +500,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'b',	
 		1,			//触控							
-		178,	170,
-		34, 34,
+		PAGE_KEY_L4K6,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -378,8 +509,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'n',	
 		1,			//触控							
-		214, 170,
-		34, 34,
+		PAGE_KEY_L4K7, PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -387,8 +518,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'm',	
 		1,			//触控							
-		248,	170,
-		34, 34,
+		PAGE_KEY_L4K8,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -396,8 +527,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'!',	
 		1,			//触控							
-		284, 170,
-		34, 34,
+		PAGE_KEY_L4K9, PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -405,8 +536,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'?',	
 		1,			//触控							
-		318,	170,
-		34, 34,
+		PAGE_KEY_L4KA,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -414,8 +545,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'@',	
 		1,			//触控							
-		354,	170,
-		34, 34,
+		PAGE_KEY_L4KB,	PAGE_KEY_LINE4,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -423,8 +554,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'#',	
 		1,			//触控							
-		2,	206,
-		34, 34,
+		PAGE_KEY_L5K1,	PAGE_KEY_LINE5,
+		PAGE_KEY_RW, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -432,8 +563,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		' ',	
 		1,			//触控							
-		108, 206,
-		174, 34,
+		PAGE_KEY_L5K2, PAGE_KEY_LINE5,
+		PAGE_KEY_NW, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -441,8 +572,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'*',	
 		1,			//触控							
-		284,	206,
-		80, 34,
+		PAGE_KEY_L5K3,	PAGE_KEY_LINE5,
+		PAGE_KEY_BW, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -450,8 +581,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		'\\',	
 		0,			//触控							
-		200,	66,
-		34, 34,
+		PAGE_KEY_L5K4,	PAGE_KEY_LINE5,
+		PAGE_KEY_W, PAGE_KEY_H,
 		{0},
 		0	
 	},
@@ -459,8 +590,8 @@ const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
 	{ 
 		0,	
 		0,			//t0						
-		82,	24,
-		250, 30,
+		PAGE_KEY_TXTL,	PAGE_KEY_TXTH1,
+		PAGE_KEY_TXTW, PAGE_KEY_TXTH,
 		{0},
 		0	
 	},
@@ -530,7 +661,7 @@ static void pageKeyBoardItemUpdate(void)
 				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y+20, WHITE);
 	
 	LCD_ShowString_hz16x16(page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x, 
-				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y, 100, 16, 16, gPagePara.t_string[0]);
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y, 100, 16, 16, keyBoardInfo.buff);
 }
 
 
@@ -541,33 +672,69 @@ static void pageKeyBoardTPUpdate(u8 item)
 		case '<': //删除最后一个字符
 			if (keyBoardInfo.buffLen > 0)
 				keyBoardInfo.buffLen--;
-			gPagePara.t_string[0][keyBoardInfo.buffLen] = 0;
+			keyBoardInfo.buff[keyBoardInfo.buffLen] = 0;
 			break;
 		case '#': //删除全部字符
-			gPagePara.t_string[0][0] = 0;
+			keyBoardInfo.buff[0] = 0;
 			keyBoardInfo.buffLen = 0;
 			break;
 		case '*'://直接返回
 			memset(&keyBoardInfo, 0, sizeof(KEYBOARD_INFO));	
+			//此处切换页面
+			gPageInfo.cur_page_idx = prePage;
+//			memset(&gPagePara, 0, sizeof(page_para));
+//			break;
 		case '>': //确认退出
 			if (keyBoardInfo.buffLen > 0)
 			{
+				u8 buff[14];
+				u8 len = 0;
+				
 				keyBoardInfo.strUpdate = 1;
-				memcpy(keyBoardInfo.buff, gPagePara.t_string[0], keyBoardInfo.buffLen);
+				len = pageKeyBoardMakeReplyFrame(buff);
+				uartSendbuffer(buff, len);
 			}
 			//此处切换页面
 			gPageInfo.cur_page_idx = prePage;
-			memset(&gPagePara, 0, sizeof(page_para));
 			break;
 		default://字符处理
-			gPagePara.t_string[0][keyBoardInfo.buffLen] = letter_table[item];
-			if (keyBoardInfo.buffLen < 10) //最多输入15个字符，否则ip输入格式不对
+			keyBoardInfo.buff[keyBoardInfo.buffLen] = letter_table[item];
+			if (keyBoardInfo.buffLen < 12) //最多输入12个字符
 			{
 				keyBoardInfo.buffLen++;
-				gPagePara.t_string[0][keyBoardInfo.buffLen] = 0; //添加字符串结束符
+				keyBoardInfo.buff[keyBoardInfo.buffLen] = 0; //添加字符串结束符
 			}
 			break;
 	}
 }
 
+static u8 pageKeyBoardMakeReplyFrame(u8* buff)
+{
+	u8 i = 0;
+	u8 k = 0;
+	
+	buff[i] = 0x90;   //帧头
+	i++;
+	buff[i] = 0x0a;   //页面ID
+	i++;
+	buff[i] = 0x01;   //设置项
+	i++;
+	buff[i] = '"';
+	i++;
+	while(keyBoardInfo.buff[k] != 0)  //拷贝字符串
+	{
+		buff[i] = keyBoardInfo.buff[k];
+		i++;
+		k++;
+	}
+	buff[i] = '"';
+	i++;
+	buff[i] = 0xff;
+	i++;
+	buff[i] = 0xff;
+	i++;
+	buff[i] = 0xff;
+	i++;
+	return i;
+}
 

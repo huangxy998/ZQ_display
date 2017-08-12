@@ -18,6 +18,24 @@
 static void pageSystemSetInit(void);
 static void pageSystemSetUpdate(void);
 
+#ifdef LCD_SIZE_480X320
+	#define PAGE_SET_LINE1     84
+	#define PAGE_SET_LINE2     158
+	#define PAGE_SET_LINE3     228
+	#define PAGE_SET_ROW1      62
+	#define PAGE_SET_ROW2      260
+	#define PAGE_SET_W         138
+	#define PAGE_SET_H         40
+#else
+	#define PAGE_SET_LINE1     62
+	#define PAGE_SET_LINE2     120
+	#define PAGE_SET_LINE3     174
+	#define PAGE_SET_ROW1      60
+	#define PAGE_SET_ROW2      222
+	#define PAGE_SET_W         112
+	#define PAGE_SET_H         32
+#endif
+
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
 const PAGE_ITEM_T page_SystemSet_item[] =
@@ -27,8 +45,8 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		1,     //id
 		1,      //支持触控
 		
-		60,62,    //开始坐标
-		112,32, //宽高
+		PAGE_SET_ROW1,PAGE_SET_LINE1,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x01,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -38,8 +56,8 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		2,     //id
 		1,      //支持触控
 		
-		60,120,    //开始坐标
-		112,32, //宽高
+		PAGE_SET_ROW1,PAGE_SET_LINE2,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x02,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -49,8 +67,8 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		3,     //id
 		1,      //支持触控
 		
-		222,62,    //开始坐标
-		112,32, //宽高
+		PAGE_SET_ROW2,PAGE_SET_LINE1,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x03,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -60,8 +78,8 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		4,     //id
 		1,      //支持触控
 		
-		222,120,    //开始坐标
-		112,32, //宽高
+		PAGE_SET_ROW2,PAGE_SET_LINE2,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x04,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -71,8 +89,8 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		5,     //id
 		1,      //支持触控
 		
-		60,174,    //开始坐标
-		112,32, //宽高
+		PAGE_SET_ROW1,PAGE_SET_LINE3,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x05,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -82,8 +100,8 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		6,     //id
 		1,      //支持触控
 		
-		222,174,    //开始坐标
-		112,32, //宽高
+		PAGE_SET_ROW2,PAGE_SET_LINE3,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x06,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -102,16 +120,34 @@ const PAGE_T page_SystemSet =
  	pageSystemSetUpdate
 };
 
-const _bmp_info bmp_system_Page =
-{
-	BASIC_PAGE_SYSTEM_SET_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
+#ifdef LCD_SIZE_480X320
+	const _bmp_info bmp_system_Page =
+	{
+		BASIC_PAGE_SINGLE_BUTTON_OFFSET,
+		152,
+		52
+	};
+#else
+	const _bmp_info bmp_system_Page =
+	{
+		BASIC_PAGE_SYSTEM_SET_OFFSET,
+		LCD_HOR_SIZE,
+		LCD_VER_SIZE
+	};
+#endif
 
 static void pageSystemSetInit(void)
 {
+#ifdef LCD_SIZE_480X320
+	u8 i = 0;
+	LCD_Clear(BLACK);
+	for (i = 0; i < 6; i++)
+	{
+		show_bmp_in_flash(page_SystemSet_item[i].start_pos_x,page_SystemSet_item[i].start_pos_y,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
+	}
+#else
 	show_bmp_in_flash(0,0,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
+#endif
 }
 
 static void pageSystemSetUpdate(void)

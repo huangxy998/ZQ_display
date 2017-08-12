@@ -15,26 +15,61 @@
 #include "touch.h"
 #include "lcd_com.h"
 
-#define PAGE_GZ_L1			3
-#define PAGE_GZ_L2			56
-#define PAGE_GZ_L3			108
-#define PAGE_GZ_L4		    180
-#define PAGE_GZ_L5		    316
-#define PAGE_GZ_H1			26
-#define PAGE_GZ_H2			50
-#define PAGE_GZ_H3			73
-#define PAGE_GZ_H4			96
-#define PAGE_GZ_H5			119
-#define PAGE_GZ_H6			142
-#define PAGE_GZ_H7			165
-#define PAGE_GZ_H8			189
-#define PAGE_GZ_W1      49
-#define PAGE_GZ_W2      43
-#define PAGE_GZ_W3      63
-#define PAGE_GZ_W4      134
-#define PAGE_GZ_W5      76
-#define PAGE_GZ_H       20
-
+#ifdef LCD_SIZE_480X320
+	#define PAGE_GZ_L1			3
+	#define PAGE_GZ_L2			70
+	#define PAGE_GZ_L3			132
+	#define PAGE_GZ_L4		  216
+	#define PAGE_GZ_L5		  382
+	#define PAGE_GZ_H1			36
+	#define PAGE_GZ_H2			68
+	#define PAGE_GZ_H3			96
+	#define PAGE_GZ_H4			128
+	#define PAGE_GZ_H5			160
+	#define PAGE_GZ_H6			190
+	#define PAGE_GZ_H7			222
+	#define PAGE_GZ_H8			252
+	#define PAGE_GZ_W1      58
+	#define PAGE_GZ_W2      54
+	#define PAGE_GZ_W3      74
+	#define PAGE_GZ_W4      156
+	#define PAGE_GZ_W5      90
+	#define PAGE_GZ_H       24
+	
+	#define PAGE_GZ_BH1     280
+	#define PAGE_GZ_BL1     33
+	#define PAGE_GZ_BL2     188
+	#define PAGE_GZ_BL3     348
+	#define PAGE_GZ_BW      100
+	#define PAGE_GZ_BH      40
+#else
+	#define PAGE_GZ_L1			3
+	#define PAGE_GZ_L2			56
+	#define PAGE_GZ_L3			108
+	#define PAGE_GZ_L4		    180
+	#define PAGE_GZ_L5		    316
+	#define PAGE_GZ_H1			26
+	#define PAGE_GZ_H2			50
+	#define PAGE_GZ_H3			73
+	#define PAGE_GZ_H4			96
+	#define PAGE_GZ_H5			119
+	#define PAGE_GZ_H6			142
+	#define PAGE_GZ_H7			165
+	#define PAGE_GZ_H8			189
+	#define PAGE_GZ_W1      49
+	#define PAGE_GZ_W2      43
+	#define PAGE_GZ_W3      63
+	#define PAGE_GZ_W4      134
+	#define PAGE_GZ_W5      76
+	#define PAGE_GZ_H       20
+	
+	#define PAGE_GZ_BH1     210
+	#define PAGE_GZ_BL1     22
+	#define PAGE_GZ_BL2     160
+	#define PAGE_GZ_BL3     290
+	#define PAGE_GZ_BW      80
+	#define PAGE_GZ_BH      26
+#endif
 
 static void pageSerialInit(void);
 static void pageSerialUpdate(void);
@@ -61,8 +96,8 @@ const PAGE_ITEM_T page_Serial_item[] =
 		2,     //id
 		1,      //支持触控
 		
-		22,210,    //开始坐标
-		80,26, //宽高
+		PAGE_GZ_BL1,PAGE_GZ_BH1,    //开始坐标
+		PAGE_GZ_BW,PAGE_GZ_BH, //宽高
 		
 		{0x65,0x0b,0x04,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -72,8 +107,8 @@ const PAGE_ITEM_T page_Serial_item[] =
 		3,     //id
 		1,      //支持触控
 		
-		160,210,    //开始坐标
-		80,26, //宽高
+		PAGE_GZ_BL2,PAGE_GZ_BH1,    //开始坐标
+		PAGE_GZ_BW,PAGE_GZ_BH, //宽高
 		
 			{0x65,0x0b,0x05,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -83,8 +118,8 @@ const PAGE_ITEM_T page_Serial_item[] =
 		4,     //id
 		1,      //支持触控
 		
-		290,210,    //开始坐标
-		80,26, //宽高
+		PAGE_GZ_BL3,PAGE_GZ_BH1,    //开始坐标
+		PAGE_GZ_BW,PAGE_GZ_BH, //宽高
 		
 			{0x65,0x0b,0x06,0x00,0xff,0xff,0xff},
 		0       //默认0

@@ -17,151 +17,18 @@
 
 #define PAGE_MAIN_BACK_COLOR    BLACK
 
+
 PAGE_MAIN_PARA_T gPageMainPara;
 
 static void pageBasicItemMode(void);
 
 static void pageBasicInit(void);
 static void pageBasicUpdate(void);
-#if 0
-static void pageBasicItemMode(void);
-static void pageBasicItemSensity(void);
-static void pageBasicItemPreset(void);
-static void pageBasicItemAdd(void);
-static void pageBasicItemShowDenoCnt(void);
-static void pageBasicItemEnterMenu(void);
-static void pageBasicItemShowTime(void);
-static void pageBasicItemShowCurCnt(void);
-static void pageBasicItemShowCnt(void);
-static void pageBasicItemShowSum(void);
-static void pageBasicItemShowSDStatus(void);
-static void pageBasicItemShowNetStatus(void);
-static void pageBasicItemShowSerialNum(void);
-#else
 static void pageBasicItemUpdate(void);
-#endif
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
-#if 0
-const PAGE_ITEM_T page_basic_item[] =
-{
-	{  //模式
-		BASIC_ITEM_MODE,	
-		1,			//触控							
-		160, 0,     //起始坐标
-		96, 48,     //字符长宽
-		pageBasicItemMode	//显示更新函数	
-	},
-	
-	{  //灵敏度
-		BASIC_ITEM_SENSITY,	
-		1,			//触控							
-		300, 0,     //起始坐标
-		100, 22,    //字符长宽
-		pageBasicItemSensity	//显示更新函数	
-	},
 
-	{  //预置
-		BASIC_ITEM_PRESET,	
-		1,			//触控							
-		300, 25,     //起始坐标
-		100, 22,    //字符长宽
-		pageBasicItemPreset	//显示更新函数	
-	},
-	
-	{
-		//累加开关
-		BASIC_ITEM_ADD,	
-		1,			//触控							
-		5, 124,     //起始坐标
-		43, 22,     //字符长宽
-		pageBasicItemAdd //显示更新函数
-	},
-
-	{
-		//进入菜单
-		BASIC_ITEM_MENU,	
-		1,			//触控							
-		0, 0,     //起始坐标
-		120, 50,     //字符长宽
-		pageBasicItemEnterMenu //显示更新函数
-	},
-
-	{
-		//时间显示
-		BASIC_ITEM_TIME,	
-		0,			//触控无							
-		56, 218,     //起始坐标
-		200, 20,     //字符长宽
-		pageBasicItemShowTime //显示更新函数
-	},
-
-	{
-		//面额计数
-		BASIC_ITEM_DENO,	
-		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
-		pageBasicItemShowDenoCnt //显示更新函数
-	},
-
-	{
-		//当前计数
-		BASIC_ITEM_CUR_CNT,	
-		0,			//触控无							
-		80, 72,     //起始坐标
-		320, 128,     //字符长宽
-		pageBasicItemShowCurCnt //显示更新函数
-	},
-
-	{
-		//上次计数
-		BASIC_ITEM_CNT,	
-		0,			//触控无							
-		310, 176,     //起始坐标
-		60, 24,     //字符长宽
-		pageBasicItemShowCnt //显示更新函数
-	},
-
-	{
-		//金额
-		BASIC_ITEM_SUM,	
-		0,			//触控无							
-		310, 212,     //起始坐标
-		60, 24,     //字符长宽
-		pageBasicItemShowSum //显示更新函数
-	},
-
-	{
-		//冠字号码
-		BASIC_ITEM_SERIAL,	
-		0,			//触控无							
-		72, 176,     //起始坐标
-		144, 24,     //字符长宽
-		pageBasicItemShowSerialNum //显示更新函数
-	},
-
-	{
-		//网络状态
-		BASIC_ITEM_NET,	
-		0,			//触控无							
-		42, 52,     //起始坐标
-		400, 20,     //字符长宽
-		pageBasicItemShowNetStatus //显示更新函数
-	},
-
-	{
-		//sd卡状态
-		BASIC_ITEM_SD,	
-		0,			//触控无							
-		5, 210,     //起始坐标
-		48, 48,     //字符长宽
-		pageBasicItemShowSDStatus //显示更新函数
-	},
-	
-};
-#else
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //STANDtime
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +52,248 @@ static const ITEM_IDX_T item_id2indx[] =
 	{ 23, 'x', 0}, 
 	{ 3, 'f', 0}, 
 };
+#ifdef LCD_SIZE_480X320
+const PAGE_ITEM_T page_basic_item[] =
+{           //b0控件
+	{
+		0,     //id
+		1,      //支持触控
+		
+		0,0,    //开始坐标
+		132,67, //宽高
+		
+		{0x65,0x01,0x21,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
 
+ //b5控件
+	{
+		1,     //id
+		1,      //支持触控
+		
+		136,3,    //开始坐标
+		165,62, //宽高
+		
+		{0x65,0x01,0x16,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	            //b4控件
+	{
+			2,	   //id
+			1,		//支持触控
+			
+			314,3,	  //开始坐标
+			68,28, //宽高
+			
+			{0x65,0x01,0x02,0x00,0xff,0xff,0xff},
+			0  
+	},
+
+	             //b3控件
+	{
+		3,     //id
+		1,      //支持触控
+		
+		314,35,    //开始坐标
+		66,31, //宽高
+		
+		{0x65,0x01,0x01,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	            //bt0控件
+	{
+		4,     //id
+		1,      //支持触控
+		
+		0,71,    //开始坐标
+		48,24,//宽高
+		
+		{0x65,0x01,0x1d,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	             //bt1控件
+	{
+		5,     //id
+		1,      //支持触控
+		
+		8,101,    //开始坐标
+		67,41,//宽高
+		
+		{0x65,0x01,0x1d,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	            //bt2控件
+	{
+		6,     //id
+		1,      //支持触控
+		
+		10,150,    //开始坐标
+		64,36,//宽高
+		
+		{0x65,0x01,0x1e,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+
+	            //n14控件
+	{	
+		7,      //id
+		0,      //不支持触控
+		
+		405,38,  //开始坐标
+		70,28,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	            //n1控件
+	{	
+		8,      //id
+		0,      //不支持触控
+		
+		38,70,  //开始坐标
+		50,25,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n2控件
+	{	
+		9,      //id
+		0,      //不支持触控
+		
+		133,70,  //开始坐标
+		54,25,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n3控件
+	{	
+		10,      //id
+		0,      //不支持触控
+		
+		194,69,  //开始坐标
+		52,25,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n4控件
+	{	
+		11,      //id
+		0,      //不支持触控
+		
+		270,70,  //开始坐标
+		47,24,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //n5控件
+	{	
+		12,      //id
+		0,      //不支持触控
+		
+		334,70,  //开始坐标
+		49,24,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	            //n6控件
+	{	
+		13,      //id
+		0,      //不支持触控
+	
+		423,70,  //开始坐标
+		49,24,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+
+	          //n0控件
+	{	
+		14,      //id
+		0,      //不支持触控
+	
+		87,112,  //开始坐标
+		330,118,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+	            //t6控件
+	{	
+		15,      //id
+		0,      //不支持触控
+	
+		428,194,  //开始坐标
+		39,30,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+	          //t0控件
+	{	
+		16,      //id
+		0,      //不支持触控
+	
+		60,244,  //开始坐标
+		242,37,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+	          //t5控件
+	{	
+		17,      //id
+		0,      //不支持触控
+	
+		345,244,  //开始坐标
+		131,36,//宽高
+		
+		{0},
+		0       //默认0
+	},
+
+
+	           //t7控件
+	{	
+		18,      //id
+		0,      //不支持触控
+	
+		346,284,  //开始坐标
+		128,32,//宽高
+		
+		{0},
+		0       //默认0
+	}
+};
+
+#else
 const PAGE_ITEM_T page_basic_item[] =
 {           //b0控件
 	{
@@ -427,6 +535,8 @@ const PAGE_ITEM_T page_basic_item[] =
 };
 
 #endif
+
+
 //页面结构体
 const PAGE_T page_basic = 
 {
@@ -478,7 +588,7 @@ const _bmp_info bmp_mainPage =
 	LCD_HOR_SIZE,
 	LCD_VER_SIZE
 };
-
+#ifndef LCD_SIZE_480X320
 const _bmp_info bmp_menuPageProgressOn =
 {
 	MENU_PAGE_PROGRESSFULL_OFFSET,
@@ -513,13 +623,13 @@ const _bmp_info bmp_menuPageAddOff =
 	43,
 	22
 };
-
+#endif
 
 ///////////////////////////////////////////////////////////
 //基本页面初始化
 static void pageBasicInit(void)
 {
-	u8 tmp_buff[8];
+//	u8 tmp_buff[8];
 	show_bmp_in_flash(0,0,bmp_mainPage.width,bmp_mainPage.height,bmp_mainPage.addr);
 //	if(gPageMainPara.add_flg)
 //	{
@@ -597,7 +707,7 @@ static void pageBasicItemUpdate(void)
 	LCD_SetFrontColor(GREEN);  //字颜色
 	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
 	Get_TimeStr(timebuff);
-	LCD_ShowString(60, 216, 190, 16, 16, timebuff);
+	LCD_ShowString(82, 286, 190, 16, 16, timebuff);
 }
 
 

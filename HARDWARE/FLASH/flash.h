@@ -1,6 +1,8 @@
 #ifndef __FLASH_H
 #define __FLASH_H			    
 #include "sys.h" 
+#include "LCD.h" 
+
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //Mini STM32开发板
@@ -16,7 +18,24 @@
 
 //4M字节
 #define SPI_FLASH_SIZE							0x400000
+#ifdef LCD_SIZE_480X320
+#define GB2312_16X16_HZ_OFFSET					0x00000000  //0 字库起始地址
+#define BASIC_PAGE_CIS_PARA_SET_OFFSET          0x0003FE42  //CIS参数校正
+#define MENU_PAGE_UP_OFFSET						0x0008AE4A  //主菜单1
+#define BASIC_PAGE_VERSION_OFFSET			    0X000D5E52  //程序版本号
+#define BASIC_PAGE_PARA_SET_OFFSET				0X00120E5A  //参数设置
+#define BASIC_PAGE_DIALOG_OFFSET				0X0016BE62  //对话框
+#define BASIC_PAGE_SERAL_OFFSET					0X00185D52  //冠字号显示
+#define BASIC_PAGE_BLACK_LIST_OFFSET			0X001D0D5A  //黑名单输入
+#define BASIC_PAGE_KEYBOARD_OFFSET				0X0021BD62  //键盘
+#define BASIC_PAGE_START_OFFSET			        0X00266D6A  //开机画面
+#define BASIC_PAGE_OFFSET						0X002B1D72  //基本页面
+#define BASIC_PAGE_TIME_SET_OFFSET				0X002FCD7A  //时间设置
+#define BASIC_PAGE_LOCAL_IP_OFFSET				0X00347D82  //ip设置
+#define BASIC_PAGE_SINGLE_BUTTON_OFFSET			0X00392D8A  //单个按钮
+#define BASIC_PAGE_MAIN_PARA_OFFSET			    0X00396B52  //主参数设置
 
+#else
 #define GB2312_16X16_HZ_OFFSET					0x00000000  //0 字库起始地址
 #define BASIC_PAGE_OFFSET						0x0003FE42  
 #define MENU_PAGE_UP_OFFSET						0x0006EC4A
@@ -45,7 +64,7 @@
 
 //END 0X003122B2
 
-
+#endif
 
 #define TOUCH_ADJUST_PARAM_OFFSET				0x003f0000
 

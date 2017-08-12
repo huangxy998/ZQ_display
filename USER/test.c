@@ -35,7 +35,7 @@
 
 
 //全局变量
-PAGE_INFO_T  gPageInfo;
+volatile PAGE_INFO_T  gPageInfo;
 CMD_PAGE_ID_INFO  gIDInfo;
 
 u32 main_task_mask = 0;
@@ -43,15 +43,15 @@ u32 main_task_mask = 0;
 
 int main(void)
 {	
-	u32 timeUpdatePeriod = 0;
  	Stm32_Clock_Init(9);	//系统时钟设置 	
 	uart_init(72,115200);	//串口初始化为9600
 	delay_init(72);	   	 	//延时初始化 
+	
 	LED_Init();		  		//初始化与LED连接的硬件接口
-	LCD_Init();			   	//初始化LCD 	
-	KEY_Init();				//按键初始化	
+	LCD_Init();			   	//初始化LCD 
+	KEY_Init();				//按键初始化			
 	SPI_Flash_Init();  		//SPI FLASH 初始化 	
-//	RTC_Init();
+	RTC_Init();
 	gIDInfo.cmdUpdate = 0;
 	gIDInfo.cmdPage.start = 0x65;
 	gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
@@ -60,7 +60,6 @@ int main(void)
 	gIDInfo.cmdPage.cmdEnd[1] = 0xff;
 	gIDInfo.cmdPage.cmdEnd[2] = 0xff;
 
-	LCD_Clear(BLACK);
 	LCD_SetFrontColor(RED);//设置字体为红色 
 	
 	while(SPI_Flash_ReadID()!=W25Q32)							//检测不到W25Q32
@@ -140,26 +139,14 @@ int main(void)
 		{
 			gPageInfo.p_page[gPageInfo.cur_page_idx]->page_init(); //页面初始化
 			gPageInfo.pre_page_idx = gPageInfo.cur_page_idx;
+			delay_ms(2);
 		}
 		gPageInfo.p_page[gPageInfo.cur_page_idx]->page_update(); //页面更新		
 		if(gIDInfo.cmdUpdate != 0)
 		{
-			u8 sendlen = sizeof(CMD_PAGE_ID);
-			if(gIDInfo.cmdUpdate == 2)
-				sendlen = 4;
 			gIDInfo.cmdUpdate = 0;
-			uartSendbuffer((u8*)&gIDInfo.cmdPage, sendlen);
+			uartSendbuffer((u8*)&gIDInfo.cmdPage, sizeof(CMD_PAGE_ID));
 		}
-		//时间更新
-		timeUpdatePeriod++;
-		if (timeUpdatePeriod > 600)
-		{
-			timeUpdatePeriod = 0;
-//			RTC_Get();
-			if (gPageInfo.cur_page_idx == PAGE_ID_BASIC)
-				gPageInfo.need_update = 1;
-		}
-
 	}	
 }
 

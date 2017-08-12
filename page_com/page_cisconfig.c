@@ -16,25 +16,80 @@
 #include "page.h"
 #include "touch.h"
 #include "lcd_com.h"
+#ifdef LCD_SIZE_480X320
+	#define PAGE_CISS_LIE1_X			6
+	#define PAGE_CISS_LIE2_X			96
+	#define PAGE_CISS_LIE3_X			172
+	#define PAGE_CISS_LIE4_X			256
+	#define PAGE_CISS_LIE5_X			330
+	#define PAGE_CISS_LIE6_X			414
+	#define PAGE_CISS_HANG1_Y		32
+	#define PAGE_CISS_HANG2_Y		60
+	#define PAGE_CISS_HANG3_Y		86
+	#define PAGE_CISS_HANG4_Y		112
+	#define PAGE_CISS_HANG5_Y		138
+	#define PAGE_CISS_HANG6_Y		166
+	#define PAGE_CISS_HANG7_Y		190
+	#define PAGE_CISS_HANG8_Y		218
+	#define PAGE_CISS_KEY_WIDTH    78
+	#define PAGE_CISS_KEY_HIGH     22
+	#define PAGE_CISS_DATA_WIDTH   68
+	#define PAGE_CISS_DATA_HIGH    22
+	
+	#define PAGE_CISS_BH1          278
+	#define PAGE_CISS_BL1          64
+	#define PAGE_CISS_BL2          198
+	#define PAGE_CISS_BL3          338	
+	#define PAGE_CISS_BW           82
+	#define PAGE_CISS_BH           40
+	
+	#define PAGE_CISS_BJX          104
+	#define PAGE_CISS_BJY          249	
+	#define PAGE_CISS_BJW           261
+	#define PAGE_CISS_BJH           14
+	
+	#define PAGE_CISS_BTX          380
+	#define PAGE_CISS_BTY          242	
+	#define PAGE_CISS_BTW           95
+	#define PAGE_CISS_BTH           24
+#else
+	#define PAGE_CISS_LIE1_X			4
+	#define PAGE_CISS_LIE2_X			80
+	#define PAGE_CISS_LIE3_X			135
+	#define PAGE_CISS_LIE4_X			212
+	#define PAGE_CISS_LIE5_X			267
+	#define PAGE_CISS_LIE6_X			345
+	#define PAGE_CISS_HANG1_Y		22
+	#define PAGE_CISS_HANG2_Y		42
+	#define PAGE_CISS_HANG3_Y		62
+	#define PAGE_CISS_HANG4_Y		82
+	#define PAGE_CISS_HANG5_Y		102
+	#define PAGE_CISS_HANG6_Y		122
+	#define PAGE_CISS_HANG7_Y		142
+	#define PAGE_CISS_HANG8_Y		162
+	#define PAGE_CISS_KEY_WIDTH    70
+	#define PAGE_CISS_KEY_HIGH     20
+	#define PAGE_CISS_DATA_WIDTH   52
+	#define PAGE_CISS_DATA_HIGH    20
+	
+	#define PAGE_CISS_BH1          209		
+	#define PAGE_CISS_BL1          61
+	#define PAGE_CISS_BL2          166
+	#define PAGE_CISS_BL3          279	
+	#define PAGE_CISS_BW           66
+	#define PAGE_CISS_BH           30
+	
+	#define PAGE_CISS_BJX          104
+	#define PAGE_CISS_BJY          179	
+	#define PAGE_CISS_BJW           222
+	#define PAGE_CISS_BJH           13
+	
+	#define PAGE_CISS_BTX          310
+	#define PAGE_CISS_BTY          185	
+	#define PAGE_CISS_BTW           85
+	#define PAGE_CISS_BTH           17
 
-#define PAGE_CISS_LIE1_X			4
-#define PAGE_CISS_LIE2_X			80
-#define PAGE_CISS_LIE3_X			135
-#define PAGE_CISS_LIE4_X			212
-#define PAGE_CISS_LIE5_X			267
-#define PAGE_CISS_LIE6_X			345
-#define PAGE_CISS_HANG1_Y		22
-#define PAGE_CISS_HANG2_Y		42
-#define PAGE_CISS_HANG3_Y		62
-#define PAGE_CISS_HANG4_Y		82
-#define PAGE_CISS_HANG5_Y		102
-#define PAGE_CISS_HANG6_Y		122
-#define PAGE_CISS_HANG7_Y		142
-#define PAGE_CISS_HANG8_Y		162
-#define PAGE_CISS_KEY_WIDTH    70
-#define PAGE_CISS_KEY_HIGH     20
-#define PAGE_CISS_DATA_WIDTH   52
-#define PAGE_CISS_DATA_HIGH    20
+#endif
 
 static void pageCISConfigInit(void);
 static void pageCISConfigUpdate(void);
@@ -339,8 +394,8 @@ const PAGE_ITEM_T page_CISConfig_item[] =
 		40,     //id
 		0,      //不支持触控
 		
-		104,179,    //开始坐标
-		222,13 , //宽高
+		PAGE_CISS_BJX,PAGE_CISS_BJY,    //开始坐标
+		PAGE_CISS_BJW,PAGE_CISS_BJH , //宽高
 		
 		{0},
 		0       //默认0
@@ -351,8 +406,8 @@ const PAGE_ITEM_T page_CISConfig_item[] =
 		41,     //id
 		0,      //不支持触控
 		
-		310,185,    //开始坐标
-		85,17 , //宽高
+		PAGE_CISS_BTX,PAGE_CISS_BTY,    //开始坐标
+		PAGE_CISS_BTW,PAGE_CISS_BTH , //宽高
 		
 		{0},
 		0       //默认0
@@ -363,8 +418,8 @@ const PAGE_ITEM_T page_CISConfig_item[] =
 		42,     //id
 		1,      //支持触控
 		
-		61,209,    //开始坐标
-		66,30 , //宽高
+		PAGE_CISS_BL1,PAGE_CISS_BH1,    //开始坐标
+		PAGE_CISS_BW,PAGE_CISS_BH , //宽高
 		
 		{0x65,0x07,0x03,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -375,8 +430,8 @@ const PAGE_ITEM_T page_CISConfig_item[] =
 		44,     //id
 			1,      //支持触控
 		
-		166,209,    //开始坐标
-		66,30 , //宽高
+		PAGE_CISS_BL2,PAGE_CISS_BH1,    //开始坐标
+		PAGE_CISS_BW,PAGE_CISS_BH , //宽高
 		
 		{0x65,0x07,0x05,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -387,8 +442,8 @@ const PAGE_ITEM_T page_CISConfig_item[] =
 		45,     //id
 		1,      //支持触控
 		
-		279,203,    //开始坐标
-		66,30 , //宽高
+		PAGE_CISS_BL3,PAGE_CISS_BH1,    //开始坐标
+		PAGE_CISS_BW,PAGE_CISS_BH , //宽高
 		
 		{0x65,0x07,0x01,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -413,7 +468,7 @@ const _bmp_info bmp_CISConfig_Page =
 	LCD_HOR_SIZE,
 	LCD_VER_SIZE
 };
-
+#ifndef LCD_SIZE_480X320
 const _bmp_info bmp_progress_none =
 {
 	MENU_PAGE_PROGRESS_OFFSET,
@@ -427,7 +482,7 @@ const _bmp_info bmp_progress_percent =
 	222,
 	13
 };
-
+#endif
 static u8 progress_show = 0;
 
 static void pageCISConfigInit(void)
@@ -438,18 +493,6 @@ static void pageCISConfigInit(void)
 
 static void pageCISConfigUpdate(void)
 {
-#if 0
-	LCD_SetFrontColor(WHITE);  //字颜色
-	LCD_SetBackColor(BLACK); 
-//	LCD_ShowString_hz16x16(10,100,200,16,16,"菜单子页面演示");
-	if(gPageInfo.toucged_up)
-	{
-//		gPageInfo.cur_page_idx = PAGE_ID_CISSET1;
-	gIDInfo.cmdUpdate = 1;
-	gIDInfo.cmdPage.touchStatus = PAGE_ID_CISSET1;
-
-	}
-#endif	
 	u8 item;
 	if(gPageInfo.toucged_up)
 	{
@@ -503,7 +546,13 @@ static void pageCISConfigItemUpdate(void)
 		{
 			progress_show = 1;
 			valtmp = 0;
+		#ifdef LCD_SIZE_480X320
+			LCD_Fill(page_CISConfig_item[24].start_pos_x, page_CISConfig_item[24].start_pos_y,
+			     page_CISConfig_item[24].start_pos_x+page_CISConfig_item[24].width,
+			     page_CISConfig_item[24].start_pos_y+page_CISConfig_item[24].height, WHITE);
+		#else
 			show_bmp_in_flash(84,187,bmp_progress_none.width,bmp_progress_none.height,bmp_progress_none.addr);
+		#endif
 		}
 		
 		value = atoi((char*)&gPagePara.j_percent[0]);
@@ -516,7 +565,13 @@ static void pageCISConfigItemUpdate(void)
 			if(value != valtmp)
 			{
 				valtmp = value;
+			#ifdef LCD_SIZE_480X320
+				LCD_Fill(page_CISConfig_item[24].start_pos_x, page_CISConfig_item[24].start_pos_y+2,
+			     page_CISConfig_item[24].start_pos_x+(page_CISConfig_item[24].width*value)/100,
+			     page_CISConfig_item[24].start_pos_y+page_CISConfig_item[24].height-2, GREEN);
+			#else
 				show_bmp_in_flash(84,187,(bmp_progress_percent.width*value)/100,bmp_progress_percent.height,bmp_progress_percent.addr);
+			#endif
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 #include "delay.h"
 #include "usart.h"
-#include "rtc.h" 		    
+#include "rtc.h" 	
+#include "lcd_com.h"
+#include "page_define.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK MiniSTM32开发板
@@ -25,26 +27,27 @@ u8 RTC_Init(void)
 {
 	//检查是不是第一次配置时钟
 	u8 temp=0;
-	if(BKP->DR1!=0X5050)//第一次配置
+	if (BKP->DR1!=0X5050)//第一次配置
 	{	 
-	  	RCC->APB1ENR|=1<<28;     //使能电源时钟	    
+		RCC->APB1ENR|=1<<28;     //使能电源时钟	    
 		RCC->APB1ENR|=1<<27;     //使能备份时钟	    
 		PWR->CR|=1<<8;           //取消备份区写保护
-		RCC->BDCR|=1<<16;        //备份区域软复位	   
-		RCC->BDCR&=~(1<<16);     //备份区域软复位结束	  	 
-//	    RCC->BDCR|=1<<0;         //开启外部低速振荡器 
-//	    while((!(RCC->BDCR&0X02))&&temp<250)//等待外部时钟就绪	 
-//		{
-//			temp++;
-//			delay_ms(10);
-//		};
-//		if(temp>=250)return 1;//初始化时钟失败,晶振有问题	   
+//		RCC->BDCR|=1<<16;        //备份区域软复位	   
+//		RCC->BDCR&=~(1<<16);     //备份区域软复位结束	  	 
+		RCC->BDCR|=1<<0;         //开启外部低速振荡器 
+		while(!(RCC->BDCR&0X02) && (temp<250))//等待外部时钟就绪	 
+		{
+			temp++;
+			delay_ms(10);
+		};
+		if(temp>=250)
+			return 1;//初始化时钟失败,晶振有问题	   
 		RCC->BDCR|=1<<8; //LSI作为RTC时钟 	    
 		RCC->BDCR|=1<<15;//RTC时钟使能	  
-	  	while(!(RTC->CRL&(1<<5)));//等待RTC寄存器操作完成	 
-    	while(!(RTC->CRL&(1<<3)));//等待RTC寄存器同步  
-    	RTC->CRH|=0X00;  		  //允许秒中断
-    	while(!(RTC->CRL&(1<<5)));//等待RTC寄存器操作完成	 
+		while(!(RTC->CRL&(1<<5)));//等待RTC寄存器操作完成	 
+		while(!(RTC->CRL&(1<<3)));//等待RTC寄存器同步  
+		RTC->CRH|=0X01;  		  //允许秒中断
+		while(!(RTC->CRL&(1<<5)));//等待RTC寄存器操作完成	 
 		RTC->CRL|=1<<4;           //允许配置	 
 		RTC->PRLH=0X0000;
 		RTC->PRLL=32767;          //时钟周期设置(有待观察,看是否跑慢了?)理论值：32767	
@@ -52,15 +55,14 @@ u8 RTC_Init(void)
 		RTC->CRL&=~(1<<4);           //配置更新
 		while(!(RTC->CRL&(1<<5)));   //等待RTC寄存器操作完成		 									  
 		BKP->DR1=0X5050;  
-//	 	printf("FIRST TIME\n");
-	}else//系统继续计时
+	}
+	else//系统继续计时
 	{
     	while(!(RTC->CRL&(1<<3)));//等待RTC寄存器同步  
     	RTC->CRH|=0X01;  		  //允许秒中断
     	while(!(RTC->CRL&(1<<5)));//等待RTC寄存器操作完成
-//		printf("OK\n");
 	}		    				  
-//	MY_NVIC_Init(0,0,RTC_IRQn,2);//优先级设置    
+	MY_NVIC_Init(0,0,RTC_IRQn,2);//优先级设置    
 	RTC_Get();//更新时间 
 	return 0; //ok
 }		 				    
@@ -72,13 +74,12 @@ void RTC_IRQHandler(void)
 	{							
 		RTC_Get();//更新时间   
 		//printf("sec:%d\r\n",calendar.sec);
- 	}
-	if(RTC->CRL&0x0002)//闹钟中断
-	{
-		RTC->CRL&=~(0x0002);		//清闹钟中断	  
-  		//printf("Alarm!\n");		   
-  	} 				  								 
-    RTC->CRL&=0X0FFA;         //清除溢出，秒钟中断标志
+		if (gPageInfo.cur_page_idx == PAGE_ID_STANDTIME)
+		{
+			gPageInfo.need_update = 1;
+		}
+	}				  								 
+	RTC->CRL&=0X0FFA;         //清除溢出，秒钟中断标志
 	while(!(RTC->CRL&(1<<5)));//等待RTC寄存器操作完成	  	    						 	   	 
 }
 //判断是否是闰年函数
@@ -219,7 +220,7 @@ u8 RTC_Get_Week(u16 year,u8 month,u8 day)
 
 void Get_TimeStr(u8 *str)
 {
-	sprintf((char*)str, "%04d-%02d-%02d %02d-%02d-%02d",calendar.w_year, calendar.w_month, calendar.w_date
+	sprintf((char*)str, "%04d-%02d-%02d %02d:%02d:%02d",calendar.w_year, calendar.w_month, calendar.w_date
 		, calendar.hour, calendar.min, calendar.sec);
 }
 

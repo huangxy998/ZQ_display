@@ -15,16 +15,27 @@
 #include "touch.h"
 #include "lcd_com.h"
 
-#define PAGE_CIS_TEST_L1    42
-#define PAGE_CIS_TEST_L2    224
+#ifdef LCD_SIZE_480X320
+	#define PAGE_CIS_TEST_L1    62
+	#define PAGE_CIS_TEST_L2    260
 
-#define PAGE_CIS_TEST_H1    58
-#define PAGE_CIS_TEST_H2    120
-#define PAGE_CIS_TEST_H3    180
+	#define PAGE_CIS_TEST_H1    84
+	#define PAGE_CIS_TEST_H2    158
+	#define PAGE_CIS_TEST_H3    228
 
-#define PAGE_CIS_TEST_LW    134
-#define PAGE_CIS_TEST_HH    38
+	#define PAGE_CIS_TEST_LW    138
+	#define PAGE_CIS_TEST_HH    40
+#else
+	#define PAGE_CIS_TEST_L1    42
+	#define PAGE_CIS_TEST_L2    224
 
+	#define PAGE_CIS_TEST_H1    58
+	#define PAGE_CIS_TEST_H2    120
+	#define PAGE_CIS_TEST_H3    180
+
+	#define PAGE_CIS_TEST_LW    134
+	#define PAGE_CIS_TEST_HH    38
+#endif
 static void page_CISTestInit(void);
 static void page_CISTestUpdate(void);
 
@@ -99,16 +110,34 @@ const PAGE_T page_CISTest =
  	page_CISTestUpdate
 };
 
-const _bmp_info bmp_CISTest_Page =
-{
-	BASIC_PAGE_CIS_TEST_OFFSET,
-	LCD_HOR_SIZE,
-	LCD_VER_SIZE
-};
+#ifdef LCD_SIZE_480X320
+	const _bmp_info bmp_CISTest_Page =
+	{
+		BASIC_PAGE_SINGLE_BUTTON_OFFSET,
+		152,
+		52
+	};
+#else
+	const _bmp_info bmp_CISTest_Page =
+	{
+		BASIC_PAGE_CIS_TEST_OFFSET,
+		LCD_HOR_SIZE,
+		LCD_VER_SIZE
+	};
+#endif
 
 static void page_CISTestInit(void)
 {
+#ifdef LCD_SIZE_480X320
+	u8 i = 0;
+	LCD_Clear(BLACK);
+	for (i = 0; i < 6; i++)
+	{
+		show_bmp_in_flash(page_CISTest_item[i].start_pos_x,page_CISTest_item[i].start_pos_y,bmp_CISTest_Page.width,bmp_CISTest_Page.height,bmp_CISTest_Page.addr);
+	}
+#else
 	show_bmp_in_flash(0,0,bmp_CISTest_Page.width,bmp_CISTest_Page.height,bmp_CISTest_Page.addr);
+#endif
 }
 
 static void page_CISTestUpdate(void)

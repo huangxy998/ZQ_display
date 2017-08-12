@@ -15,24 +15,56 @@
 #include "touch.h"
 #include "lcd_com.h"
 
-#define PAGE_SENSOR_L1			8
-#define PAGE_SENSOR_L2			57
-#define PAGE_SENSOR_L3			140
-#define PAGE_SENSOR_L4			195
-#define PAGE_SENSOR_L5			272
-#define PAGE_SENSOR_L6			326
-#define PAGE_SENSOR_H1			33
-#define PAGE_SENSOR_H2			56
-#define PAGE_SENSOR_H3			80
-#define PAGE_SENSOR_H4			102
-#define PAGE_SENSOR_H5			125
-#define PAGE_SENSOR_H6			149
-#define PAGE_SENSOR_H7			172
-#define PAGE_SENSOR_H8			195
-#define PAGE_SENSOR_WT     45
-#define PAGE_SENSOR_WD     80
-#define PAGE_SENSOR_H          19
-
+#ifdef LCD_SIZE_480X320
+	#define PAGE_SENSOR_L1			1
+	#define PAGE_SENSOR_L2			72
+	#define PAGE_SENSOR_L3			172
+	#define PAGE_SENSOR_L4			236
+	#define PAGE_SENSOR_L5			326
+	#define PAGE_SENSOR_L6			392
+	#define PAGE_SENSOR_H1			44
+	#define PAGE_SENSOR_H2			76
+	#define PAGE_SENSOR_H3			106
+	#define PAGE_SENSOR_H4			136
+	#define PAGE_SENSOR_H5			166
+	#define PAGE_SENSOR_H6			196
+	#define PAGE_SENSOR_H7			228
+	#define PAGE_SENSOR_H8			258
+	#define PAGE_SENSOR_WT     62
+	#define PAGE_SENSOR_WD     96
+	#define PAGE_SENSOR_H      24
+	
+	#define PAGE_SENSOR_BH1      264
+	#define PAGE_SENSOR_BL1      196
+	#define PAGE_SENSOR_BL2      332
+	#define PAGE_SENSOR_BW       114
+	#define PAGE_SENSOR_BH       48
+	
+#else
+	#define PAGE_SENSOR_L1			8
+	#define PAGE_SENSOR_L2			57
+	#define PAGE_SENSOR_L3			140
+	#define PAGE_SENSOR_L4			195
+	#define PAGE_SENSOR_L5			272
+	#define PAGE_SENSOR_L6			326
+	#define PAGE_SENSOR_H1			33
+	#define PAGE_SENSOR_H2			56
+	#define PAGE_SENSOR_H3			80
+	#define PAGE_SENSOR_H4			102
+	#define PAGE_SENSOR_H5			125
+	#define PAGE_SENSOR_H6			149
+	#define PAGE_SENSOR_H7			172
+	#define PAGE_SENSOR_H8			195
+	#define PAGE_SENSOR_WT     45
+	#define PAGE_SENSOR_WD     80
+	#define PAGE_SENSOR_H          19
+	
+	#define PAGE_SENSOR_BH1      198
+	#define PAGE_SENSOR_BL1      169
+	#define PAGE_SENSOR_BL2      279
+	#define PAGE_SENSOR_BW       88
+	#define PAGE_SENSOR_BH       34
+#endif
 
 static void pageParaSetInit(void);
 static void pageParaSetUpdate(void);
@@ -290,8 +322,8 @@ const PAGE_ITEM_T page_ParaSet_item[] =
 		46,     //id
 		1,      //支持触控
 		
-		169,198,    //开始坐标
-		88,34, //宽高
+		PAGE_SENSOR_BL1,PAGE_SENSOR_BH1,    //开始坐标
+		PAGE_SENSOR_BW,PAGE_SENSOR_BH, //宽高
 		
 		{0x65,0x0d,0x08,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -301,8 +333,8 @@ const PAGE_ITEM_T page_ParaSet_item[] =
 		47,     //id
 		1,      //支持触控
 		
-		279,198,    //开始坐标
-		88,34, //宽高
+		PAGE_SENSOR_BL2,PAGE_SENSOR_BH1,    //开始坐标
+		PAGE_SENSOR_BW,PAGE_SENSOR_BH, //宽高
 		
 	{0x65,0x0d,0x09,0x00,0xff,0xff,0xff},
 		0       //默认0
@@ -381,7 +413,7 @@ static void pageParaSetItemUpdate(void)
 	}
 	for(; item < 44; item++)
 	{
-		LCD_ShowString(page_ParaSet_item[item-22].start_pos_x - 55, 
+		LCD_ShowString(page_ParaSet_item[item-22].start_pos_x - (PAGE_SENSOR_WT+8), 
 					page_ParaSet_item[item-22].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
 	}
 }

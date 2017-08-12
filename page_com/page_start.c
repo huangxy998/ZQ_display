@@ -39,11 +39,11 @@ const _bmp_info bmp_start_Page =
 	LCD_HOR_SIZE,
 	LCD_VER_SIZE
 };
-
+#ifndef LCD_SIZE_480X320
 extern const _bmp_info bmp_progress_none;
 
 extern const _bmp_info bmp_progress_percent;
-
+#endif
 
 static void pageStartInit(void)
 {
@@ -54,11 +54,8 @@ static void pageStartInit(void)
 //版本页面刷新
 static void pageStartUpdate(void)
 {
-	if(gPageInfo.need_update == 1)
-	{
-		gPageInfo.need_update = 0;
+
 		pageStartItemUpdate();   //页面刷新
-	}
 	
 }
 
@@ -66,6 +63,7 @@ static void pageStartUpdate(void)
 //显示更新
 static void pageStartItemUpdate(void)
 {
+	static int i = 0;
 	if(gPagePara.j_percent[0][0] != 0)
 	{
 		static int valtmp = 0;
@@ -75,7 +73,9 @@ static void pageStartItemUpdate(void)
 		{
 			progress_show = 1;
 			valtmp = 0;
+			#ifndef LCD_SIZE_480X320
 			show_bmp_in_flash(86,210,bmp_progress_none.width,bmp_progress_none.height,bmp_progress_none.addr);
+			#endif
 		}
 		
 		value = atoi((char*)&gPagePara.j_percent[0][0]);
@@ -88,9 +88,23 @@ static void pageStartItemUpdate(void)
 			if(value != valtmp)
 			{
 				valtmp = value;
+			#ifndef LCD_SIZE_480X320
 				show_bmp_in_flash(86,210,(bmp_progress_percent.width*value)/100,bmp_progress_percent.height,bmp_progress_percent.addr);
+			#endif
 			}
 		}
+	}
+	if ( i < 200 )
+	{
+		i++;
+		tp_dev.scan(1);//扫描物理坐标
+		if((tp_dev.sta&0xc0)==TP_CATH_PRES)//按键按下了一次(此时按键松开了.)
+		{
+				LCD_Clear(WHITE);//清屏
+				TP_Adjust();  	//屏幕校准 
+				TP_Save_Adjdata();
+		}
+		delay_ms(10);
 	}
 }
 

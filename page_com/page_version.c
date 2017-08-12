@@ -15,12 +15,29 @@
 #include "touch.h"
 #include "lcd_com.h"
 
+#ifdef LCD_SIZE_480X320
+	#define PAGE_VER_LIE1_X		 200
+	#define PAGE_VER_H1   		 56
+	#define PAGE_VER_H2   		 98
+	#define PAGE_VER_H3   		 144
+	#define PAGE_VER_H4   		 188
+	#define PAGE_VER_H5   		 232
+	#define PAGE_VER_H6   		 276
 
-#define PAGE_VER_LIE1_X		 180
-#define PAGE_VER_KEY_WIDTH   230
-#define PAGE_VER_KEY_HIGH    30
+	#define PAGE_VER_KEY_WIDTH   274
+	#define PAGE_VER_KEY_HIGH    36
+#else
+	#define PAGE_VER_LIE1_X		 180
+	#define PAGE_VER_H1   		 42
+	#define PAGE_VER_H2   		 74
+	#define PAGE_VER_H3   		 108
+	#define PAGE_VER_H4   		 142
+	#define PAGE_VER_H5   		 178
+	#define PAGE_VER_H6   		 210
 
-
+	#define PAGE_VER_KEY_WIDTH   230
+	#define PAGE_VER_KEY_HIGH    30
+#endif
 static void pageVersionInit(void);
 static void pageVersionUpdate(void);
 static void pageVersionItemUpdate(void);
@@ -37,7 +54,7 @@ const PAGE_ITEM_T page_version_item[] =
 		74,4,    //开始坐标
 		243,30,//宽高
 		
-		{0x65,0x02,0x01,0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	},
 	             //t1控件
@@ -45,10 +62,10 @@ const PAGE_ITEM_T page_version_item[] =
 		2,     //id
 		1,      //支持触控
 		
-		PAGE_VER_LIE1_X,42,    //开始坐标
+		PAGE_VER_LIE1_X,PAGE_VER_H1,    //开始坐标
 		PAGE_VER_KEY_WIDTH,PAGE_VER_KEY_HIGH,//宽高
 		
-		{0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	},
 	             //t2控件
@@ -56,10 +73,10 @@ const PAGE_ITEM_T page_version_item[] =
 		3,     //id
 		1,      //支持触控
 		
-		PAGE_VER_LIE1_X,74,    //开始坐标
+		PAGE_VER_LIE1_X,PAGE_VER_H2,    //开始坐标
 		PAGE_VER_KEY_WIDTH,PAGE_VER_KEY_HIGH,//宽高
 		
-		{0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	},
 	             //t3控件
@@ -67,10 +84,10 @@ const PAGE_ITEM_T page_version_item[] =
 		4,     //id
 		1,      //支持触控
 		
-		PAGE_VER_LIE1_X,108,    //开始坐标
+		PAGE_VER_LIE1_X,PAGE_VER_H3,    //开始坐标
 		PAGE_VER_KEY_WIDTH,PAGE_VER_KEY_HIGH,//宽高
 		
-		{0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	},
 
@@ -79,10 +96,10 @@ const PAGE_ITEM_T page_version_item[] =
 		5,     //id
 		1,      //支持触控
 		
-		PAGE_VER_LIE1_X,142,    //开始坐标
+		PAGE_VER_LIE1_X,PAGE_VER_H4,    //开始坐标
 		PAGE_VER_KEY_WIDTH,PAGE_VER_KEY_HIGH,//宽高
 		
-		{0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	},
 
@@ -91,10 +108,10 @@ const PAGE_ITEM_T page_version_item[] =
 		6,     //id
 		1,      //支持触控
 		
-		PAGE_VER_LIE1_X,178,    //开始坐标
+		PAGE_VER_LIE1_X,PAGE_VER_H5,    //开始坐标
 		PAGE_VER_KEY_WIDTH,PAGE_VER_KEY_HIGH,//宽高
 		
-		{0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	},
 
@@ -103,10 +120,10 @@ const PAGE_ITEM_T page_version_item[] =
 		7,     //id
 		1,      //支持触控
 		
-		PAGE_VER_LIE1_X,210,    //开始坐标
+		PAGE_VER_LIE1_X,PAGE_VER_H6,    //开始坐标
 		PAGE_VER_KEY_WIDTH,PAGE_VER_KEY_HIGH,//宽高
 		
-		{0x00,0xff,0xff,0xff},
+		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0
 	}
 };
@@ -162,8 +179,6 @@ static void pageVersionUpdate(void)
 					( touch_up_pos.y >= page_version_item[item].start_pos_y ) && ( touch_up_pos.y < page_version_item[item].start_pos_y + page_version_item[item].height) )
 				{
 					gIDInfo.cmdUpdate = 1;
-					if(page_version_item[item].id != 1)
-						gIDInfo.cmdUpdate = 2;
 					memcpy(&gIDInfo.cmdPage.start, &page_version_item[item].com_data[0], cmdLen);
 					break;
 				}
@@ -187,7 +202,7 @@ static void pageVersionItemUpdate(void)
 	for(item = 0; item < page_version.page_item_num; item++)
 	{
 		LCD_ShowString(page_version_item[item].start_pos_x, 
-					page_version_item[item].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
+					page_version_item[item].start_pos_y, page_version_item[item].width, 16, 16, gPagePara.t_string[item]);
 	}
 }
 

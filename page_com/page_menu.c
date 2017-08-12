@@ -23,14 +23,14 @@ const _bmp_info bmp_menuPageOff =
 	LCD_HOR_SIZE,
 	LCD_VER_SIZE
 };
-
+#ifndef LCD_SIZE_480X320
 const _bmp_info bmp_menuPageOn =
 {
 	MENU_PAGE_DOWN_OFFSET,
 	LCD_HOR_SIZE,
 	LCD_VER_SIZE
 };
-
+#endif
 static void pageMenuInit(void);
 static void pageMenuUpdate(void);
 static void pageMenuItemVersion(void);
@@ -50,8 +50,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		0,	
 		1,			//触控							
-		6, 22,     //起始坐标
-		76, 92,     //字符长宽
+		35,40,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x01,0x00,0xff,0xff,0xff},
 		pageMenuItemVersion	//显示更新函数	
 	},
@@ -59,8 +59,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		1,	
 		1,			//触控							
-		110, 22,     //起始坐标
-		76, 92,     //字符长宽
+		147,40,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x02,0x00,0xff,0xff,0xff},
 		pageMenuItemBlacklist//显示更新函数	
 	},
@@ -68,8 +68,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		2,	
 		1,			//触控							
-		214, 22,     //起始坐标
-		76, 92,     //字符长宽
+		259,40,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x04,0x00,0xff,0xff,0xff},
 		pageMenuItemPictureSet//显示更新函数	
 	},
@@ -77,8 +77,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		3,	
 		1,			//触控							
-		320, 22,     //起始坐标
-		76, 92,     //字符长宽
+		369,40,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x05,0x00,0xff,0xff,0xff},
 		pageMenuItemUpdate//显示更新函数	
 	},
@@ -86,8 +86,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		4,	
 		1,			//触控							
-		6, 128,     //起始坐标
-		76, 92,     //字符长宽
+		36,184,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x03,0x00,0xff,0xff,0xff},
 		pageMenuItemNetSet//显示更新函数	
 	},
@@ -95,8 +95,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		5,	
 		1,			//触控							
-		110, 128,     //起始坐标
-		76, 92,     //字符长宽
+		148,185,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x06,0x00,0xff,0xff,0xff},
 		pageMenuItemSerial//显示更新函数	
 	},
@@ -104,8 +104,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		6,	
 		1,			//触控							
-		214, 128,     //起始坐标
-		76, 92,     //字符长宽
+		257,185,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x07,0x00,0xff,0xff,0xff},
 		pageMenuItemSystem//显示更新函数	
 	},
@@ -113,8 +113,8 @@ const PAGE_ITEM_T page_menu_item[] =
 	{  //模式
 		7,	
 		1,			//触控							
-		320, 128,     //起始坐标
-		76, 92,     //字符长宽
+		368,185,    //开始坐标
+		80,80,//宽高
 		{0x65,0x03,0x08,0x00,0xff,0xff,0xff},
 		pageMenuItemTime//显示更新函数	
 	},
@@ -124,7 +124,7 @@ const PAGE_ITEM_T g0=             //g0控件
 {
 	9,     //id
 	0,      //不支持触控
-  0,220,   //开始坐标
+  	44,295,   //开始坐标
 	400,20,//宽高
 	
 	{0},
@@ -200,10 +200,19 @@ static void pageMenuItemVersion(void)
 {
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
-			pressed = 1;
-			show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
-			show_pressed_icon_in_flash( page_menu_item[0].start_pos_x, page_menu_item[0].start_pos_y,
-			page_menu_item[0].width,  page_menu_item[0].height, MENU_PAGE_DOWN_OFFSET );
+		//u16 color = POINT_COLOR;
+		pressed = 1;
+	#ifdef LCD_SIZE_480X320
+		
+		//POINT_COLOR = LIGHTBLUE;
+		//LCDDrawRectAlphaBlend(page_menu_item[0].start_pos_x,page_menu_item[0].start_pos_y,
+		//page_menu_item[0].width,  page_menu_item[0].height,8);
+		//POINT_COLOR = color;
+	#else
+		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
+		show_pressed_icon_in_flash( page_menu_item[0].start_pos_x, page_menu_item[0].start_pos_y,
+		page_menu_item[0].width,  page_menu_item[0].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -219,9 +228,17 @@ static void pageMenuItemBlacklist(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifdef LCD_SIZE_480X320
+		
+		//POINT_COLOR = LIGHTBLUE;
+		//LCDDrawRectAlphaBlend(page_menu_item[1].start_pos_x,page_menu_item[1].start_pos_y,
+		//page_menu_item[1].width,  page_menu_item[1].height,8);
+		//POINT_COLOR = color;
+	#else
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[1].start_pos_x, page_menu_item[1].start_pos_y,
 			 page_menu_item[1].width,  page_menu_item[1].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -241,9 +258,11 @@ static void pageMenuItemPictureSet(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifndef LCD_SIZE_480X320
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[2].start_pos_x, page_menu_item[2].start_pos_y,
 			 page_menu_item[2].width,  page_menu_item[2].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -260,9 +279,11 @@ static void pageMenuItemUpdate(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifndef LCD_SIZE_480X320
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[3].start_pos_x, page_menu_item[3].start_pos_y,
 			 page_menu_item[3].width,  page_menu_item[3].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -279,9 +300,11 @@ static void pageMenuItemNetSet(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifndef LCD_SIZE_480X320
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[4].start_pos_x, page_menu_item[4].start_pos_y,
 			 page_menu_item[4].width,  page_menu_item[4].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -300,9 +323,11 @@ static void pageMenuItemSerial(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifndef LCD_SIZE_480X320
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[5].start_pos_x, page_menu_item[5].start_pos_y,
 			 page_menu_item[5].width,  page_menu_item[5].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -319,9 +344,11 @@ static void pageMenuItemSystem(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifndef LCD_SIZE_480X320
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[6].start_pos_x, page_menu_item[6].start_pos_y,
 			 page_menu_item[6].width,  page_menu_item[6].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{
@@ -338,9 +365,11 @@ static void pageMenuItemTime(void)
 	if ((gPageInfo.toucged_down) && (pressed == 0))
 	{
 		pressed = 1;
+	#ifndef LCD_SIZE_480X320
 		show_bmp_in_flash(0,0,bmp_menuPageOff.width,bmp_menuPageOff.height,bmp_menuPageOff.addr);
 		show_pressed_icon_in_flash( page_menu_item[7].start_pos_x, page_menu_item[7].start_pos_y,
 			 page_menu_item[7].width,  page_menu_item[7].height, MENU_PAGE_DOWN_OFFSET );
+	#endif
 	}
 	else if (gPageInfo.toucged_up)
 	{

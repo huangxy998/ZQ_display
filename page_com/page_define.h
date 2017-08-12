@@ -133,7 +133,7 @@ typedef	struct
 }PAGE_INFO_T;
 
 
-extern PAGE_INFO_T  gPageInfo;
+extern volatile PAGE_INFO_T  gPageInfo;
 
 
 
