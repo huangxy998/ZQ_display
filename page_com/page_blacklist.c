@@ -449,7 +449,7 @@ const PAGE_ITEM_T page_Blacklist_item[] =
 		1,			//触控							
 		PAGE_BLALKLIST_BL1,	PAGE_BLALKLIST_BH3,
 		PAGE_BLALKLIST_BW, PAGE_BLALKLIST_BHH,
-		{0},
+		{0x65,0x04,0x03,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 
@@ -459,7 +459,7 @@ const PAGE_ITEM_T page_Blacklist_item[] =
 		1,			//触控							
 		PAGE_BLALKLIST_BL1,	PAGE_BLALKLIST_BH4,
 		PAGE_BLALKLIST_BW, PAGE_BLALKLIST_BHH,
-		{0},
+		{0x65,0x04,0x04,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 
@@ -585,9 +585,9 @@ static void pageBlackListItemUpdate(void)
 				 page_Blacklist_item[j].start_pos_y+16, BLACK);
 		LCD_ShowString(page_Blacklist_item[j].start_pos_x, 
 			page_Blacklist_item[j].start_pos_y, 100, 16, 16, gPagePara.n_val[j]);
-		LCD_Fill(page_Blacklist_item[j].start_pos_x, page_Blacklist_item[j].start_pos_y,
-				 page_Blacklist_item[j].start_pos_x+page_Blacklist_item[j].width-4,
-				 page_Blacklist_item[j].start_pos_y+16, BLACK);
+		LCD_Fill(page_Blacklist_item[j+16].start_pos_x, page_Blacklist_item[j+16].start_pos_y,
+				 page_Blacklist_item[j+16].start_pos_x+page_Blacklist_item[j+16].width-4,
+				 page_Blacklist_item[j+16].start_pos_y+16, BLACK);
 		LCD_ShowString(page_Blacklist_item[j+16].start_pos_x, 
 			page_Blacklist_item[j+16].start_pos_y, 100, 16, 16, gPagePara.t_string[j]);
 	}
@@ -655,7 +655,7 @@ static u8 pageBlackListMakeReplyFrame(u8* buff)
 	
 	buff[i] = 0x90;   //帧头
 	i++;
-	buff[i] = 0x03;   //页面ID
+	buff[i] = 0x04;   //页面ID
 	i++;
 	buff[i] = 0x02;   //设置项
 	i++;

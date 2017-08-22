@@ -45,6 +45,7 @@
 	#define PAGE_CLOCKSET_W     60
 	#define PAGE_CLOCKSET_H     54
 #endif
+
 static void pageTimeSetInit(void);
 static void pageTimeSetUpdate(void);
 static void pageTimeItemUpdate(void);

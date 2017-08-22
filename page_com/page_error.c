@@ -117,6 +117,7 @@ extern const _bmp_info bmp_Dialog_Page;
 static void pageErrorInit(void)
 {
 	u16 color;
+	u16 bkcolor;
 	u16 i = 1;
 	show_bmp_in_flash(page_Error_item[0].start_pos_x,page_Error_item[0].start_pos_y,
 		              bmp_Dialog_Page.width,bmp_Dialog_Page.height,bmp_Dialog_Page.addr);
@@ -134,7 +135,12 @@ static void pageErrorInit(void)
 	LCD_DrawLine(page_Error_item[i].start_pos_x,page_Error_item[i].start_pos_y+page_Error_item[i].height,
 		     page_Error_item[i].start_pos_x+page_Error_item[i].width,
 		     page_Error_item[i].start_pos_y+page_Error_item[i].height);
+
+	bkcolor = BACK_COLOR;
+	BACK_COLOR = GRAY;
+	LCD_ShowString_hz16x16(page_Error_item[i].start_pos_x+16, page_Error_item[i].start_pos_y+8, 100, 16, 16, "È¡Ïû");
 	POINT_COLOR = color;
+	BACK_COLOR = bkcolor;
 }
 
 static void pageErrorUpdate(void)
@@ -162,10 +168,17 @@ static void pageErrorUpdate(void)
 static void pageErrorItemUpdate(void)
 {
 	u8 i = 0;
+	u16 color = POINT_COLOR;
+	u16 bkcolor = BACK_COLOR; 
+	
+	POINT_COLOR = BLACK;
+	BACK_COLOR = WHITE;
 	for(; i < 2; i++)
 	{
 		LCD_ShowString_hz16x16(page_Error_item[i+2].start_pos_x+2, 
 					page_Error_item[i+2].start_pos_y+2, 100, 16, 16, gPagePara.t_string[i]);
 	}
+	BACK_COLOR = bkcolor;
+	POINT_COLOR = color;
 }
 

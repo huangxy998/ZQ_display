@@ -655,13 +655,20 @@ static void pageKeyBoardUpdate(void)
 
 static void pageKeyBoardItemUpdate(void)
 {
+	u16 color = POINT_COLOR;
+	u16 bkcolor = BACK_COLOR;
+	
+	POINT_COLOR = BLACK;
+	BACK_COLOR = WHITE;
 	LCD_Fill(page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x, 
 				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y,
-				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x+100, 
-				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y+20, WHITE);
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x+page_KeyBoard_item[page_KeyBoard.page_item_num-1].width, 
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y+page_KeyBoard_item[page_KeyBoard.page_item_num-1].height, WHITE);
 	
 	LCD_ShowString_hz16x16(page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_x, 
-				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y, 100, 16, 16, keyBoardInfo.buff);
+				page_KeyBoard_item[page_KeyBoard.page_item_num-1].start_pos_y+8, 300, 24, 24, keyBoardInfo.buff);
+	POINT_COLOR = color;
+	BACK_COLOR = bkcolor;
 }
 
 
@@ -687,7 +694,7 @@ static void pageKeyBoardTPUpdate(u8 item)
 		case '>': //确认退出
 			if (keyBoardInfo.buffLen > 0)
 			{
-				u8 buff[14];
+				u8 buff[32];
 				u8 len = 0;
 				
 				keyBoardInfo.strUpdate = 1;
@@ -698,9 +705,10 @@ static void pageKeyBoardTPUpdate(u8 item)
 			gPageInfo.cur_page_idx = prePage;
 			break;
 		default://字符处理
-			keyBoardInfo.buff[keyBoardInfo.buffLen] = letter_table[item];
-			if (keyBoardInfo.buffLen < 12) //最多输入12个字符
+			
+			if (keyBoardInfo.buffLen < 16) //最多输入16个字符
 			{
+				keyBoardInfo.buff[keyBoardInfo.buffLen] = letter_table[item];
 				keyBoardInfo.buffLen++;
 				keyBoardInfo.buff[keyBoardInfo.buffLen] = 0; //添加字符串结束符
 			}
@@ -715,7 +723,7 @@ static u8 pageKeyBoardMakeReplyFrame(u8* buff)
 	
 	buff[i] = 0x90;   //帧头
 	i++;
-	buff[i] = 0x0a;   //页面ID
+	buff[i] = 0x05;   //页面ID
 	i++;
 	buff[i] = 0x01;   //设置项
 	i++;

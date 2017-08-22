@@ -63,7 +63,7 @@ static void pageStartUpdate(void)
 //显示更新
 static void pageStartItemUpdate(void)
 {
-	static int i = 0;
+	static u8 touchFlg = 0;
 	if(gPagePara.j_percent[0][0] != 0)
 	{
 		static int valtmp = 0;
@@ -94,17 +94,12 @@ static void pageStartItemUpdate(void)
 			}
 		}
 	}
-	if ( i < 200 )
+	if (( strcmp((char *)gPagePara.t_string[0], "adjust lcd") == 0) && (touchFlg == 0))
 	{
-		i++;
-		tp_dev.scan(1);//扫描物理坐标
-		if((tp_dev.sta&0xc0)==TP_CATH_PRES)//按键按下了一次(此时按键松开了.)
-		{
-				LCD_Clear(WHITE);//清屏
-				TP_Adjust();  	//屏幕校准 
-				TP_Save_Adjdata();
-		}
-		delay_ms(10);
+		touchFlg = 1;
+		LCD_Clear(WHITE);//清屏
+		TP_Adjust();  	 //屏幕校准 
+		TP_Save_Adjdata();
 	}
 }
 

@@ -19,6 +19,8 @@
 
 
 PAGE_MAIN_PARA_T gPageMainPara;
+PARA_DEVICE_STATE gParaDeviceState;
+
 
 static void pageBasicItemMode(void);
 
@@ -80,14 +82,14 @@ const PAGE_ITEM_T page_basic_item[] =
 
 	            //b4控件
 	{
-			2,	   //id
-			1,		//支持触控
-			
-			314,3,	  //开始坐标
-			68,28, //宽高
-			
-			{0x65,0x01,0x02,0x00,0xff,0xff,0xff},
-			0  
+		2,	   //id
+		1,		//支持触控
+		
+		314,3,	  //开始坐标
+		68,28, //宽高
+		
+		{0x65,0x01,0x02,0x00,0xff,0xff,0xff},
+		0  
 	},
 
 	             //b3控件
@@ -144,7 +146,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		7,      //id
 		0,      //不支持触控
 		
-		405,38,  //开始坐标
+		405,42,  //开始坐标
 		70,28,//宽高
 		
 		{0},
@@ -157,7 +159,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		8,      //id
 		0,      //不支持触控
 		
-		38,70,  //开始坐标
+		42,74,  //开始坐标
 		50,25,//宽高
 		
 		{0},
@@ -170,7 +172,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		9,      //id
 		0,      //不支持触控
 		
-		133,70,  //开始坐标
+		126,74,  //开始坐标
 		54,25,//宽高
 		
 		{0},
@@ -183,7 +185,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		10,      //id
 		0,      //不支持触控
 		
-		194,69,  //开始坐标
+		196,74,  //开始坐标
 		52,25,//宽高
 		
 		{0},
@@ -196,7 +198,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		11,      //id
 		0,      //不支持触控
 		
-		270,70,  //开始坐标
+		272,74,  //开始坐标
 		47,24,//宽高
 		
 		{0},
@@ -209,7 +211,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		12,      //id
 		0,      //不支持触控
 		
-		334,70,  //开始坐标
+		336,74,  //开始坐标
 		49,24,//宽高
 		
 		{0},
@@ -222,7 +224,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		13,      //id
 		0,      //不支持触控
 	
-		423,70,  //开始坐标
+		425,74,  //开始坐标
 		49,24,//宽高
 		
 		{0},
@@ -236,8 +238,8 @@ const PAGE_ITEM_T page_basic_item[] =
 		14,      //id
 		0,      //不支持触控
 	
-		87,112,  //开始坐标
-		330,118,//宽高
+		87,110,  //开始坐标
+		330,128,//宽高
 		
 		{0},
 		0       //默认0
@@ -260,8 +262,8 @@ const PAGE_ITEM_T page_basic_item[] =
 		16,      //id
 		0,      //不支持触控
 	
-		60,244,  //开始坐标
-		242,37,//宽高
+		66,248,  //开始坐标
+		260,37,//宽高
 		
 		{0},
 		0       //默认0
@@ -272,7 +274,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		17,      //id
 		0,      //不支持触控
 	
-		345,244,  //开始坐标
+		352,250,  //开始坐标
 		131,36,//宽高
 		
 		{0},
@@ -285,7 +287,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		18,      //id
 		0,      //不支持触控
 	
-		346,284,  //开始坐标
+		352,290,  //开始坐标
 		128,32,//宽高
 		
 		{0},
@@ -385,7 +387,7 @@ const PAGE_ITEM_T page_basic_item[] =
 		7,      //id
 		0,      //不支持触控
 		
-		330,30,  //开始坐标
+		330,34,  //开始坐标
 		66, 22,//宽高
 		
 		{0},
@@ -675,22 +677,42 @@ const char* modeTable[] = {"智能", "混点", "清分", "清点"};
 static void pageBasicItemUpdate(void)
 {	
 	int j = 0;
-	u8 timebuff[22];
+	u16 len = 0;
+	u8 timebuff[22] = {0};
+	
 	LCD_SetFrontColor(GREEN);  //字颜色
 	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
 	for( j = 0; j < sizeof(item_id2indx)/sizeof(ITEM_IDX_T); j++ )
 	{
+		if(j == 0)
+		{
+			len = strlen((char*)&gPagePara.n_val[0][0]);
+			LCD_Fill(page_basic_item[item_id2indx[j].id].start_pos_x, page_basic_item[item_id2indx[j].id].start_pos_y,
+			page_basic_item[item_id2indx[j].id].start_pos_x + (5 - len)*64, 
+			page_basic_item[item_id2indx[j].id].start_pos_y+ page_basic_item[item_id2indx[j].id].height, BLACK);
+			LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x+(5 - len)*64, 
+					page_basic_item[item_id2indx[j].id].start_pos_y, page_basic_item[item_id2indx[j].id].width, 128, 128, gPagePara.n_val[item_id2indx[j].itemIndx]);
+			continue;
+		}
 		switch(item_id2indx[j].itemType)
 		{
 			case 'n':
-				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
-					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, "    ");
+				len = strlen((char*)gPagePara.n_val[item_id2indx[j].itemIndx]);
+				if(len < 5)
+					LCD_Fill(page_basic_item[item_id2indx[j].id].start_pos_x+len*8, page_basic_item[item_id2indx[j].id].start_pos_y,
+						page_basic_item[item_id2indx[j].id].start_pos_x + 5*8, 
+						page_basic_item[item_id2indx[j].id].start_pos_y+ 16, BLACK);
 				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
 					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, gPagePara.n_val[item_id2indx[j].itemIndx]);
 				break;
 			case 't':
+				len = strlen((char*)gPagePara.t_string[item_id2indx[j].itemIndx]);
+				if(len < 8)
+					LCD_Fill(page_basic_item[item_id2indx[j].id].start_pos_x+len*12, page_basic_item[item_id2indx[j].id].start_pos_y,
+						page_basic_item[item_id2indx[j].id].start_pos_x + 8*12, 
+						page_basic_item[item_id2indx[j].id].start_pos_y+ 24, BLACK);
 				LCD_ShowString(page_basic_item[item_id2indx[j].id].start_pos_x, 
-					page_basic_item[item_id2indx[j].id].start_pos_y, 100, 16, 16, gPagePara.t_string[item_id2indx[j].itemIndx]);
+					page_basic_item[item_id2indx[j].id].start_pos_y, 160, 24, 24, gPagePara.t_string[item_id2indx[j].itemIndx]);
 				break;
 			case 'x':
 				break;
@@ -707,7 +729,84 @@ static void pageBasicItemUpdate(void)
 	LCD_SetFrontColor(GREEN);  //字颜色
 	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
 	Get_TimeStr(timebuff);
-	LCD_ShowString(82, 286, 190, 16, 16, timebuff);
+	LCD_ShowString(124, 286+6, 190, 16, 16, timebuff);
+#ifdef LCD_SIZE_480X320
+	if(strcmp((char *)gPagePara.t_string[30], "on") == 0)  // U盘连接
+	{
+		if(gParaDeviceState.u_diskstate != 0)
+		{
+			//在此处清除显示
+			gParaDeviceState.u_diskstate = 0;
+			LCD_Fill(32, 292, 64, 16, BLACK);
+		}
+		//刷新信息	
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "U 盘存储");
+	}
+	else if(strcmp((char *)gPagePara.t_string[30], "off") == 0)//U盘无连接
+	{
+		u16 color = POINT_COLOR;
+		if(gParaDeviceState.u_diskstate != 1)
+		{
+			//在此处清除显示
+			gParaDeviceState.u_diskstate = 1;
+			LCD_Fill(32, 292, 64, 16, BLACK);
+		}
+		//刷新信息
+		POINT_COLOR = RED;
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "存储异常");
+		POINT_COLOR = color;
+	}
+	else if(strcmp((char *)gPagePara.t_string[31], "on") == 0)  //SD卡状态
+	{
+		if(gParaDeviceState.sd_state != 0)
+		{
+			//在此处清除显示
+			gParaDeviceState.sd_state = 0;
+			LCD_Fill(32, 292, 64, 16, BLACK);
+		}
+		//刷新信息
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "SD卡存储");
+	}
+	else if(strcmp((char *)gPagePara.t_string[31], "off") == 0)
+	{
+		u16 color = POINT_COLOR;
+		if(gParaDeviceState.sd_state!= 1)
+		{
+			//在此处清除显示
+			gParaDeviceState.sd_state = 1;
+			LCD_Fill(32, 292, 64, 16, BLACK);
+		}
+		//刷新信息
+		POINT_COLOR = RED;
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "存储异常");
+		POINT_COLOR = color;
+	}
+	if(strcmp((char *)gPagePara.t_string[32], "on") == 0)  //网络状态
+	{
+		if(gParaDeviceState.net_state!= 0)
+		{
+			//在此处清除显示
+			gParaDeviceState.net_state= 0;
+			LCD_Fill(10, 216, 64, 64, BLACK);
+		}
+		//刷新信息
+		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络正常");
+	}
+	else if(strcmp((char *)gPagePara.t_string[32], "off") == 0)
+	{
+		u16 color = POINT_COLOR;
+		if(gParaDeviceState.net_state!= 1)
+		{
+			//在此处清除显示
+			gParaDeviceState.net_state= 1;
+			LCD_Fill(10, 216, 64, 64, BLACK);
+		}
+		//刷新信息
+		POINT_COLOR = RED;
+		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络异常");
+		POINT_COLOR = color;
+	}
+#endif
 }
 
 
@@ -729,11 +828,11 @@ static void pageBasicItemMode(void)
 	{
 		LCD_SetFrontColor(page_item_func_name_color[i]);  //字颜色
 		LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
-		LCD_ShowHZ(	page_basic_item[1].start_pos_x, 
-					page_basic_item[1].start_pos_y, 
+		LCD_ShowHZ(	page_basic_item[1].start_pos_x+32, 
+					page_basic_item[1].start_pos_y+6, 
 					page_item_func_name[i][0], 48, 0 );
-		LCD_ShowHZ(	page_basic_item[1].start_pos_x+48, 
-					page_basic_item[1].start_pos_y, 
+		LCD_ShowHZ(	page_basic_item[1].start_pos_x+48+32, 
+					page_basic_item[1].start_pos_y+6, 
 					page_item_func_name[i][1], 48, 0 );
 	}
 }

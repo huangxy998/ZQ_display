@@ -23,12 +23,11 @@ void KEY_Init(void)
 	GPIOA->CRL&=0XFFFFFFF0;	//PA0设置成输入	  
 	GPIOA->CRL|=0X00000008;   
 	GPIOA->CRH&=0X0FFFFFFF;	//PA15设置成输入	  
-	GPIOA->CRH|=0X80000000; 			 
+	GPIOA->CRH|=0X10000000; 			 
 	GPIOA->ODR|=1<<15;	   	//PA15上拉,PA0默认下拉
-	GPIOC->CRL&=0XFF0FFFFF;	//PC5设置成输入	  
-	GPIOC->CRL|=0X00800000;   
+	GPIOC->CRL&=0XFF00FFFF;	//PC5设置成输入	  
+	GPIOC->CRL|=0X00840000;   
 	GPIOC->ODR|=1<<5;	   	//PC5
-	
 } 
 //按键处理函数
 //返回按键值

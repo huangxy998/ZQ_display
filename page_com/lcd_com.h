@@ -77,6 +77,13 @@ typedef struct
 	CMD_PAGE_ID    cmdPage;
 }CMD_PAGE_ID_INFO;
 
+typedef struct
+{
+	u8 u_diskstate;
+	u8 sd_state;
+	u8 net_state;
+}PARA_DEVICE_STATE;
+
 
 extern CMD_PAGE_ID_INFO  gIDInfo;
 
