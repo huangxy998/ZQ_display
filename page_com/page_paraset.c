@@ -16,12 +16,12 @@
 #include "lcd_com.h"
 
 #ifdef LCD_SIZE_480X320
-	#define PAGE_SENSOR_L1			1
+	#define PAGE_SENSOR_L1			4
 	#define PAGE_SENSOR_L2			72
-	#define PAGE_SENSOR_L3			172
+	#define PAGE_SENSOR_L3			176
 	#define PAGE_SENSOR_L4			236
-	#define PAGE_SENSOR_L5			326
-	#define PAGE_SENSOR_L6			392
+	#define PAGE_SENSOR_L5			332
+	#define PAGE_SENSOR_L6			396
 	#define PAGE_SENSOR_H1			44
 	#define PAGE_SENSOR_H2			76
 	#define PAGE_SENSOR_H3			106
@@ -325,7 +325,7 @@ const PAGE_ITEM_T page_ParaSet_item[] =
 		PAGE_SENSOR_BL1,PAGE_SENSOR_BH1,    //开始坐标
 		PAGE_SENSOR_BW,PAGE_SENSOR_BH, //宽高
 		
-		{0x65,0x0d,0x08,0x00,0xff,0xff,0xff},
+		{0x65,0x0d,0x2e,0x00,0xff,0xff,0xff},
 		0       //默认0
 	},
 	          //b1控件
@@ -336,7 +336,7 @@ const PAGE_ITEM_T page_ParaSet_item[] =
 		PAGE_SENSOR_BL2,PAGE_SENSOR_BH1,    //开始坐标
 		PAGE_SENSOR_BW,PAGE_SENSOR_BH, //宽高
 		
-	{0x65,0x0d,0x09,0x00,0xff,0xff,0xff},
+		{0x65,0x0d,0x2f,0x00,0xff,0xff,0xff},
 		0       //默认0
 	}
 };

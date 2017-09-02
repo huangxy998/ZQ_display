@@ -176,7 +176,7 @@ static void pageErrorItemUpdate(void)
 	for(; i < 2; i++)
 	{
 		LCD_ShowString_hz16x16(page_Error_item[i+2].start_pos_x+2, 
-					page_Error_item[i+2].start_pos_y+2, 100, 16, 16, gPagePara.t_string[i]);
+					page_Error_item[i+2].start_pos_y+2, 300, 16, 16, gPagePara.t_string[i]);
 	}
 	BACK_COLOR = bkcolor;
 	POINT_COLOR = color;

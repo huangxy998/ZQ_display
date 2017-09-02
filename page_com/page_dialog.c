@@ -156,7 +156,7 @@ static void pageDialogInit(void)
 			     page_Dialog_item[i].start_pos_x+page_Dialog_item[i].width,
 			     page_Dialog_item[i].start_pos_y+page_Dialog_item[i].height);
 		BACK_COLOR = GRAY;
-		LCD_ShowString_hz16x16(page_Dialog_item[i].start_pos_x+18, page_Dialog_item[i].start_pos_y+8, 100, 16, 16, d_str[i - 1]);
+		LCD_ShowString_hz16x16(page_Dialog_item[i].start_pos_x+18, page_Dialog_item[i].start_pos_y+8, 300, 16, 16, d_str[i - 1]);
 	}
 	//»­ÖÐ¼ä·½¿ò
 	POINT_COLOR = BLUE;

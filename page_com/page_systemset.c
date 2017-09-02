@@ -26,6 +26,16 @@ static void pageSystemSetUpdate(void);
 	#define PAGE_SET_ROW2      260
 	#define PAGE_SET_W         138
 	#define PAGE_SET_H         40
+
+	const u8* item_table[] =
+	{
+		"传感器检测",
+		"主板档位设置",
+		"显示屏亮度",
+		"蜂鸣器设置",
+		"系统参数导入",
+		"系统参数导出",
+	};
 #else
 	#define PAGE_SET_LINE1     62
 	#define PAGE_SET_LINE2     120
@@ -35,6 +45,7 @@ static void pageSystemSetUpdate(void);
 	#define PAGE_SET_W         112
 	#define PAGE_SET_H         32
 #endif
+
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
@@ -140,11 +151,22 @@ static void pageSystemSetInit(void)
 {
 #ifdef LCD_SIZE_480X320
 	u8 i = 0;
+	u16 color = POINT_COLOR;
+	u16 bccolor = BACK_COLOR;
+	POINT_COLOR = WHITE;
+	BACK_COLOR = BLACK;
 	LCD_Clear(BLACK);
+	LCD_ShowString_hz24x24(192,26,100,24,24,"系统设置");
+	POINT_COLOR = BRRED;
+	BACK_COLOR = SEABLUE;
 	for (i = 0; i < 6; i++)
 	{
 		show_bmp_in_flash(page_SystemSet_item[i].start_pos_x,page_SystemSet_item[i].start_pos_y,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
+		LCD_ShowString_hz24x24(page_SystemSet_item[i].start_pos_x+5,page_SystemSet_item[i].start_pos_y+bmp_system_Page.height/2-12,
+			bmp_system_Page.width,24,24,item_table[i]);
 	}
+	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 #else
 	show_bmp_in_flash(0,0,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
 #endif

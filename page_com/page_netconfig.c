@@ -540,7 +540,7 @@ static void pageNetConfigItemUpdate(void)
 			LCD_SetBackColor(BLACK);
 		}
 		LCD_ShowString_hz16x16(page_NetConfig_item[item+21].start_pos_x, 
-					page_NetConfig_item[item+21].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
+					page_NetConfig_item[item+21].start_pos_y, 160, 16, 16, gPagePara.t_string[item]);
 	}
 	LCD_SetFrontColor(WHITE);
 	LCD_SetBackColor(BLACK);

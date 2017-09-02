@@ -18,11 +18,11 @@
 #ifdef LCD_SIZE_480X320
 
 	#define PAGE_PARA_LIE1_X			5
-	#define PAGE_PARA_LIE2_X			106
+	#define PAGE_PARA_LIE2_X			112
 	#define PAGE_PARA_LIE3_X			162
-	#define PAGE_PARA_LIE4_X			258
+	#define PAGE_PARA_LIE4_X			260
 	#define PAGE_PARA_LIE5_X			320
-	#define PAGE_PARA_LIE6_X			416
+	#define PAGE_PARA_LIE6_X			418
 	#define PAGE_PARA_HANG1_Y		6
 	#define PAGE_PARA_HANG2_Y		40
 	#define PAGE_PARA_HANG3_Y		74

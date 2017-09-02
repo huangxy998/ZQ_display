@@ -25,6 +25,16 @@
 
 	#define PAGE_CIS_TEST_LW    138
 	#define PAGE_CIS_TEST_HH    40
+
+	const u8 *test_table[] =
+	{
+		"红光检测",
+		"紫外检测",
+		"绿光检测",
+		"红外检测",
+		"蓝光检测",
+		"CIS校正",
+	};
 #else
 	#define PAGE_CIS_TEST_L1    42
 	#define PAGE_CIS_TEST_L2    224
@@ -130,11 +140,22 @@ static void page_CISTestInit(void)
 {
 #ifdef LCD_SIZE_480X320
 	u8 i = 0;
+	u16 color = POINT_COLOR;
+	u16 bccolor = BACK_COLOR;
+	POINT_COLOR = WHITE;
+	BACK_COLOR = BLACK;
 	LCD_Clear(BLACK);
+	LCD_ShowString_hz24x24(174,26,200,24,24,"CIS光源检测");
+	POINT_COLOR = BRRED;
+	BACK_COLOR = SEABLUE;
 	for (i = 0; i < 6; i++)
 	{
 		show_bmp_in_flash(page_CISTest_item[i].start_pos_x,page_CISTest_item[i].start_pos_y,bmp_CISTest_Page.width,bmp_CISTest_Page.height,bmp_CISTest_Page.addr);
+		LCD_ShowString_hz24x24(page_CISTest_item[i].start_pos_x+5,page_CISTest_item[i].start_pos_y+page_CISTest_item[i].height/2-16,
+			bmp_CISTest_Page.width,24,24,test_table[i]);
 	}
+	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 #else
 	show_bmp_in_flash(0,0,bmp_CISTest_Page.width,bmp_CISTest_Page.height,bmp_CISTest_Page.addr);
 #endif

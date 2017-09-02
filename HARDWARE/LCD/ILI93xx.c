@@ -1989,6 +1989,191 @@ void LCD_ShowString_hz16x16(u16 x,u16 y,u16 total_width,u16 char_high,u8 char_wi
 		}
     }  
 }
+
+void LCD_ShowChar_hz24x24(u16 x,u16 y,const u8* p,u8 char_high,u8 mode) 
+{ 
+	u8 temp; 
+//	u8 t;
+	//字符点阵列数
+	int lie_num;
+	u8 lie_num_max;
+	//字符点阵每列字节数
+	u8 bytes_per_lie;
+	int pos;
+	u32 hz_offset;
+	u16 hz_code = 0;
+	u16 i;
+
+	hz_code = *p;
+	hz_code = hz_code <<8 | *(p+1);
+	for(i = 0; i < sizeof(chn_c_2424)/sizeof(int); i++)
+	{
+		if(chn_c_2424[i] == hz_code)
+			break;
+	}
+	if( i >= sizeof(chn_c_2424)/sizeof(int))
+		return;
+	hz_offset = i;
+	
+	if(!mode) //非叠加方式
+	{
+		LCD_SetDomain(x,y,x+char_high-1,y+char_high-1); //设定GRAM区域地址 
+		
+		bytes_per_lie = 3;
+		lie_num_max = 24;
+
+#ifdef LCD_SIZE_480X320
+		LCD_WR_REG(lcddev.wramcmd); //Write data
+#endif
+		
+		//字符点阵列数
+		for( lie_num=0; lie_num < lie_num_max; lie_num++ )
+		{
+			//字符点阵每列字节数
+			for( pos=0; pos<bytes_per_lie; pos++ )
+			{
+				temp=chn_b_2424[hz_offset][lie_num*bytes_per_lie+pos];
+				{
+					if(temp&0x80) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}
+					if(temp&0x40) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}	
+					if(temp&0x20) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}
+					if(temp&0x10) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}		
+					if(temp&0x08) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}
+					if(temp&0x04) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}	
+					if(temp&0x02) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}
+					if(temp&0x01) 
+					{	
+						LCD_WR_DATA(POINT_COLOR);
+					}
+					else		
+					{
+						LCD_WR_DATA(BACK_COLOR);
+					}						
+				}
+			}
+		}
+
+		LCD_SetDomain(0,0,LCD_W,LCD_H);//恢复Gram全屏设置 
+	}else//叠加方式(覆盖方式)
+	{ 
+	;
+	}
+	
+	LCD_CS_SET;
+}   
+
+//LCD_ShowString_hz16x16(10,70,200,16,16,"川爸");	
+//显示字符串
+//x,y:起点坐标
+//width,height:区域大小  
+//size:字体大小
+//*p:字符串起始地址	
+//static u32 hz_offset;
+void LCD_ShowString_hz24x24(u16 x,u16 y,u16 total_width,u16 char_high,u8 char_width,const u8* p)
+{         
+	u8 x0;
+	//当前X位置,显示最右边位置
+	u16 curr_x_pos, rightest_x_pos;
+
+	curr_x_pos = x;
+	rightest_x_pos = x + total_width;
+	
+	//y = 240-y;
+	//x = LCD_HOR_SIZE - x;
+	x0 = x;
+		
+	
+    while(*p!=0x00)//判断是不是非法字符!
+    { 
+        if(curr_x_pos>rightest_x_pos)
+		{	
+			//下一行从开始位置显示
+			x=x0;
+			
+			if( y <= LCD_VER_SIZE )
+			{
+				//换下一行
+				y += char_high;
+			}
+			else
+			{
+				//到达屏幕最下方
+				return;
+			}
+		}
+		
+		//hz_offset = get_GB2312_offset((unsigned char *)"川");;
+		//hz_offset = get_GB2312_offset(p);
+		if(*p < 127)
+		{
+			LCD_ShowChar(x,y,*p,char_high,0);				
+			//右移
+    		x += ((char_width+1)>>1);				
+			//指向下一个汉字
+    		p+=1;				
+			curr_x_pos += ((char_width+1)>>1);
+		}
+		else
+		{
+			LCD_ShowChar_hz24x24(x,y,p,char_high,0);				
+			//右移
+    		x += char_width;				
+			//指向下一个汉字
+    		p+=2;				
+			curr_x_pos += char_width;
+		}
+    }  
+}
+
   	
 void Load_Drow_Dialog(void)
 {

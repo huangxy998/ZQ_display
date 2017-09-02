@@ -429,7 +429,7 @@ const PAGE_ITEM_T page_Blacklist_item[] =
 		1,			//触控							
 		PAGE_BLALKLIST_BL1,	PAGE_BLALKLIST_BH1,
 		PAGE_BLALKLIST_BW, PAGE_BLALKLIST_BHH,
-		{0},
+		{0x65,0x04,0x02,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 
@@ -439,7 +439,7 @@ const PAGE_ITEM_T page_Blacklist_item[] =
 		1,			//触控							
 		PAGE_BLALKLIST_BL1,	PAGE_BLALKLIST_BH2,
 		PAGE_BLALKLIST_BW, PAGE_BLALKLIST_BHH,
-		{0},
+		{0x65,0x04,0x23,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 
@@ -449,7 +449,7 @@ const PAGE_ITEM_T page_Blacklist_item[] =
 		1,			//触控							
 		PAGE_BLALKLIST_BL1,	PAGE_BLALKLIST_BH3,
 		PAGE_BLALKLIST_BW, PAGE_BLALKLIST_BHH,
-		{0x65,0x04,0x03,0x00,0xff,0xff,0xff},
+		{0x65,0x04,0x22,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 
@@ -459,17 +459,17 @@ const PAGE_ITEM_T page_Blacklist_item[] =
 		1,			//触控							
 		PAGE_BLALKLIST_BL1,	PAGE_BLALKLIST_BH4,
 		PAGE_BLALKLIST_BW, PAGE_BLALKLIST_BHH,
-		{0x65,0x04,0x04,0x00,0xff,0xff,0xff},
+		{0x65,0x04,0x24,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 
-	//b4   //按空白处退出
+	//g0   //按空白处退出
 	{ 
 		0,	
 		1,			//触控							
 		0,	0,
-		LCD_HOR_SIZE, 16,
-		{0},
+		LCD_HOR_SIZE, 35,
+		{0x65,0x04,0x27,0x00,0xff,0xff,0xff},
 		0	//显示更新函数	
 	},
 	
@@ -550,7 +550,7 @@ static void pageBlacklistUpdate(void)
 						blackListInfo.curItem = item;
 					}
 					pageBlackListTPUpdate(item);
-//					gPageInfo.need_update = 1;
+					gPageInfo.need_update = 1;
 					break;
 				}
 			}	
@@ -595,6 +595,7 @@ static void pageBlackListItemUpdate(void)
 	LCD_SetBackColor(BLACK);
 }
 
+static u8 buff[20];
 static void pageBlackListTPUpdate(u8 item)
 {
 //	u8 i;
@@ -612,7 +613,6 @@ static void pageBlackListTPUpdate(u8 item)
 			break;
 		case sizeof(page_Blacklist_item)/sizeof(PAGE_ITEM_T)-4://删除
 		{
-			u8 buff[20];
 			u8 len;
 			len = pageBlackListMakeReplyFrame(buff);
 			uartSendbuffer(buff, len);

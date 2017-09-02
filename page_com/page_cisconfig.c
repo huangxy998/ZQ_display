@@ -530,7 +530,7 @@ static void pageCISConfigItemUpdate(void)
 		LCD_ShowString(page_CISConfig_item[j].start_pos_x, 
 			page_CISConfig_item[j].start_pos_y, 100, 16, 16, gPagePara.n_val[j]);
 		LCD_ShowString_hz16x16(page_CISConfig_item[j].start_pos_x-74, 
-			page_CISConfig_item[j].start_pos_y, 100, 16, 16, gPagePara.t_string[j+1]);
+			page_CISConfig_item[j].start_pos_y, 100, 16, 16, gPagePara.b_str[j+4]);
 	}
 	LCD_Fill(page_CISConfig_item[25].start_pos_x, page_CISConfig_item[25].start_pos_y,
 			     page_CISConfig_item[25].start_pos_x+page_CISConfig_item[25].width-4,

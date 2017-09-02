@@ -143,7 +143,7 @@ static void pageConfirmInit(void)
 			     page_Confirm_item[i].start_pos_x+page_Confirm_item[i].width,
 			     page_Confirm_item[i].start_pos_y+page_Confirm_item[i].height);
 		BACK_COLOR = GRAY;
-		LCD_ShowString_hz16x16(page_Confirm_item[i].start_pos_x+20, page_Confirm_item[i].start_pos_y+7, 100, 16, 16, dialogStr[i - 1]);
+		LCD_ShowString_hz16x16(page_Confirm_item[i].start_pos_x+20, page_Confirm_item[i].start_pos_y+7, 300, 16, 16, dialogStr[i - 1]);
 	}	
 	POINT_COLOR = color;
 	BACK_COLOR = bccolor;
