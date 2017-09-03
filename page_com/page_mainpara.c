@@ -87,7 +87,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG1_Y,        //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x02, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 26, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -99,7 +99,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG2_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x03, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 27, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -112,7 +112,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG3_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x04, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 28, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -125,7 +125,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG4_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x05, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 29, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -137,7 +137,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG5_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x06, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 30, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -149,7 +149,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG6_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x07, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 31, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -161,7 +161,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG7_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x08, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 32, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -172,7 +172,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE1_X,PAGE_PARA_HANG8_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x09, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 33, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -184,7 +184,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG1_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x0a, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 34, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -196,7 +196,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG2_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x0b, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 35, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -208,7 +208,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG3_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x0c, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 36, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -220,7 +220,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG4_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x0d, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 37, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -232,7 +232,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG5_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x0e, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 38, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -244,7 +244,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG6_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x0f, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 39, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -256,7 +256,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG7_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x10, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 40, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -267,7 +267,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE3_X,PAGE_PARA_HANG8_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x11, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 41, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 	             //n14控件
@@ -278,7 +278,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG1_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x12, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 42, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -291,7 +291,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG2_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x13, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 43, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -304,7 +304,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG3_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x14, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 44, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -317,7 +317,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG4_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x15, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 45, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -330,7 +330,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG5_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x16, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 46, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -343,7 +343,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG6_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x17, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 47, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -354,7 +354,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG7_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x18, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 48, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 
@@ -365,7 +365,7 @@ const PAGE_ITEM_T page_mainpara_item[] =
 		PAGE_PARA_LIE5_X,PAGE_PARA_HANG8_Y,    //开始坐标
 		PAGE_PARA_KEY_WIDTH,PAGE_PARA_KEY_HIGH , //宽高
 		
-		{0x65, 0x0e, 0x19, 0x00, 0xff, 0xff, 0xff},
+		{0x65, 0x0e, 49, 0x00, 0xff, 0xff, 0xff},
 		0       //默认0
 	},
 	             //

@@ -600,6 +600,11 @@
               <FileType>1</FileType>
               <FilePath>..\page_com\page_error.c</FilePath>
             </File>
+            <File>
+              <FileName>page_systemupdate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\page_com\page_systemupdate.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

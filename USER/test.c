@@ -27,6 +27,7 @@
 #include "page_mainpara.h"
 #include "page_confirm.h"
 #include "page_error.h"
+#include "page_systemupdate.h"
 
 
 
@@ -100,7 +101,7 @@ int main(void)
 	gPageInfo.p_page[PAGE_ID_BLACKKEY] = &page_KeyBoard;
 	gPageInfo.p_page[PAGE_ID_CISCHEK] = &page_CISTest;
 	gPageInfo.p_page[PAGE_ID_CISSET1] = &page_CISConfig;
-	gPageInfo.p_page[PAGE_ID_SYSUPDATA] = &page_version;
+	gPageInfo.p_page[PAGE_ID_SYSUPDATA] = &page_SystemUpdate;
 	gPageInfo.p_page[PAGE_ID_ZBUPDATA] = &page_version;
 	gPageInfo.p_page[PAGE_ID_NETSET] = &page_NetConfig;
 	gPageInfo.p_page[PAGE_ID_GZHMDIS] = &page_Serial;

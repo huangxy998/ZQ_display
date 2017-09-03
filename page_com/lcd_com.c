@@ -91,7 +91,7 @@ static void parse_t_buff(u8 *buff)
 					}
 					break;
 				case 2:
-					if ((idx < 44) && (j < 23))
+					if ((idx < 44) && (j < 49))
 					{
 						gPagePara.t_string[idx][j] = buff[i];
 						j++;

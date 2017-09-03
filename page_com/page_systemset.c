@@ -30,8 +30,8 @@ static void pageSystemSetUpdate(void);
 	const u8* item_table[] =
 	{
 		"传感器检测",
-		"主板档位设置",
 		"显示屏亮度",
+		"主板档位设置",
 		"蜂鸣器设置",
 		"系统参数导入",
 		"系统参数导出",

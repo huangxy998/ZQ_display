@@ -671,7 +671,7 @@ static void pageBasicUpdate(void)
 	}
 }
 
-const char* modeTable[] = {"智能", "混点", "清分", "清点"};
+const char* modeTable[] = {"智 能", "混 点", "清 分", "清 点"};
 ///////////////////////////////////////////////////////////
 //显示更新
 static void pageBasicItemUpdate(void)
@@ -742,20 +742,6 @@ static void pageBasicItemUpdate(void)
 		//刷新信息	
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "U 盘存储");
 	}
-	else if(strcmp((char *)gPagePara.t_string[30], "off") == 0)//U盘无连接
-	{
-		u16 color = POINT_COLOR;
-		if(gParaDeviceState.u_diskstate != 1)
-		{
-			//在此处清除显示
-			gParaDeviceState.u_diskstate = 1;
-			LCD_Fill(32, 292, 64, 16, BLACK);
-		}
-		//刷新信息
-		POINT_COLOR = RED;
-		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "存储异常");
-		POINT_COLOR = color;
-	}
 	else if(strcmp((char *)gPagePara.t_string[31], "on") == 0)  //SD卡状态
 	{
 		if(gParaDeviceState.sd_state != 0)
@@ -767,13 +753,13 @@ static void pageBasicItemUpdate(void)
 		//刷新信息
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "SD卡存储");
 	}
-	else if(strcmp((char *)gPagePara.t_string[31], "off") == 0)
+	else if((strcmp((char *)gPagePara.t_string[30], "off") == 0) || (strcmp((char *)gPagePara.t_string[31], "off") == 0))//U盘或SD卡无连接
 	{
 		u16 color = POINT_COLOR;
-		if(gParaDeviceState.sd_state!= 1)
+		if(gParaDeviceState.u_diskstate != 1)
 		{
 			//在此处清除显示
-			gParaDeviceState.sd_state = 1;
+			gParaDeviceState.u_diskstate = 1;
 			LCD_Fill(32, 292, 64, 16, BLACK);
 		}
 		//刷新信息
