@@ -413,7 +413,7 @@ static void parse_b_buff(u8 *buff)
 					}
 					break;
 				case 2:
-					if ((idx < 24) && (j < 9))
+					if ((idx < 28) && (j < 9))
 					{	
 						if(bc == 1)
 							gPagePara.b_bc[idx][j] = buff[i];

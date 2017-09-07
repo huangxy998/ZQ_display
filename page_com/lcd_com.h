@@ -58,8 +58,8 @@ typedef struct
 	u8 j_percent[2][4];
 	u8 x_str[4][50];
 	u8 f_str[2][30];
-	u8 b_str[24][10];
-	u8 b_bc[24][10];
+	u8 b_str[28][10];
+	u8 b_bc[28][10];
 }page_para;
 
 typedef struct

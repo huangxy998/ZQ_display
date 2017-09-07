@@ -602,7 +602,7 @@ static void pageBlackListTPUpdate(u8 item)
 	switch(item)
 	{
 		case sizeof(page_Blacklist_item)/sizeof(PAGE_ITEM_T)-1://ÍË³ö
-			gPageInfo.cur_page_idx = PAGE_ID_MENU;
+			gPageInfo.cur_page_idx = PAGE_ID_MAIN;
 			memset(&gPagePara, 0, sizeof(page_para));
 			break;
 		case sizeof(page_Blacklist_item)/sizeof(PAGE_ITEM_T)-2: //ÏÂÒ³
