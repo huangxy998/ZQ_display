@@ -373,9 +373,9 @@ static void pageMenuItemTime(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
+		gPageInfo.cur_page_idx = PAGE_ID_CLOCKSET;
+		memset(&gPagePara, 0, sizeof(page_para));
 		gIDInfo.cmdUpdate = 1;
-//		gIDInfo.cmdPage.touchStatus = PAGE_ID_CLOCKDISP;
 		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[7].com_data[0], TOUCH_CMD_LEN);
 	}	
 }

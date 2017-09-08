@@ -175,8 +175,8 @@ static void pageErrorItemUpdate(void)
 	BACK_COLOR = WHITE;
 	for(; i < 2; i++)
 	{
-		LCD_ShowString_hz16x16(page_Error_item[i+2].start_pos_x+2, 
-					page_Error_item[i+2].start_pos_y+2, 300, 16, 16, gPagePara.t_string[i]);
+		LCD_ShowString_hz16x16(page_Error_item[i+2].start_pos_x, 
+					page_Error_item[i+2].start_pos_y+2, 240, 16, 16, gPagePara.t_string[i]);
 	}
 	BACK_COLOR = bkcolor;
 	POINT_COLOR = color;

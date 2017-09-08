@@ -74,7 +74,7 @@ void RTC_IRQHandler(void)
 	{							
 		RTC_Get();//更新时间   
 		//printf("sec:%d\r\n",calendar.sec);
-		if (gPageInfo.cur_page_idx == PAGE_ID_STANDTIME)
+		if ((gPageInfo.cur_page_idx == PAGE_ID_STANDTIME) || (gPageInfo.cur_page_idx == PAGE_ID_CLOCKSET))
 		{
 			gPageInfo.need_update = 1;
 		}
