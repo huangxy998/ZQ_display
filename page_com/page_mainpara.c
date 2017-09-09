@@ -430,7 +430,6 @@ static void pageMainParaInit(void)
 	show_bmp_in_flash(0,0,bmp_mainpara_Page.width,bmp_mainpara_Page.height,bmp_mainpara_Page.addr);
 }
 
-//°æ±¾Ò³ÃæË¢ÐÂ
 static void pageMainParaUpdate(void)
 {
 	

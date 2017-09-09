@@ -344,6 +344,7 @@ static void pageTimeSetUpdate(void)
 				if( ( touch_up_pos.x >= page_TimeSet_item[item].start_pos_x ) && ( touch_up_pos.x < page_TimeSet_item[item].start_pos_x + page_TimeSet_item[item].width)  && \
 					( touch_up_pos.y >= page_TimeSet_item[item].start_pos_y ) && ( touch_up_pos.y < page_TimeSet_item[item].start_pos_y + page_TimeSet_item[item].height) )
 				{
+					gPageInfo.need_update = 1;
 					pageTimeSetTouchUpdate(item - 1);
 					break;
 				}
@@ -372,12 +373,22 @@ static void pageTimeSetTouchUpdate(char item)
 					buff[buffIdx][dataIdx] = keytable[item];
 					dataIdx++;
 				}
-				datetime.w_year = 2000+atoi((char*)buff[0]);
-				datetime.w_month = atoi((char*)buff[1]);
-				datetime.w_date = atoi((char*)buff[2]);
-				datetime.hour = atoi((char*)buff[3]);
-				datetime.min = atoi((char*)buff[4]);
-				datetime.sec = atoi((char*)buff[5]);
+				switch(buffIdx)
+				{
+					case 0:datetime.w_year = 2000+atoi((char*)buff[0]);
+						break;
+					case 1:datetime.w_month = atoi((char*)buff[1]);
+						break;
+					case 2:datetime.w_date = atoi((char*)buff[2]);
+						break;
+					case 3:datetime.hour = atoi((char*)buff[3]);
+						break;
+					case 4:datetime.min = atoi((char*)buff[4]);
+						break;
+					case 5:datetime.sec = atoi((char*)buff[5]);
+						break;
+					default:break;
+				}			
 			}
 			else
 			{
@@ -486,6 +497,12 @@ static void pageTimeItemUpdate(void)
 			buff[4][1] = gPagePara.t_string[0][15];
 			buff[5][0] = gPagePara.t_string[0][17];
 			buff[5][1] = gPagePara.t_string[0][18];	
+			datetime.w_year = 2000+atoi((char*)buff[0]);
+			datetime.w_month = atoi((char*)buff[1]);
+			datetime.w_date = atoi((char*)buff[2]);
+			datetime.hour = atoi((char*)buff[3]);
+			datetime.min = atoi((char*)buff[4]);
+			datetime.sec = atoi((char*)buff[5]);
 			LCD_ShowString(page_TimeSet_item[0].start_pos_x, 
 					page_TimeSet_item[0].start_pos_y, 300, 24, 24, gPagePara.t_string[0]);
 		}

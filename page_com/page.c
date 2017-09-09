@@ -27,6 +27,8 @@ static void pageBasicItemMode(void);
 static void pageBasicInit(void);
 static void pageBasicUpdate(void);
 static void pageBasicItemUpdate(void);
+static void pageBasicSendTime(u8 *buff);
+
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
@@ -730,6 +732,7 @@ static void pageBasicItemUpdate(void)
 	LCD_SetBackColor(PAGE_MAIN_BACK_COLOR);           //背景颜色
 	Get_TimeStr(timebuff);
 	LCD_ShowString(124, 286+6, 190, 16, 16, timebuff);
+	pageBasicSendTime(timebuff);
 #ifdef LCD_SIZE_480X320
 	if(strcmp((char *)gPagePara.t_string[30], "on") == 0)  // U盘连接
 	{
@@ -820,6 +823,30 @@ static void pageBasicItemMode(void)
 		LCD_ShowHZ(	page_basic_item[1].start_pos_x+48+32, 
 					page_basic_item[1].start_pos_y+6, 
 					page_item_func_name[i][1], 48, 0 );
+	}
+}
+
+static void pageBasicSendTime(u8 *buff)
+{
+	//2017-09-09 17:38:16
+	static u8 updateFlg = 0;
+	static u8 sec = 0;
+
+	if(updateFlg == 0)
+	{
+		updateFlg = 1;
+		sec = buff[18];
+	}
+	if(updateFlg == 1)
+	{
+		if (sec != buff[18])
+		{
+			u8 sbuff[27] = {0x90, 0x01, 0x01, '"', '2', '0', '1', '7', '-', '0', '8', 
+				'-', '3', '0', ' ', '1', '1', ':', '2', '2', ':', '3', '3', '"', 0xff,0xff,0xff};
+			updateFlg = 2;
+			memcpy((char*)&sbuff[4], buff, 19);
+			uartSendbuffer((u8*)&sbuff, sizeof(sbuff));
+		}
 	}
 }
 

@@ -107,6 +107,17 @@ const PAGE_ITEM_T page_SystemUpdate_item[] =
 		
 		{0x65,PAGE_ID_SYSUPDATA,0x06,0x00,0xff,0xff,0xff},
 		0       //默认0
+	},
+	
+	{
+		7,     //id
+		1,      //支持触控
+		
+		0, 280,    //开始坐标
+		LCD_HOR_SIZE, PAGE_SET_H, //宽高
+		
+		{0x65,PAGE_ID_SYSUPDATA,0xfe,0x00,0xff,0xff,0xff},
+		0       //默认0
 	}
 };
 

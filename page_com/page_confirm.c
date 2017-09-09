@@ -71,7 +71,7 @@ const PAGE_ITEM_T page_Confirm_item[] =
 		PAGE_ERROR_B1X,PAGE_ERROR_B1Y,	  //开始坐标
 		PAGE_ERROR_B1W,PAGE_ERROR_B1H, //宽高
 		
-	{0x65,0x17,0x03,0x00,0xff,0xff,0xff},
+		{0x65,0x17,0x03,0x00,0xff,0xff,0xff},
 		0		//默认0
 	},
 	  			   //b1控件
@@ -82,7 +82,7 @@ const PAGE_ITEM_T page_Confirm_item[] =
 		PAGE_ERROR_B2X,PAGE_ERROR_B2Y,    //开始坐标
 		PAGE_ERROR_B2W,PAGE_ERROR_B2H, //宽高
 		
-	{0x65,0x17,0x04,0x00,0xff,0xff,0xff},
+		{0x65,0x17,0x04,0x00,0xff,0xff,0xff},
 		0		//默认0
 	},
 	  			   //t0控件
@@ -90,7 +90,7 @@ const PAGE_ITEM_T page_Confirm_item[] =
 		4,	   //id
 		0,		//不支持触控
 		
-		PAGE_ERROR_TX,PAGE_ERROR_TY,	//开始坐标
+		PAGE_ERROR_TX,PAGE_ERROR_TY, //开始坐标
 		PAGE_ERROR_TW,PAGE_ERROR_TH, //宽高
 		
 		{0},
@@ -182,7 +182,7 @@ static void pageConfirmItemUpdate(void)
 	POINT_COLOR = BLACK;
 	BACK_COLOR = WHITE;
 	LCD_ShowString_hz16x16(page_Confirm_item[3].start_pos_x+2, 
-					page_Confirm_item[3].start_pos_y+2, 100, 16, 16, gPagePara.g_string[0]);
+					page_Confirm_item[3].start_pos_y+2, 300, 16, 16, gPagePara.g_string[0]);
 	POINT_COLOR = color;
 	BACK_COLOR = bccolor;
 }

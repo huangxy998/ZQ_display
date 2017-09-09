@@ -53,6 +53,7 @@
 typedef struct
 {
 	u8 t_string[44][50];
+	u8 t_bco[44][8];
 	u8 n_val[32][10];
 	u8 g_string[2][50];
 	u8 j_percent[2][4];

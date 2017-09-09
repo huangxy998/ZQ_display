@@ -51,8 +51,8 @@ const PAGE_ITEM_T page_version_item[] =
 		1,     //id
 		1,      //支持触控
 		
-		74,4,    //开始坐标
-		243,30,//宽高
+		0,0,    //开始坐标
+		LCD_HOR_SIZE, 40,//宽高
 		
 		{0x65,0X02, 0X06, 0X00, 0xff,0xff,0xff},
 		0       //默认0

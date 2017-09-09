@@ -59,6 +59,7 @@ static void parse_t_buff(u8 *buff)
 	u8 i = 2, j = 0;
 	u8 status = 0;
 	u8 idx = 0;
+	u8 bc = 0;
 	if((buff[1] >= '0') && ((buff[1] <= '9')))
 	{
 		while(buff[i] != 0)
@@ -83,8 +84,13 @@ static void parse_t_buff(u8 *buff)
 					}
 					break;
 				case 1:
-					if((buff[i] == '=') && (buff[i+1] == '"'))
+					if( buff[i] == '=' )
 					{
+						if (buff[i+1] != '"')
+						{
+							bc = 1;
+							memset((char*)&gPagePara.t_bco[0][0], 0, 352);
+						}
 						i += 1;
 						status = 2;
 						j = 0;
@@ -93,7 +99,10 @@ static void parse_t_buff(u8 *buff)
 				case 2:
 					if ((idx < 44) && (j < 49))
 					{
-						gPagePara.t_string[idx][j] = buff[i];
+						if (bc && (j < 7))
+							gPagePara.t_bco[idx][j] = buff[i];
+						else
+							gPagePara.t_string[idx][j] = buff[i];
 						j++;
 					}
 					break;

@@ -405,17 +405,34 @@ static void pageParaSetUpdate(void)
 static void pageParaSetItemUpdate(void)
 {
 	int item = 0;
-
+	u16 color = POINT_COLOR;
+	u16 bccolor = BACK_COLOR;
+	POINT_COLOR = GREEN;
+	BACK_COLOR = BLACK;
+	
 	for(item = 0; item < 22; item++)
 	{
 		LCD_ShowString(page_ParaSet_item[item].start_pos_x, 
 					page_ParaSet_item[item].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
 	}
+	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 	for(; item < 44; item++)
 	{
+		if (gPagePara.t_bco[item][0] != 0)
+		{
+			POINT_COLOR = BLACK;
+			BACK_COLOR = WHITE;
+		}
+		else
+		{
+			POINT_COLOR = GREEN;
+			BACK_COLOR = BLACK;
+		}
 		LCD_ShowString(page_ParaSet_item[item-22].start_pos_x - (PAGE_SENSOR_WT+8), 
 					page_ParaSet_item[item-22].start_pos_y, 100, 16, 16, gPagePara.t_string[item]);
 	}
+	
 }
 
 
