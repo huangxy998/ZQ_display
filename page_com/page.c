@@ -629,6 +629,8 @@ const _bmp_info bmp_menuPageAddOff =
 };
 #endif
 
+u8 addflg = 0;
+
 ///////////////////////////////////////////////////////////
 //基本页面初始化
 static void pageBasicInit(void)
@@ -659,6 +661,8 @@ static void pageBasicUpdate(void)
 				if( ( touch_up_pos.x >= page_basic_item[item].start_pos_x ) && ( touch_up_pos.x < page_basic_item[item].start_pos_x + page_basic_item[item].width)  && \
 					( touch_up_pos.y >= page_basic_item[item].start_pos_y ) && ( touch_up_pos.y < page_basic_item[item].start_pos_y + page_basic_item[item].height) )
 				{
+					if(item == 6)
+						addflg = !addflg;
 					gIDInfo.cmdUpdate = 1;
 					memcpy(&gIDInfo.cmdPage.start, &page_basic_item[item].com_data[0], TOUCH_CMD_LEN);
 					break;
@@ -793,6 +797,17 @@ static void pageBasicItemUpdate(void)
 		//刷新信息
 		POINT_COLOR = RED;
 		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络异常");
+		POINT_COLOR = color;
+	}
+	if (addflg)
+	{
+		LCD_ShowString_hz16x16(18, 192, 64, 16, 16, "累加开");
+	}
+	else
+	{
+		u16 color = POINT_COLOR;
+		POINT_COLOR = RED;
+		LCD_ShowString_hz16x16(18, 192, 64, 16, 16, "累加关");
 		POINT_COLOR = color;
 	}
 #endif

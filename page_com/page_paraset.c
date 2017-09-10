@@ -338,7 +338,19 @@ const PAGE_ITEM_T page_ParaSet_item[] =
 		
 		{0x65,0x0d,0x2f,0x00,0xff,0xff,0xff},
 		0       //默认0
+	},
+
+	{
+		48,     //id
+		1,      //支持触控
+		
+		0,0,    //开始坐标
+		LCD_HOR_SIZE, 40, //宽高
+		
+		{0x65,0x0d,0xfe,0x00,0xff,0xff,0xff},
+		0       //默认0
 	}
+	
 };
 
 //页面结构体
