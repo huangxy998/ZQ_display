@@ -445,6 +445,22 @@ static void parse_b_buff(u8 *buff)
 		else
 			gPagePara.b_str[idx][j] = 0;
 	}
+	else if(buff[1] == 't')
+	{
+		while(buff[i] != 0)
+		{
+			if(buff[i] != '=')
+			{
+				i++;
+				continue;
+			}
+			if(buff[i-1] == 'l')
+			{
+				gPagePara.x_str[3][0] = buff[i+1];  //保存累加标志
+			}
+			break;
+		}
+	}
 }
 
 void uart_to_main_cmd_parse(u8 *uart_to_main_cmd_parse_buff)

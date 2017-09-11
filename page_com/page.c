@@ -629,8 +629,6 @@ const _bmp_info bmp_menuPageAddOff =
 };
 #endif
 
-u8 addflg = 0;
-
 ///////////////////////////////////////////////////////////
 //基本页面初始化
 static void pageBasicInit(void)
@@ -661,8 +659,6 @@ static void pageBasicUpdate(void)
 				if( ( touch_up_pos.x >= page_basic_item[item].start_pos_x ) && ( touch_up_pos.x < page_basic_item[item].start_pos_x + page_basic_item[item].width)  && \
 					( touch_up_pos.y >= page_basic_item[item].start_pos_y ) && ( touch_up_pos.y < page_basic_item[item].start_pos_y + page_basic_item[item].height) )
 				{
-					if(item == 6)
-						addflg = !addflg;
 					gIDInfo.cmdUpdate = 1;
 					memcpy(&gIDInfo.cmdPage.start, &page_basic_item[item].com_data[0], TOUCH_CMD_LEN);
 					break;
@@ -738,76 +734,46 @@ static void pageBasicItemUpdate(void)
 	LCD_ShowString(124, 286+6, 190, 16, 16, timebuff);
 	pageBasicSendTime(timebuff);
 #ifdef LCD_SIZE_480X320
-	if(strcmp((char *)gPagePara.t_string[30], "on") == 0)  // U盘连接
+	if(gPagePara.t_string[30][1] == 'n')  // U盘连接
 	{
-		if(gParaDeviceState.u_diskstate != 0)
-		{
-			//在此处清除显示
-			gParaDeviceState.u_diskstate = 0;
-			LCD_Fill(32, 292, 64, 16, BLACK);
-		}
 		//刷新信息	
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "U 盘存储");
 	}
-	else if(strcmp((char *)gPagePara.t_string[31], "on") == 0)  //SD卡状态
+	else if(gPagePara.t_string[31][1] == 'n')  //SD卡状态
 	{
-		if(gParaDeviceState.sd_state != 0)
-		{
-			//在此处清除显示
-			gParaDeviceState.sd_state = 0;
-			LCD_Fill(32, 292, 64, 16, BLACK);
-		}
 		//刷新信息
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "SD卡存储");
 	}
-	else if((strcmp((char *)gPagePara.t_string[30], "off") == 0) || (strcmp((char *)gPagePara.t_string[31], "off") == 0))//U盘或SD卡无连接
+	else if((gPagePara.t_string[30][1] == 'f') || (gPagePara.t_string[31][1] == 'f'))//U盘或SD卡无连接
 	{
 		u16 color = POINT_COLOR;
-		if(gParaDeviceState.u_diskstate != 1)
-		{
-			//在此处清除显示
-			gParaDeviceState.u_diskstate = 1;
-			LCD_Fill(32, 292, 64, 16, BLACK);
-		}
 		//刷新信息
 		POINT_COLOR = RED;
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "存储异常");
 		POINT_COLOR = color;
 	}
-	if(strcmp((char *)gPagePara.t_string[32], "on") == 0)  //网络状态
+	if(gPagePara.t_string[32][1] == 'n')  //网络状态
 	{
-		if(gParaDeviceState.net_state!= 0)
-		{
-			//在此处清除显示
-			gParaDeviceState.net_state= 0;
-			LCD_Fill(10, 216, 64, 64, BLACK);
-		}
 		//刷新信息
 		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络正常");
 	}
-	else if(strcmp((char *)gPagePara.t_string[32], "off") == 0)
+	else if(gPagePara.t_string[32][1] == 'f')
 	{
 		u16 color = POINT_COLOR;
-		if(gParaDeviceState.net_state!= 1)
-		{
-			//在此处清除显示
-			gParaDeviceState.net_state= 1;
-			LCD_Fill(10, 216, 64, 64, BLACK);
-		}
 		//刷新信息
 		POINT_COLOR = RED;
 		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络异常");
 		POINT_COLOR = color;
 	}
-	if (addflg)
+	if (gPagePara.x_str[3][0] == '1')
 	{
-		LCD_ShowString_hz16x16(18, 192, 64, 16, 16, "累加开");
+		LCD_ShowString_hz16x16(18, 188, 64, 16, 16, "累加开");
 	}
 	else
 	{
 		u16 color = POINT_COLOR;
 		POINT_COLOR = RED;
-		LCD_ShowString_hz16x16(18, 192, 64, 16, 16, "累加关");
+		LCD_ShowString_hz16x16(18, 188, 64, 16, 16, "累加关");
 		POINT_COLOR = color;
 	}
 #endif
