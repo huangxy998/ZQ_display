@@ -560,8 +560,8 @@ const u8 page_item_func_name[4][2] =
 {
 	{CM_48X48_ZHI40, CM_48X48_NENG20},
 	{CM_48X48_HUN30, CM_48X48_DIAN30},
-	{CM_48X48_FEN10, CM_48X48_BAN30},
-	{CM_48X48_QING10,CM_48X48_DIAN30}	
+	{CM_48X48_QING10,CM_48X48_FEN10},
+	{CM_48X48_JI10,  CM_48X48_SHU30}	
 };
 //模式显示颜色
 const u16 page_item_func_name_color[4] = 
@@ -673,7 +673,7 @@ static void pageBasicUpdate(void)
 	}
 }
 
-const char* modeTable[] = {"智 能", "混 点", "清 分", "清 点"};
+const char* modeTable[] = {"智 能", "混 点", "清 分", "计 数"};
 ///////////////////////////////////////////////////////////
 //显示更新
 static void pageBasicItemUpdate(void)
@@ -767,13 +767,18 @@ static void pageBasicItemUpdate(void)
 	}
 	if (gPagePara.x_str[3][0] == '1')
 	{
-		LCD_ShowString_hz16x16(18, 188, 64, 16, 16, "累加开");
+		u16 color = POINT_COLOR;
+		POINT_COLOR = WHITE;
+		LCD_ShowString_hz24x24(20, 160, 48, 24, 24, "累");
+		LCD_ShowString_hz24x24(42, 160, 48, 24, 24, "加");
+		POINT_COLOR = color;
 	}
 	else
 	{
 		u16 color = POINT_COLOR;
-		POINT_COLOR = RED;
-		LCD_ShowString_hz16x16(18, 188, 64, 16, 16, "累加关");
+		POINT_COLOR = GRAY;
+		LCD_ShowString_hz24x24(20, 160, 48, 24, 24, "累");
+		LCD_ShowString_hz24x24(42, 160, 48, 24, 24, "加");
 		POINT_COLOR = color;
 	}
 #endif
@@ -813,7 +818,7 @@ static void pageBasicSendTime(u8 *buff)
 	static u8 updateFlg = 0;
 	static u8 sec = 0;
 
-	if(updateFlg == 0)
+	if(updateFlg == 0)  //进入标准界面后主动发送一次时间
 	{
 		updateFlg = 1;
 		sec = buff[18];
@@ -828,6 +833,14 @@ static void pageBasicSendTime(u8 *buff)
 			memcpy((char*)&sbuff[4], buff, 19);
 			uartSendbuffer((u8*)&sbuff, sizeof(sbuff));
 		}
+	}
+	else if(gPagePara.g_string[1][0] == 'T')//主控请求时发送时间
+	{
+		u8 sbuff[27] = {0x90, 0x01, 0x01, '"', '2', '0', '1', '7', '-', '0', '8', 
+				'-', '3', '0', ' ', '1', '1', ':', '2', '2', ':', '3', '3', '"', 0xff,0xff,0xff};
+		memcpy((char*)&sbuff[4], buff, 19);
+		uartSendbuffer((u8*)&sbuff, sizeof(sbuff));
+		gPagePara.g_string[1][0] = 0;	
 	}
 }
 

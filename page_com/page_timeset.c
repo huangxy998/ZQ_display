@@ -359,6 +359,8 @@ static void pageTimeSetUpdate(void)
 	
 }
 
+static u8 timepdated = 0;
+
 static void pageTimeSetTouchUpdate(char item)
 {
 	u16 bccolor = BACK_COLOR;
@@ -450,6 +452,7 @@ static void pageTimeSetTouchUpdate(char item)
 				showtime = 1;
 				RTC_Set(datetime.w_year, datetime.w_month, datetime.w_date, 
 					datetime.hour, datetime.min, datetime.sec);
+				timepdated = 1;
 			}
 			break;
 		case '*'://√‹¬Î
@@ -505,6 +508,14 @@ static void pageTimeItemUpdate(void)
 			datetime.sec = atoi((char*)buff[5]);
 			LCD_ShowString(page_TimeSet_item[0].start_pos_x, 
 					page_TimeSet_item[0].start_pos_y, 300, 24, 24, gPagePara.t_string[0]);
+			if (timepdated == 1)
+			{
+				u8 sbuff[27] = {0x90, 0x12, 0x01, '"', '2', '0', '1', '7', '-', '0', '8', 
+				'-', '3', '0', ' ', '1', '1', ':', '2', '2', ':', '3', '3', '"', 0xff,0xff,0xff};
+				memcpy((char*)&sbuff[4], gPagePara.t_string[0], 19);
+				uartSendbuffer((u8*)&sbuff, sizeof(sbuff));
+				timepdated = 0;	
+			}
 		}
 		else
 		{

@@ -119,7 +119,7 @@ void MYRCC_DeInit(void)
 #ifdef  VECT_TAB_RAM
 	MY_NVIC_SetVectorTable(0x20000000, 0x0);
 #else   
-	MY_NVIC_SetVectorTable(0x08000000,0x0);
+	MY_NVIC_SetVectorTable(0x08000000,0x0);//0x8000
 #endif
 }
 //THUMB指令不支持汇编内联

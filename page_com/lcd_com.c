@@ -9,8 +9,8 @@
 #include "key.h"  
 #include "24cxx.h"  
 #include "touch.h"  
-#include "flash.h"  
-
+#include "flash.h" 
+#include "stmflash.h"
 
 #include "../USER/main.h" 
 
@@ -273,6 +273,10 @@ static void parse_g_buff(u8 *buff)
 		}
 		gPagePara.g_string[idx][j] = 0;
 	}
+	else if((buff[1] == 'e')&&(buff[4] == 's')) //"get sys_time"
+	{
+		gPagePara.g_string[1][0] = 'T';
+	}
 }
 
 //Ò³Ãæ¸üÐÂ
@@ -484,6 +488,18 @@ void uart_to_main_cmd_parse(u8 *uart_to_main_cmd_parse_buff)
 			break;
 		case 'x':parse_x_buff(uart_to_main_cmd_parse_buff);
 			break;
+		case 'd':
+			if((uart_to_main_cmd_parse_buff[1] == 'i')
+				&&(uart_to_main_cmd_parse_buff[8] == 'i'))//"display iap"
+			{
+				APP_UPDATED_INFO_TYPE app_updated_info;
+				app_updated_info.updated_mark1 = UPDATED_MARK1;
+				app_updated_info.updated_mark2 = UPDATED_MARK2;
+				
+				STMFLASH_Write(APP_UPDATED_INFO_ADDRESS, (u16*)&app_updated_info, sizeof(app_updated_info)/2);
+				delay_ms(10);
+				Sys_Soft_Reset();
+			}
 		default:break;
 		
 	}

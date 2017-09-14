@@ -106,7 +106,9 @@ enum
 	CM_48X48_HUN30,//"混
 	CM_48X48_NENG20,//"能"
 	CM_48X48_QING10,//"清"
-	CM_48X48_ZHI40,//"智"	
+	CM_48X48_ZHI40,//"智"
+	CM_48X48_JI10, //"计"
+	CM_48X48_SHU30, //"数"
 };
 
 extern const  u8 CM_16X16[][32];
