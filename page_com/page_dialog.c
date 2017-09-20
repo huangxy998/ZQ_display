@@ -208,8 +208,8 @@ static void pageDialogItemUpdate(void)
 	u16 color = POINT_COLOR;
 	POINT_COLOR = BLACK;
 	BACK_COLOR = WHITE;
-	LCD_ShowString(page_Dialog_item[4].start_pos_x+2, 
-					page_Dialog_item[4].start_pos_y+2, 200, 16, 16, gPagePara.t_string[0]);
+	LCD_ShowString_hz16x16(page_Dialog_item[4].start_pos_x+2, 
+					page_Dialog_item[4].start_pos_y+2, 200, 16, 16, gPagePara.n_val[0]);
 	BACK_COLOR = bkcolor;
 	POINT_COLOR = color;
 }

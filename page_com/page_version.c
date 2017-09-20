@@ -201,6 +201,13 @@ static void pageVersionItemUpdate(void)
 
 	for(item = 0; item < page_version.page_item_num; item++)
 	{
+		if(item == 5)
+		{
+			u8 *dispVer = "1.02";
+			LCD_ShowString(page_version_item[item].start_pos_x, 
+					page_version_item[item].start_pos_y, page_version_item[item].width, 16, 16, dispVer);
+			continue;
+		}
 		LCD_ShowString(page_version_item[item].start_pos_x, 
 					page_version_item[item].start_pos_y, page_version_item[item].width, 16, 16, gPagePara.t_string[item]);
 	}

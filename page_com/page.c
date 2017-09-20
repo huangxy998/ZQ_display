@@ -737,19 +737,19 @@ static void pageBasicItemUpdate(void)
 	if(gPagePara.t_string[30][1] == 'n')  // U盘连接
 	{
 		//刷新信息	
-		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "U 盘存储");
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "U 盘");
 	}
 	else if(gPagePara.t_string[31][1] == 'n')  //SD卡状态
 	{
 		//刷新信息
-		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "SD卡存储");
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "SD卡");
 	}
 	else if((gPagePara.t_string[30][1] == 'f') || (gPagePara.t_string[31][1] == 'f'))//U盘或SD卡无连接
 	{
 		u16 color = POINT_COLOR;
 		//刷新信息
 		POINT_COLOR = RED;
-		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "存储异常");
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "    ");
 		POINT_COLOR = color;
 	}
 	if(gPagePara.t_string[32][1] == 'n')  //网络状态

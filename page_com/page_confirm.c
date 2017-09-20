@@ -182,7 +182,7 @@ static void pageConfirmItemUpdate(void)
 	POINT_COLOR = BLACK;
 	BACK_COLOR = WHITE;
 	LCD_ShowString_hz16x16(page_Confirm_item[3].start_pos_x+2, 
-					page_Confirm_item[3].start_pos_y+2, 300, 16, 16, gPagePara.g_string[0]);
+					page_Confirm_item[3].start_pos_y+2, 300, 16, 16, gPagePara.t_string[0]);
 	POINT_COLOR = color;
 	BACK_COLOR = bccolor;
 }

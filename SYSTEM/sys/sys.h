@@ -38,11 +38,13 @@
 //1,支持OS
 #define SYSTEM_SUPPORT_OS		0		//定义系统文件夹是否支持OS
 
-//显示BOOT程序起始地址： 0x08000000
+//显示BOOT程序起始地址
+#define BOOT_ADDRESS     				        (uint32_t)0x08000000
 //显示应用程序起始地址
-#define APPLICATION_ADDRESS     				(uint32_t)0x08008000      
+#define APPLICATION_ADDRESS     				(uint32_t)0x0800C000      
 //显示升级信息（升级标志等）地址
-#define APP_UPDATED_INFO_ADDRESS     		(uint32_t)0x08007800
+#define APP_UPDATED_INFO_ADDRESS     		(uint32_t)0x0800B800
+
 
 //升级标志字节1
 #define UPDATED_MARK1										0X55
