@@ -190,7 +190,7 @@ static void pageSystemUpdateItemUpdate(void)
 	
 	for (i = 0; i < 6; i++)
 	{	
-		POINT_COLOR = BRRED;
+		POINT_COLOR = BLACK;
 		BACK_COLOR = SEABLUE;
 		LCD_ShowString_hz16x16(page_SystemUpdate_item[i].start_pos_x+32, page_SystemUpdate_item[i].start_pos_y+bmp_system_Page.height/2 -8, 300, 16, 16, gPagePara.t_string[i]);	
 		POINT_COLOR = GREEN;

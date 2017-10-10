@@ -736,13 +736,37 @@ static void pageBasicItemUpdate(void)
 #ifdef LCD_SIZE_480X320
 	if(gPagePara.t_string[30][1] == 'n')  // U盘连接
 	{
+		u8 i = 0;
 		//刷新信息	
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "U 盘");
+		while(gPagePara.n_val[30][i] != 0)
+		{
+			i++;
+		};
+		if(i > 0)
+		{
+			gPagePara.n_val[30][i] = '%';
+			gPagePara.n_val[30][i+1] = 0;
+		}
+		LCD_ShowString_hz16x16(68, 292, 64, 16, 16, gPagePara.n_val[30]);
+		gPagePara.n_val[30][i] = 0;
 	}
 	else if(gPagePara.t_string[31][1] == 'n')  //SD卡状态
 	{
+		u8 i = 0;
 		//刷新信息
 		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "SD卡");
+		while(gPagePara.n_val[31][i] != 0)
+		{
+			i++;
+		};
+		if(i > 0)
+		{
+			gPagePara.n_val[31][i] = '%';
+			gPagePara.n_val[31][i+1] = 0;
+		}
+		LCD_ShowString(68, 292, 64, 16, 16, gPagePara.n_val[31]);
+		gPagePara.n_val[31][i] = 0;
 	}
 	else if((gPagePara.t_string[30][1] == 'f') || (gPagePara.t_string[31][1] == 'f'))//U盘或SD卡无连接
 	{
@@ -755,14 +779,15 @@ static void pageBasicItemUpdate(void)
 	if(gPagePara.t_string[32][1] == 'n')  //网络状态
 	{
 		//刷新信息
-		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络正常");
+		LCD_ShowString_hz16x16(10, 204, 64, 16, 16, "网络正常");
+		LCD_ShowString_hz16x16(10, 220, 64, 16, 16, gPagePara.n_val[32]);
 	}
 	else if(gPagePara.t_string[32][1] == 'f')
 	{
 		u16 color = POINT_COLOR;
 		//刷新信息
 		POINT_COLOR = RED;
-		LCD_ShowString_hz16x16(10, 216, 64, 16, 16, "网络异常");
+		LCD_ShowString_hz16x16(10, 204, 64, 16, 16, "网络异常");
 		POINT_COLOR = color;
 	}
 	if (gPagePara.x_str[3][0] == '1')

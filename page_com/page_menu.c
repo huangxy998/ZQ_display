@@ -266,10 +266,11 @@ static void pageMenuItemPictureSet(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
-	gIDInfo.cmdUpdate = 1;
+		gPageInfo.cur_page_idx = PAGE_ID_CLOCKSET;
+		gPageInfo.pre_page_idx = PAGE_ID_CISCHEK;
+//		gIDInfo.cmdUpdate = 1;
 //	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
-		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[2].com_data[0], TOUCH_CMD_LEN);
+//		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[2].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }
@@ -352,10 +353,11 @@ static void pageMenuItemSystem(void)
 	}
 	else if (gPageInfo.toucged_up)
 	{
-//		gPageInfo.cur_page_idx = PAGE_ID_VERSION;
-		gIDInfo.cmdUpdate = 1;
+		gPageInfo.cur_page_idx = PAGE_ID_CLOCKSET;
+		gPageInfo.pre_page_idx = PAGE_ID_SYSEMSET;
+//		gIDInfo.cmdUpdate = 1;
 //		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSEMSET;
-		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[6].com_data[0], TOUCH_CMD_LEN);
+//		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[6].com_data[0], TOUCH_CMD_LEN);
 
 	}	
 }

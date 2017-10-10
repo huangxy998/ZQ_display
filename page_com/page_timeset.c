@@ -18,7 +18,7 @@
 
 static char showtime = 1;//当不编辑时间时进行时间实时显示
 _calendar_obj datetime;
-
+extern const PAGE_ITEM_T page_menu_item[];
 
 const u8 keytable[] = {
 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
@@ -324,10 +324,24 @@ const _bmp_info bmp_TimeSet_Page =
 	LCD_VER_SIZE
 };
 
+static u8 prepage = 0;
+const u8 *codestr = "1711";
+
 static void pageTimeSetInit(void)
 {
-	showtime = 1;
-	buffIdx = 0xff;
+	prepage = gPageInfo.pre_page_idx;
+	if(prepage != PAGE_ID_MAIN)
+	{
+		showtime = 0;
+		buffIdx = 0x06;
+		code[0] = 0;
+		dataIdx = 0;
+	}
+	else
+	{
+		showtime = 1;
+		buffIdx = 0xff;
+	}
 	show_bmp_in_flash(0,0,bmp_TimeSet_Page.width,bmp_TimeSet_Page.height,bmp_TimeSet_Page.addr);
 }
 
@@ -398,41 +412,61 @@ static void pageTimeSetTouchUpdate(char item)
 				{
 					code[dataIdx] = keytable[item];
 					dataIdx++;
+					code[dataIdx] = 0;
 				}
 			}
 		}
 	}
+	
 	switch(keytable[item])
 	{
 		case 'Y':
-			dataIdx = 0;
-			showtime = 0;
-			buffIdx = 0;
+			if (prepage == PAGE_ID_MAIN)
+			{
+				dataIdx = 0;
+				showtime = 0;
+				buffIdx = 0;
+			}
 			break;
 		case 'M':
-			dataIdx = 0;
-			showtime = 0;
-			buffIdx = 1;
+			if (prepage == PAGE_ID_MAIN)
+			{
+				dataIdx = 0;
+				showtime = 0;
+				buffIdx = 1;
+			}
 			break;
 		case 'D':
-			dataIdx = 0;
-			showtime = 0;
-			buffIdx = 2;
+			if (prepage == PAGE_ID_MAIN)
+			{
+				dataIdx = 0;
+				showtime = 0;
+				buffIdx = 2;
+			}
 			break;
 		case 'H':
-			dataIdx = 0;
-			showtime = 0;
-			buffIdx = 3;
+			if (prepage == PAGE_ID_MAIN)
+			{
+				dataIdx = 0;
+				showtime = 0;
+				buffIdx = 3;
+			}
 			break;
 		case 'N':
-			dataIdx = 0;
-			showtime = 0;
-			buffIdx = 4;
+			if (prepage == PAGE_ID_MAIN)
+			{
+				dataIdx = 0;
+				showtime = 0;
+				buffIdx = 4;
+			}
 			break;
 		case 'S':
-			dataIdx = 0;
-			showtime = 0;
-			buffIdx = 5;
+			if (prepage == PAGE_ID_MAIN)
+			{
+				dataIdx = 0;
+				showtime = 0;
+				buffIdx = 5;
+			}
 			break;
 		case '<'://退格
 			if(dataIdx > 0)
@@ -454,6 +488,24 @@ static void pageTimeSetTouchUpdate(char item)
 					datetime.hour, datetime.min, datetime.sec);
 				timepdated = 1;
 			}
+			else
+			{
+				if (strcmp((char*)codestr, (char*)code) == 0)
+				{
+					gPageInfo.cur_page_idx = prepage;
+					memset(&gPagePara, 0, sizeof(page_para));
+					if(prepage == PAGE_ID_SYSEMSET)
+					{
+						gIDInfo.cmdUpdate = 1;
+						memcpy(&gIDInfo.cmdPage.start, &page_menu_item[6].com_data[0], TOUCH_CMD_LEN);
+					}
+					else if (prepage == PAGE_ID_CISCHEK)
+					{
+						gIDInfo.cmdUpdate = 1;
+						memcpy(&gIDInfo.cmdPage.start, &page_menu_item[2].com_data[0], TOUCH_CMD_LEN);
+					}
+				}
+			}
 			break;
 		case '*'://密码
 			dataIdx = 0;
@@ -462,6 +514,7 @@ static void pageTimeSetTouchUpdate(char item)
 			LCD_ShowString(page_TimeSet_item[0].start_pos_x, 
 					page_TimeSet_item[0].start_pos_y, 300, 24, 24, "                    ");
 			BACK_COLOR = bccolor;
+			code[dataIdx] = 0;
 			break;
 		default:
 			break;

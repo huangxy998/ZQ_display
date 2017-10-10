@@ -33,6 +33,7 @@
 
 #include "lcd_com.h" 
 #include "main.h"  
+#include "timer.h"
 
 
 //全局变量
@@ -45,12 +46,15 @@ u32 main_task_mask = 0;
 int main(void)
 {	
  	Stm32_Clock_Init(9);	//系统时钟设置 	
+ 	JTAG_Set(SWD_ENABLE);
 	uart_init(72,115200);	//串口初始化为9600
 	delay_init(72);	   	 	//延时初始化 
 	
 	LED_Init();		  		//初始化与LED连接的硬件接口
 	LCD_Init();			   	//初始化LCD 
-	KEY_Init();				//按键初始化			
+	KEY_Init();				//按键初始化	
+//	TIM2_PWM_Init(100,7200);
+//	TIM2_PWM_duty(99);
 	SPI_Flash_Init();  		//SPI FLASH 初始化 	
 	RTC_Init();
 	gIDInfo.cmdUpdate = 0;

@@ -41,9 +41,9 @@
 //显示BOOT程序起始地址
 #define BOOT_ADDRESS     				        (uint32_t)0x08000000
 //显示应用程序起始地址
-#define APPLICATION_ADDRESS     				(uint32_t)0x0800C000      
+#define APPLICATION_ADDRESS     				(uint32_t)0x08008000      
 //显示升级信息（升级标志等）地址
-#define APP_UPDATED_INFO_ADDRESS     		(uint32_t)0x0800B800
+#define APP_UPDATED_INFO_ADDRESS     		(uint32_t)0x08007800
 
 
 //升级标志字节1
@@ -51,13 +51,13 @@
 //升级标志字节2
 #define UPDATED_MARK2										0XAA
 
-#define FITE_PATH_LEN_MAX                                   96
+#define FITE_PATH_LEN_MAX               96
 
 typedef struct
 {
-  	u8 updated_mark1;						//升级标志1
+	u8 updated_mark1;						//升级标志1
 	u8 updated_mark2;						//升级标志2
- 	u16 checksum;
+	u16 checksum;
 	u32 file_size;
 	u8 file_path[FITE_PATH_LEN_MAX];
 

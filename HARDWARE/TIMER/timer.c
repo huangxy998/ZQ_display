@@ -62,6 +62,40 @@ void TIM1_PWM_Init(u16 arr,u16 psc)
 	TIM1->CR1=0x0080;   	//ARPE使能 
 	TIM1->CR1|=0x01;    	//使能定时器1 										  
 }  
+
+//TIM2_CH1 PWM输出初始化
+//arr：自动重装值
+//psc：时钟预分频数
+void TIM2_PWM_Init(u16 arr,u16 psc)
+{		 					 
+	//此部分需手动修改IO口设置
+	RCC->APB1ENR|=1<<0;   	//TIM2 时钟使能 
+	RCC->APB2ENR|=1<<2;    	//使能PORTA时钟  
+	GPIOA->CRH&=0X0FFFFFFF;	//PA15清除之前的设置
+	GPIOA->CRH|=0XB0000000;	//复用功能输出 
+	GPIOA->ODR|=1<<15;	   	//PA15上拉,PA15默认下拉
+	
+	TIM2->ARR=arr;			//设定计数器自动重装值 
+	TIM2->PSC=psc-1;			//预分频器设置
+  
+	TIM2->CCMR1|=7<<4;  	//CH1 PWM2模式		 
+	TIM2->CCMR1|=1<<3; 		//CH1预装载使能
+	TIM2->CCER|=1<<1;   	//OC1 输出使能
+ 	TIM2->CCER|=1<<0;   	//OC1 输出使能	   
+	TIM2->BDTR|=1<<15;   	//MOE 主输出使能	   
+
+	TIM2->CR1=0x0080;   	//ARPE使能 
+	TIM2->CR1|=0x01;    	//使能定时器1 										  
+}  
+
+//设定占空比
+void TIM2_PWM_duty(u16 duty)
+{
+    
+	TIM2->CCR3=duty;
+}
+
+
 //定时器2通道1输入捕获配置
 //arr：自动重装值
 //psc：时钟预分频数

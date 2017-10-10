@@ -671,7 +671,7 @@ static void pageKeyBoardItemUpdate(void)
 	BACK_COLOR = bkcolor;
 }
 
-
+const u8 backcode[] = {0x90, 0x05, 0x0f, 0xff, 0xff, 0xff};
 static void pageKeyBoardTPUpdate(u8 item)
 {
 	switch(letter_table[item])
@@ -689,6 +689,7 @@ static void pageKeyBoardTPUpdate(u8 item)
 			memset(&keyBoardInfo, 0, sizeof(KEYBOARD_INFO));	
 			//此处切换页面
 			gPageInfo.cur_page_idx = prePage;
+			uartSendbuffer((u8*)backcode, 6);
 //			memset(&gPagePara, 0, sizeof(page_para));
 //			break;
 		case '>': //确认退出

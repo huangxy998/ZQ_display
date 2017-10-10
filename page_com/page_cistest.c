@@ -157,12 +157,12 @@ static void page_CISTestInit(void)
 	BACK_COLOR = BLACK;
 	LCD_Clear(BLACK);
 	LCD_ShowString_hz24x24(174,26,200,24,24,"CISπ‚‘¥ºÏ≤‚");
-	POINT_COLOR = BRRED;
+	POINT_COLOR = BLACK;
 	BACK_COLOR = SEABLUE;
 	for (i = 0; i < 6; i++)
 	{
 		show_bmp_in_flash(page_CISTest_item[i].start_pos_x,page_CISTest_item[i].start_pos_y,bmp_CISTest_Page.width,bmp_CISTest_Page.height,bmp_CISTest_Page.addr);
-		LCD_ShowString_hz24x24(page_CISTest_item[i].start_pos_x+5,page_CISTest_item[i].start_pos_y+page_CISTest_item[i].height/2-16,
+		LCD_ShowString_hz24x24(page_CISTest_item[i].start_pos_x+6,page_CISTest_item[i].start_pos_y+page_CISTest_item[i].height/2-12,
 			bmp_CISTest_Page.width,24,24,test_table[i]);
 	}
 	POINT_COLOR = color;

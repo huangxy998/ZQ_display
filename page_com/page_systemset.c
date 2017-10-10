@@ -19,9 +19,10 @@ static void pageSystemSetInit(void);
 static void pageSystemSetUpdate(void);
 
 #ifdef LCD_SIZE_480X320
-	#define PAGE_SET_LINE1     84
-	#define PAGE_SET_LINE2     158
-	#define PAGE_SET_LINE3     228
+	#define PAGE_SET_LINE1     80
+	#define PAGE_SET_LINE2     140
+	#define PAGE_SET_LINE3     200
+	#define PAGE_SET_LINE4     260
 	#define PAGE_SET_ROW1      62
 	#define PAGE_SET_ROW2      260
 	#define PAGE_SET_W         138
@@ -30,8 +31,10 @@ static void pageSystemSetUpdate(void);
 	const u8* item_table[] =
 	{
 		"传感器检测",
-		"显示屏亮度",
 		"主板档位设置",
+		"误报统计",
+		"保留",
+		"显示屏亮度",
 		"蜂鸣器设置",
 		"系统参数导入",
 		"系统参数导出",
@@ -67,7 +70,7 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		2,     //id
 		1,      //支持触控
 		
-		PAGE_SET_ROW1,PAGE_SET_LINE2,    //开始坐标
+		PAGE_SET_ROW2,PAGE_SET_LINE1,    //开始坐标
 		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x02,0x00,0xff,0xff,0xff},
@@ -78,7 +81,7 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		3,     //id
 		1,      //支持触控
 		
-		PAGE_SET_ROW2,PAGE_SET_LINE1,    //开始坐标
+		PAGE_SET_ROW1,PAGE_SET_LINE2,    //开始坐标
 		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x03,0x00,0xff,0xff,0xff},
@@ -115,6 +118,28 @@ const PAGE_ITEM_T page_SystemSet_item[] =
 		PAGE_SET_W,PAGE_SET_H, //宽高
 		
 		{0x65,0x0c,0x06,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+
+	{
+		7,     //id
+		1,      //支持触控
+		
+		PAGE_SET_ROW1,PAGE_SET_LINE4,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
+		
+		{0x65,0x0c,0x07,0x00,0xff,0xff,0xff},
+		0       //默认0
+	},
+	             //b5控件
+	{
+		8,     //id
+		1,      //支持触控
+		
+		PAGE_SET_ROW2,PAGE_SET_LINE4,    //开始坐标
+		PAGE_SET_W,PAGE_SET_H, //宽高
+		
+		{0x65,0x0c,0x08,0x00,0xff,0xff,0xff},
 		0       //默认0
 	},
 	
@@ -168,9 +193,9 @@ static void pageSystemSetInit(void)
 	BACK_COLOR = BLACK;
 	LCD_Clear(BLACK);
 	LCD_ShowString_hz24x24(192,26,100,24,24,"系统设置");
-	POINT_COLOR = BRRED;
+	POINT_COLOR = BLACK;
 	BACK_COLOR = SEABLUE;
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < 8; i++)
 	{
 		show_bmp_in_flash(page_SystemSet_item[i].start_pos_x,page_SystemSet_item[i].start_pos_y,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
 		LCD_ShowString_hz24x24(page_SystemSet_item[i].start_pos_x+5,page_SystemSet_item[i].start_pos_y+bmp_system_Page.height/2-12,
