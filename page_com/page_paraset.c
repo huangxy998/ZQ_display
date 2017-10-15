@@ -374,7 +374,15 @@ const _bmp_info bmp_ParaSet_Page =
 
 static void pageParaSetInit(void)
 {
+	u16 color = POINT_COLOR;
+	u16 bccolor = BACK_COLOR;
+	POINT_COLOR = WHITE;
+	BACK_COLOR = LIGHTBLUE;
+
 	show_bmp_in_flash(0,0,bmp_ParaSet_Page.width,bmp_ParaSet_Page.height,bmp_ParaSet_Page.addr);
+	LCD_ShowString_hz16x16(352,20,100,16,16,"按屏幕上方返回");
+	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 }
 
 static void pageParaSetUpdate(void)

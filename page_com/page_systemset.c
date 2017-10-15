@@ -19,10 +19,10 @@ static void pageSystemSetInit(void);
 static void pageSystemSetUpdate(void);
 
 #ifdef LCD_SIZE_480X320
-	#define PAGE_SET_LINE1     80
-	#define PAGE_SET_LINE2     140
-	#define PAGE_SET_LINE3     200
-	#define PAGE_SET_LINE4     260
+	#define PAGE_SET_LINE1     70
+	#define PAGE_SET_LINE2     130
+	#define PAGE_SET_LINE3     190
+	#define PAGE_SET_LINE4     250
 	#define PAGE_SET_ROW1      62
 	#define PAGE_SET_ROW2      260
 	#define PAGE_SET_W         138
@@ -193,6 +193,7 @@ static void pageSystemSetInit(void)
 	BACK_COLOR = BLACK;
 	LCD_Clear(BLACK);
 	LCD_ShowString_hz24x24(192,26,100,24,24,"系统设置");
+	LCD_ShowString_hz16x16(352,34,100,16,16,"按屏幕上方返回");
 	POINT_COLOR = BLACK;
 	BACK_COLOR = SEABLUE;
 	for (i = 0; i < 8; i++)

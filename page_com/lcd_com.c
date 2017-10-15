@@ -458,9 +458,13 @@ static void parse_b_buff(u8 *buff)
 				i++;
 				continue;
 			}
-			if(buff[i-1] == 'l')
+			if((buff[2] == '2')&&(buff[i-1] == 'l'))
 			{
 				gPagePara.x_str[3][0] = buff[i+1];  //保存累加标志
+			}
+			else if((buff[2] == '1')&&(buff[i-1] == 'l'))
+			{
+				gPagePara.x_str[2][0] = buff[i+1];  //保存累加标志
 			}
 			break;
 		}

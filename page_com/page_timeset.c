@@ -78,7 +78,7 @@ const PAGE_ITEM_T page_TimeSet_item[] =
 		2,     //id
 		0,      //不支持触控
 		
-		107,30,    //开始坐标
+		107,28,    //开始坐标
 		191,41, //宽高
 		
 		{0},
@@ -329,6 +329,7 @@ const u8 *codestr = "1711";
 
 static void pageTimeSetInit(void)
 {
+	show_bmp_in_flash(0,0,bmp_TimeSet_Page.width,bmp_TimeSet_Page.height,bmp_TimeSet_Page.addr);
 	prepage = gPageInfo.pre_page_idx;
 	if(prepage != PAGE_ID_MAIN)
 	{
@@ -341,8 +342,10 @@ static void pageTimeSetInit(void)
 	{
 		showtime = 1;
 		buffIdx = 0xff;
+		dataIdx = 0;
 	}
-	show_bmp_in_flash(0,0,bmp_TimeSet_Page.width,bmp_TimeSet_Page.height,bmp_TimeSet_Page.addr);
+	gPageInfo.need_update = 1;
+	
 }
 
 static void pageTimeSetUpdate(void)
@@ -508,6 +511,11 @@ static void pageTimeSetTouchUpdate(char item)
 			}
 			break;
 		case '*'://密码
+			if(buffIdx != 6)
+			{
+				showtime = 1;
+				break;
+			}
 			dataIdx = 0;
 			buffIdx = 6;
 			BACK_COLOR = WHITE;
@@ -535,6 +543,10 @@ static void pageTimeItemUpdate(void)
 					page_TimeSet_item[0].start_pos_y, 300, 24, 24, "                    ");
 		LCD_ShowString(page_TimeSet_item[0].start_pos_x, 
 					page_TimeSet_item[0].start_pos_y, 300, 24, 24, code);
+		POINT_COLOR = RED;
+		LCD_ShowString_hz16x16(page_TimeSet_item[0].start_pos_x, 
+					page_TimeSet_item[0].start_pos_y+24, 300, 16, 16, "输入密码后请按确认");
+		POINT_COLOR = BLACK;
 	}
 	else
 	{

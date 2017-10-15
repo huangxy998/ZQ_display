@@ -157,6 +157,7 @@ static void page_CISTestInit(void)
 	BACK_COLOR = BLACK;
 	LCD_Clear(BLACK);
 	LCD_ShowString_hz24x24(174,26,200,24,24,"CIS光源检测");
+	LCD_ShowString_hz16x16(352,34,100,16,16,"按屏幕上方返回");
 	POINT_COLOR = BLACK;
 	BACK_COLOR = SEABLUE;
 	for (i = 0; i < 6; i++)

@@ -147,6 +147,7 @@ static void pageSystemUpdateInit(void)
 		show_bmp_in_flash(page_SystemUpdate_item[i].start_pos_x,page_SystemUpdate_item[i].start_pos_y,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
 	}
 	progress_show = 0;
+	LCD_ShowString_hz16x16(168,294,200,16,16,"按屏幕下方退出升级");
 #else
 	show_bmp_in_flash(0,0,bmp_system_Page.width,bmp_system_Page.height,bmp_system_Page.addr);
 #endif
@@ -212,9 +213,9 @@ static void pageSystemUpdateItemUpdate(void)
 		{
 			progress_show = 1;
 			valtmp = 0;
-			LCD_Fill(page_SystemUpdate_item[4].start_pos_x, 292,
+			LCD_Fill(page_SystemUpdate_item[4].start_pos_x, 290,
 			     page_SystemUpdate_item[4].start_pos_x+354,
-			     292+14, WHITE);
+			     290+14, WHITE);
 		}
 		
 		value = atoi((char*)&gPagePara.j_percent[0]);
@@ -227,9 +228,9 @@ static void pageSystemUpdateItemUpdate(void)
 			if(value != valtmp)
 			{
 				valtmp = value;
-				LCD_Fill(page_SystemUpdate_item[4].start_pos_x+2, 292+2,
+				LCD_Fill(page_SystemUpdate_item[4].start_pos_x+2, 290+2,
 			     page_SystemUpdate_item[4].start_pos_x+(350*value)/100,
-			     292+14-2, GREEN);
+			     290+14-2, GREEN);
 			}
 		}
 	}

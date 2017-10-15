@@ -581,6 +581,7 @@ const _bmp_info bmp_Serial_Page =
 	LCD_VER_SIZE
 };
 
+u8 firststr[5] = {0};
 static void pageSerialInit(void)
 {
 	show_bmp_in_flash(0,0,bmp_Serial_Page.width,bmp_Serial_Page.height,bmp_Serial_Page.addr);
@@ -628,12 +629,21 @@ static void pageSerialUpdate(void)
 static void pageSerialItemUpdate(void)
 {
 	int item;
+	if (strcmp(firststr, gPagePara.t_string[0]) != 0)
+	{
+		pageSerialInit();
+		memcpy(firststr, gPagePara.t_string[0], 5);
+	}
 	LCD_SetBackColor(BLACK);
 	for(item = 0; item < 40; item++)
 	{
-		LCD_Fill(page_Serial_item[item+4].start_pos_x, page_Serial_item[item+4].start_pos_y,
-			     page_Serial_item[item+4].start_pos_x+page_Serial_item[item+4].width-4,
-			     page_Serial_item[item+4].start_pos_y+16, BLACK);
+		if(item > 31)
+		{
+			LCD_Fill(page_Serial_item[item+4].start_pos_x, page_Serial_item[item+4].start_pos_y,
+				     page_Serial_item[item+4].start_pos_x+page_Serial_item[item+4].width+4,
+				     page_Serial_item[item+4].start_pos_y+16, BLACK);
+			gPagePara.t_string[item][12] = 0;
+		}
 		LCD_ShowString_hz16x16(page_Serial_item[item+4].start_pos_x, 
 					page_Serial_item[item+4].start_pos_y, page_Serial_item[item+4].width, 16, 16, gPagePara.t_string[item]);
 		

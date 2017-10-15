@@ -52,7 +52,7 @@
 	#define PAGE_BLALKLIST_SH7      256
 	#define PAGE_BLALKLIST_SH8      290
 
-	#define PAGE_BLALKLIST_SW1      45
+	#define PAGE_BLALKLIST_SW1      170
 	#define PAGE_BLALKLIST_SHH1     26
 
 	#define PAGE_BLALKLIST_SW2      128
@@ -82,7 +82,7 @@
 	#define PAGE_BLALKLIST_SH7      192
 	#define PAGE_BLALKLIST_SH8      218
 
-	#define PAGE_BLALKLIST_SW1      42
+	#define PAGE_BLALKLIST_SW1      152
 	#define PAGE_BLALKLIST_SHH1     25
 
 	#define PAGE_BLALKLIST_SW2      110
@@ -609,9 +609,8 @@ static void pageBlackListItemUpdate(void)
 			LCD_SetFrontColor(WHITE);
 			LCD_SetBackColor(BLACK);
 		}
-		LCD_Fill(page_Blacklist_item[j].start_pos_x, page_Blacklist_item[j].start_pos_y,
-				 page_Blacklist_item[j].start_pos_x+page_Blacklist_item[j].width,
-				 page_Blacklist_item[j].start_pos_y+16, BLACK);
+		LCD_ShowString(page_Blacklist_item[j].start_pos_x, 
+			page_Blacklist_item[j].start_pos_y, 100, 16, 16, "    ");
 		LCD_ShowString(page_Blacklist_item[j].start_pos_x, 
 			page_Blacklist_item[j].start_pos_y, 100, 16, 16, gPagePara.n_val[j]);
 		LCD_Fill(page_Blacklist_item[j+16].start_pos_x, page_Blacklist_item[j+16].start_pos_y,

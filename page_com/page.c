@@ -773,7 +773,7 @@ static void pageBasicItemUpdate(void)
 		u16 color = POINT_COLOR;
 		//Ë¢ÐÂÐÅÏ¢
 		POINT_COLOR = RED;
-		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "    ");
+		LCD_ShowString_hz16x16(32, 292, 64, 16, 16, "        ");
 		POINT_COLOR = color;
 	}
 	if(gPagePara.t_string[32][1] == 'n')  //ÍøÂç×´Ì¬
@@ -804,6 +804,22 @@ static void pageBasicItemUpdate(void)
 		POINT_COLOR = GRAY;
 		LCD_ShowString_hz24x24(20, 160, 48, 24, 24, "ÀÛ");
 		LCD_ShowString_hz24x24(42, 160, 48, 24, 24, "¼Ó");
+		POINT_COLOR = color;
+	}
+	if (gPagePara.x_str[2][0] == '1')
+	{
+		u16 color = POINT_COLOR;
+		POINT_COLOR = WHITE;
+		LCD_ShowString_hz24x24(20, 112, 48, 24, 24, "Í¼");
+		LCD_ShowString_hz24x24(42, 112, 48, 24, 24, "Ïñ");
+		POINT_COLOR = color;
+	}
+	else
+	{
+		u16 color = POINT_COLOR;
+		POINT_COLOR = GRAY;
+		LCD_ShowString_hz24x24(20, 112, 48, 24, 24, "Í¼");
+		LCD_ShowString_hz24x24(42, 112, 48, 24, 24, "Ïñ");
 		POINT_COLOR = color;
 	}
 #endif
