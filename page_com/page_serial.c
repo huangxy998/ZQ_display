@@ -629,24 +629,66 @@ static void pageSerialUpdate(void)
 static void pageSerialItemUpdate(void)
 {
 	int item;
-	if (strcmp(firststr, gPagePara.t_string[0]) != 0)
-	{
-		pageSerialInit();
-		memcpy(firststr, gPagePara.t_string[0], 5);
-	}
+	int i;
+	u8 buff[20];
+	u8 endstring = 0;
+//	if (strcmp(firststr, gPagePara.t_string[0]) != 0)
+//	{
+//		pageSerialInit();
+//		memcpy(firststr, gPagePara.t_string[0], 5);
+//	}
 	LCD_SetBackColor(BLACK);
 	for(item = 0; item < 40; item++)
 	{
-		if(item > 31)
+		if(item < 24)
 		{
-			LCD_Fill(page_Serial_item[item+4].start_pos_x, page_Serial_item[item+4].start_pos_y,
-				     page_Serial_item[item+4].start_pos_x+page_Serial_item[item+4].width+4,
-				     page_Serial_item[item+4].start_pos_y+16, BLACK);
-			gPagePara.t_string[item][12] = 0;
+			for(i = 0; i < 6; i++)
+			{
+				if(endstring == 0 && gPagePara.t_string[item][i] != 0)
+				{
+					buff[i] = gPagePara.t_string[item][i];
+				}
+				else
+				{
+					buff[i] = ' ';
+					endstring = 1;
+				}
+			}
 		}
+		else if(item < 32)
+		{
+			for(i = 0; i < 18; i++)
+			{
+				if(endstring == 0 && gPagePara.t_string[item][i] != 0)
+				{
+					buff[i] = gPagePara.t_string[item][i];
+				}
+				else
+				{
+					buff[i] = ' ';
+					endstring = 1;
+				}
+			}
+		}
+		else
+		{
+			for(i = 0; i < 12; i++)
+			{
+				if(endstring == 0 && gPagePara.t_string[item][i] != 0)
+				{
+					buff[i] = gPagePara.t_string[item][i];
+				}
+				else
+				{
+					buff[i] = ' ';
+					endstring = 1;
+				}
+			}
+		}
+		buff[i] = 0;
 		LCD_ShowString_hz16x16(page_Serial_item[item+4].start_pos_x, 
-					page_Serial_item[item+4].start_pos_y, page_Serial_item[item+4].width, 16, 16, gPagePara.t_string[item]);
-		
+					page_Serial_item[item+4].start_pos_y, page_Serial_item[item+4].width, 16, 16, buff);
+		endstring = 0;
 	}
 }
 

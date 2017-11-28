@@ -42,6 +42,8 @@ static void pageMenuItemTime(void);
 static void pageMenuItemUpdate(void);
 static void pageMenuItemNetSet(void);
 
+static const char keyback[] = {0x65,0x03,0xfd,0x00,0xff,0xff,0xff};
+
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
@@ -268,6 +270,8 @@ static void pageMenuItemPictureSet(void)
 	{
 		gPageInfo.cur_page_idx = PAGE_ID_CLOCKSET;
 		gPageInfo.pre_page_idx = PAGE_ID_CISCHEK;
+		gIDInfo.cmdUpdate = 1;
+		memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 //		gIDInfo.cmdUpdate = 1;
 //	gIDInfo.cmdPage.touchStatus = PAGE_ID_BLACKLIST;
 //		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[2].com_data[0], TOUCH_CMD_LEN);
@@ -355,6 +359,8 @@ static void pageMenuItemSystem(void)
 	{
 		gPageInfo.cur_page_idx = PAGE_ID_CLOCKSET;
 		gPageInfo.pre_page_idx = PAGE_ID_SYSEMSET;
+		gIDInfo.cmdUpdate = 1;
+		memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 //		gIDInfo.cmdUpdate = 1;
 //		gIDInfo.cmdPage.touchStatus = PAGE_ID_SYSEMSET;
 //		memcpy(&gIDInfo.cmdPage.start, &page_menu_item[6].com_data[0], TOUCH_CMD_LEN);

@@ -169,6 +169,9 @@ static u8 pageKeyBoardMakeReplyFrame(u8* buff);
 	#define PAGE_KEY_BW       92													
 #endif
 
+static const char keyback[] = {0x65,0x05,0xfd,0x00,0xff,0xff,0xff};
+
+
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
 const PAGE_ITEM_T page_KeyBoard_item[] =  //按键排序从左至右，从上到下
@@ -680,10 +683,14 @@ static void pageKeyBoardTPUpdate(u8 item)
 			if (keyBoardInfo.buffLen > 0)
 				keyBoardInfo.buffLen--;
 			keyBoardInfo.buff[keyBoardInfo.buffLen] = 0;
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 		case '#': //删除全部字符
 			keyBoardInfo.buff[0] = 0;
 			keyBoardInfo.buffLen = 0;
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 		case '*'://直接返回
 			memset(&keyBoardInfo, 0, sizeof(KEYBOARD_INFO));	
@@ -702,6 +709,11 @@ static void pageKeyBoardTPUpdate(u8 item)
 				len = pageKeyBoardMakeReplyFrame(buff);
 				uartSendbuffer(buff, len);
 			}
+			else
+			{
+				gIDInfo.cmdUpdate = 1;
+				memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
+			}
 			//此处切换页面
 			gPageInfo.cur_page_idx = prePage;
 			break;
@@ -713,6 +725,8 @@ static void pageKeyBoardTPUpdate(u8 item)
 				keyBoardInfo.buffLen++;
 				keyBoardInfo.buff[keyBoardInfo.buffLen] = 0; //添加字符串结束符
 			}
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 	}
 }

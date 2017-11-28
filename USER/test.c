@@ -28,7 +28,8 @@
 #include "page_confirm.h"
 #include "page_error.h"
 #include "page_systemupdate.h"
-
+#include "page_lcdlight.h"
+#include "page_sound.h"
 
 
 #include "lcd_com.h" 
@@ -45,6 +46,7 @@ u32 main_task_mask = 0;
 
 int main(void)
 {	
+	u8 light = 0;
  	Stm32_Clock_Init(9);	//系统时钟设置 	
  	JTAG_Set(SWD_ENABLE);
 	uart_init(72,115200);	//串口初始化为9600
@@ -53,10 +55,10 @@ int main(void)
 	LED_Init();		  		//初始化与LED连接的硬件接口
 	LCD_Init();			   	//初始化LCD 
 	KEY_Init();				//按键初始化	
-//	TIM2_PWM_Init(100,7200);
-//	TIM2_PWM_duty(99);
+	
 	SPI_Flash_Init();  		//SPI FLASH 初始化 	
 	RTC_Init();
+	
 	gIDInfo.cmdUpdate = 0;
 	gIDInfo.cmdPage.start = 0x65;
 	gIDInfo.cmdPage.pageID = PAGE_ID_STANDTIME;
@@ -73,24 +75,16 @@ int main(void)
 		LCD_ShowString(10,150,220,16,16,"Please Check!      ");
 		delay_ms(500);
 	}	
-//	LCD_ShowString(10,150,200,16,16,"25Q32 Check OK!");
-//	delay_ms(500);
+
+	TIM2_PWM_Init(100,7200);
+	light = getLcdLightParam();
+	if ((light < 1) || (light > 10))
+		light = 8;
+	TIM2_PWM_duty(10*light);
 	
 	LCD_Clear(WHITE);		
 	tp_dev.init();			//触摸屏初始化
-#if 0
- 	LCD_SetFrontColor(RED);//设置字体为红色 
-	
-	LCD_ShowString_hz16x16(10,70,200,16,16,"恒强电子");	
-	delay_ms(3000);	
-	
-	LCD_ShowString(10,70,200,16,16,"TOUCH TEST");	
-	LCD_ShowString(10,90,200,16,16,"ATOM@ALIENTEK");
-	LCD_ShowString(10,110,200,16,16,"2014/3/11");
-	delay_ms(3000);	
-	
-	LCD_Clear(WHITE);	
-#endif
+
 	//初始化显示页面参数
 	gPageInfo.cur_page_idx = PAGE_ID_START;//点钞机初始化页面
 	gPageInfo.page_init_finished = 0;     //页面未初始化
@@ -116,12 +110,13 @@ int main(void)
 	gPageInfo.p_page[PAGE_ID_DISPLIGHT] = &page_SystemSet;
 	gPageInfo.p_page[PAGE_ID_CLOCKDISP] = &page_TimeSet;
 	gPageInfo.p_page[PAGE_ID_CLOCKSET] = &page_TimeSet;
-	gPageInfo.p_page[PAGE_ID_SPEAK] = &page_TimeSet;
+	gPageInfo.p_page[PAGE_ID_SPEAK] = &page_Sound;
 	gPageInfo.p_page[PAGE_ID_INPUT] = &page_TimeSet;
 	gPageInfo.p_page[PAGE_ID_OUTPUT] = &page_dialog;
 	gPageInfo.p_page[PAGE_ID_CONFIRM] = &page_confirm;
 	gPageInfo.p_page[PAGE_ID_CONFIRM1] = &page_confirm;
 	gPageInfo.p_page[PAGE_ID_ERRER] = &page_error;
+	gPageInfo.p_page[PAGE_ID_LIGHT_PARA] = &page_Lcd;
 	
 		
 	//加载页面，将页面结构体指针指向实际的页面数据结构

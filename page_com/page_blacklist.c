@@ -109,6 +109,7 @@ static void pageBlackListItemUpdate(void);
 static void pageBlackListTPUpdate(u8 item);
 static u8 pageBlackListMakeReplyFrame(u8* buff);
 
+static const char keyback[] = {0x65,0x04,0xfd,0x00,0xff,0xff,0xff};
 
 ///////////////////////////////////////////////////////////
 //页面子项目结构体
@@ -670,8 +671,9 @@ static void pageBlackListTPUpdate(u8 item)
 				gPageInfo.cur_page_idx = PAGE_ID_BLACKKEY;
 				memset(&gPagePara, 0, sizeof(page_para));
 			}
-			break;
 		default:
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 	}
 }

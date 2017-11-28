@@ -150,7 +150,16 @@ const _bmp_info bmp_version_Page =
 
 static void pageVersionInit(void)
 {
+	u16 color = POINT_COLOR;
+	u16 bccolor = BACK_COLOR;
+	
 	show_bmp_in_flash(0,0,bmp_version_Page.width,bmp_version_Page.height,bmp_version_Page.addr);
+	
+	POINT_COLOR = WHITE;
+	BACK_COLOR = DARKGREEN;
+	LCD_ShowString_hz16x16(352,34,100,16,16,"按屏幕上方返回");
+	POINT_COLOR = color;
+	BACK_COLOR = bccolor;
 }
 
 //版本页面刷新

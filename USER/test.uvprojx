@@ -615,6 +615,16 @@
               <FileType>1</FileType>
               <FilePath>..\page_com\page_systemupdate.c</FilePath>
             </File>
+            <File>
+              <FileName>page_lcdlight.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\page_com\page_lcdlight.c</FilePath>
+            </File>
+            <File>
+              <FileName>page_sound.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\page_com\page_sound.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -122,6 +122,7 @@ static void pageNetTPUpdate(int item);
 static u8 pageNetIPStr2Dec(u8 item, char* ipStr);
 static u8 pageNetMakeReplyFrame(u8 item, u8* buff);
 
+static const char keyback[] = {0x65,0x0a,0xfd,0x00,0xff,0xff,0xff};
 
 
 
@@ -570,7 +571,8 @@ static void pageNetTPUpdate(int item)
 				inputDataIdx++;
 				gPagePara.t_string[0][inputDataIdx] = 0; //添加字符串结束符
 			}
-			
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 		case 8 : //后退删除键
 			if (inputDataIdx > 0)
@@ -581,6 +583,8 @@ static void pageNetTPUpdate(int item)
 			LCD_Fill(page_NetConfig_item[21].start_pos_x, page_NetConfig_item[21].start_pos_y,
 			     page_NetConfig_item[21].start_pos_x+page_NetConfig_item[21].width-4,
 			     page_NetConfig_item[21].start_pos_y+16, BLACK);
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 		case 16://确认键，将字符进行规则检查，符合要求则拷贝到相应的缓存
 			if (pageNetIPStr2Dec(curDataIdx, (char*)gPagePara.t_string[0]))
@@ -595,6 +599,8 @@ static void pageNetTPUpdate(int item)
 				inputDataErr = 1;
 				memcpy(gPagePara.t_string[6], "输入的数据有误", sizeof("输入的数据有误"));
 			}
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 		case 17://本地IP
 		case 18://掩码
@@ -606,9 +612,11 @@ static void pageNetTPUpdate(int item)
 				 page_NetConfig_item[21].start_pos_y+16, BLACK);
 			inputDataIdx = 0;
 			gPagePara.t_string[0][0] = 0;
+			gIDInfo.cmdUpdate = 1;
+			memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 			break;
 		case 2://返回
-		#if 1  //调试用
+		#if 0  //调试用
 			gPageInfo.cur_page_idx = PAGE_ID_MENU;
 			memset(&gPagePara, 0, sizeof(page_para));
 		#endif

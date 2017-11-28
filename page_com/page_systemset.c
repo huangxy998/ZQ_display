@@ -233,6 +233,14 @@ static void pageSystemSetUpdate(void)
 				{
 					gIDInfo.cmdUpdate = 1;
 					memcpy(&gIDInfo.cmdPage.start, &page_SystemSet_item[item].com_data[0], TOUCH_CMD_LEN);
+					if (item == 4)
+					{
+						gPageInfo.cur_page_idx = PAGE_ID_LIGHT_PARA;
+					}
+ 					else if (item == 5)
+					{
+						gPageInfo.cur_page_idx = PAGE_ID_SPEAK;
+					}
 					break;
 				}
 			}	

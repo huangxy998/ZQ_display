@@ -26,6 +26,8 @@ const u8 keytable[] = {
 };
 
 const u8 xpos[] = {0, 12, 36, 48, 72, 84, 108, 120, 144, 156, 180, 192};
+static const char keyback[] = {0x65,0x12,0xfd,0x00,0xff,0xff,0xff};
+
 
 u8 buff[6][3] = {0};  //用于时间设置
 u8 code[13] = {0};    //密码设置
@@ -501,6 +503,8 @@ static void pageTimeSetTouchUpdate(char item)
 					{
 						gIDInfo.cmdUpdate = 1;
 						memcpy(&gIDInfo.cmdPage.start, &page_menu_item[6].com_data[0], TOUCH_CMD_LEN);
+						gIDInfo.cmdUpdate = 1;
+						memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 					}
 					else if (prepage == PAGE_ID_CISCHEK)
 					{
@@ -526,6 +530,11 @@ static void pageTimeSetTouchUpdate(char item)
 			break;
 		default:
 			break;
+	}
+	if (keytable[item] != 'C')
+	{
+		gIDInfo.cmdUpdate = 1;
+		memcpy(&gIDInfo.cmdPage.start, keyback, TOUCH_CMD_LEN);
 	}
 }
 
